@@ -1,20 +1,23 @@
-import React, { useDispatch, useGlobal, useState } from 'reactn'
+import React, { useDispatch, useGlobal, useState, useEffect } from 'reactn'
+//import { FunctionComponent } from 'react'
 import CartItem from './components/CartItem'
 
 const Cart = () => {
+  //const Cart: FunctionComponent = () => {
   const [cartItems] = useGlobal('cartItems')
   const fetchCartItems = useDispatch('getCartItems')
 
-  useState(() => {
+  useEffect(() => {
     fetchCartItems()
-  }, [])
+  }, [fetchCartItems])
 
   return (
     <div>
       košík
       <br />
-      {cartItems.map(item => (
+      {cartItems.map((item, index) => (
         <CartItem
+          index={index}
           item={item}
           key={`${item.idProdukt}-${item.variace}-${item.variace2}`}
         />

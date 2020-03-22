@@ -13,6 +13,12 @@ const api = axios.create({
 
 export const fetchCartItems = () => api.get(baseURL + 'getCart')
 
+export const changeCartItemAmount = (index, amount) =>
+  api.post(baseURL + 'changeCartItemAmount', { index, amount })
+
+export const removeFromCart = index =>
+  api.post(baseURL + 'removeFromCart', { index })
+
 export const addItem = () =>
   api.post(baseURL + 'addToCart', { product_id: 7, variant: '' })
 
