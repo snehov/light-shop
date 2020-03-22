@@ -1,10 +1,11 @@
 import React, { useDispatch, useState, useEffect } from 'reactn'
 import { ft } from '../utils/forceTypes'
+import { CartItemType, CartItemTypeObj } from '../utils/types'
 const Big = require('big-js')
 
-const CartItem = (params: CartItemType) => {
-  const item = ft(params.item, CartItemTypeObj.item),
-    index = ft(params.index, CartItemTypeObj.index)
+const CartItem = (params: CartItemComponentType) => {
+  const item = ft(params.item, CartItemTypeObj),
+    index = ft(params.index, 1)
 
   const [amount, setAmount] = useState(item.mnozstvi)
   const changeAmount = useDispatch().changeCartItemAmount
@@ -44,22 +45,9 @@ const CartItem = (params: CartItemType) => {
   )
 }
 
-/* type CartItemType ={
-  item: {
-    nazev: number
-    mnozstvi: string
-    cena: number
-  }
+type CartItemComponentType = {
+  item: CartItemType
   index: number
-} */
-const CartItemTypeObj = {
-  item: {
-    nazev: 'a', //example of typeof; eg. 1 is number, 'a' is string
-    mnozstvi: 1,
-    cena: 1,
-  },
-  index: 1,
 }
-type CartItemType = typeof CartItemTypeObj
 
 export default CartItem
