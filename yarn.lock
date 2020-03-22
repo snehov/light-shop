@@ -7384,6 +7384,12 @@ react@^16.13.1:
     object-assign "^4.1.1"
     prop-types "^15.6.2"
 
+reactn-devtools@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/reactn-devtools/-/reactn-devtools-1.1.0.tgz#b253bfeb99fac6848e93fd1d1be796a87d3e381a"
+  dependencies:
+    redux-devtools-extension "^2.13.8"
+
 reactn@^2.2.6:
   version "2.2.6"
   resolved "https://registry.yarnpkg.com/reactn/-/reactn-2.2.6.tgz#73128a8a95845e0bf6478674be5c7e9193d46a0f"
@@ -7472,6 +7478,17 @@ redent@^3.0.0:
   dependencies:
     indent-string "^4.0.0"
     strip-indent "^3.0.0"
+
+redux-devtools-extension@^2.13.8:
+  version "2.13.8"
+  resolved "https://registry.yarnpkg.com/redux-devtools-extension/-/redux-devtools-extension-2.13.8.tgz#37b982688626e5e4993ff87220c9bbb7cd2d96e1"
+
+redux@^4.0.5:
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/redux/-/redux-4.0.5.tgz#4db5de5816e17891de8a80c424232d06f051d93f"
+  dependencies:
+    loose-envify "^1.4.0"
+    symbol-observable "^1.2.0"
 
 regenerate-unicode-properties@^8.1.0:
   version "8.1.0"
@@ -8410,6 +8427,10 @@ svgo@^1.0.0, svgo@^1.2.2:
     stable "^0.1.8"
     unquote "~1.1.1"
     util.promisify "~1.0.0"
+
+symbol-observable@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-1.2.0.tgz#c22688aed4eab3cdc2dfeacbb561660560a00804"
 
 symbol-tree@^3.2.2:
   version "3.2.4"

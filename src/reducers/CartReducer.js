@@ -10,6 +10,7 @@ addReducer('getCartItems', async (global, dispatch, i, j) => {
 })
 
 addReducer('changeCartItemAmount', async (global, dispatch, index, newAmount) => {
+ //console.log("index, newAmount", index, newAmount)
   let response = await changeCartItemAmount(index, newAmount)
   //console.log('přisla data pres reducer', response.data)
   return { cartItems: response.data }

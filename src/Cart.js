@@ -1,6 +1,6 @@
 import React, { useDispatch, useGlobal, useState, useEffect } from 'reactn'
 //import { FunctionComponent } from 'react'
-import CartItem from './components/CartItem'
+import CartItem from './components/CartItem.tsx'
 
 const Cart = () => {
   //const Cart: FunctionComponent = () => {
