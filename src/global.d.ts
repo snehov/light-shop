@@ -1,4 +1,5 @@
 import 'reactn'
+import { CartItemType } from './utils/types'
 // NOTE: changes here needs SERVER RESTART to apply changes
 
 declare module 'reactn/default' {
@@ -24,13 +25,28 @@ declare module 'reactn/default' {
       global: State,
       dispatch: Dispatch,
     ) => null; */
-    getCart: (
-      global: State,
-      dispatch: Dispatch,
-    ) =>  Pick<State, 'cartItems'>;
+    getCart: (global: State, dispatch: Dispatch) => Pick<State, 'cartItems'>
   }
 
+  // necessary to define due to typescript ability to safely read from useGlobal()
+  type SumLine = {
+    shipping: number
+    paymentFee: number
+    goodsSum: number
+    sales: number
+    total: number
+  }
   export interface State {
-    cartItems: array
+    cartItems: Array<CartItemType>
+    cartInfo: {
+      noVat: SumLine
+      vatIncl: SumLine
+      vat: array
+      notes: {
+        shipping_note?: string
+        paymentFee_note?: string
+        sales_note?: string
+      }
+    }
   }
 }
