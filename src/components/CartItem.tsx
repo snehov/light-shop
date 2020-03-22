@@ -7,11 +7,11 @@ const CartItem = (params: CartItemComponentType) => {
   const item = ft(params.item, CartItemTypeObj),
     index = ft(params.index, 1)
 
-  const [amount, setAmount] = useState(item.mnozstvi)
+  const [amount, setAmount] = useState(item.amount)
   const changeAmount = useDispatch().changeCartItemAmount
   const removeFromCart = useDispatch().removeFromCart
   useEffect(() => {
-    item.mnozstvi !== amount && amount !== '' && setAmount(item.mnozstvi)
+    item.amount !== amount && amount !== '' && setAmount(item.amount)
   }, [amount, item])
 
   const changeAmountSafe = (index: number, newAmount: number) => {
@@ -27,19 +27,19 @@ const CartItem = (params: CartItemComponentType) => {
     }
   }
 
-  const sum = item.cena ? Number(new Big(item.cena).times(item.mnozstvi)) : 0
+  const sum = item.price ? Number(new Big(item.price).times(item.amount)) : 0
 
   return (
     <div>
-      {item.nazev}
+      {item.name}(id:{item.product_id})
       <input type="number" value={amount} onChange={inputAmountChange} />
-      <span onClick={() => changeAmountSafe(index, Number(item.mnozstvi) + 1)}>
+      <span onClick={() => changeAmountSafe(index, Number(item.amount) + 1)}>
         +
       </span>
-      <span onClick={() => changeAmountSafe(index, Number(item.mnozstvi) - 1)}>
+      <span onClick={() => changeAmountSafe(index, Number(item.amount) - 1)}>
         -
       </span>
-      {item.cena} Kč/ks; celkem: {sum} Kč
+      {item.price} Kč/ks; celkem: {sum} Kč
       <span onClick={() => removeFromCart(index)}> (x) </span>
     </div>
   )

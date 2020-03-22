@@ -11,7 +11,7 @@ const api = axios.create({
   },
 })
 
-export const fetchCartItems = () => api.get(baseURL + 'getCart')
+export const fetchCart = () => api.get(baseURL + 'getCart')
 
 export const changeCartItemAmount = (index, amount) =>
   api.post(baseURL + 'changeCartItemAmount', { index, amount })

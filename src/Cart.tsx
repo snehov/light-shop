@@ -3,22 +3,23 @@ import CartItem from './components/CartItem'
 import { CartItemType } from './utils/types'
 
 const Cart = () => {
-  const fetchCartItems = useDispatch().getCartItems
+  const fetchCart = useDispatch('getCart') //useDispatch().getCartItems//
   const [cartItems] = useGlobal('cartItems') // needs to define at global.d.ts
 
   useEffect(() => {
-    fetchCartItems()
-  }, [fetchCartItems])
+    fetchCart()
+  }, [fetchCart])
 
   return (
     <div>
       košík
       <br />
+      {console.log('cartItems', cartItems)}
       {cartItems.map((item: CartItemType, index: number) => (
         <CartItem
           index={index}
           item={item}
-          key={`${item.idProdukt}-${item.variace}-${item.variace2}`}
+          key={`${item.product_id}-${item.variant_attr1}-${item.variant_attr2}`}
         />
       ))}
     </div>

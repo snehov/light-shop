@@ -20,10 +20,14 @@ declare module 'reactn/default' {
       dispatch: Dispatch,
     ) => null;
 
-    cartItems: (
+    getCartItems: (
       global: State,
       dispatch: Dispatch,
     ) => null; */
+    getCart: (
+      global: State,
+      dispatch: Dispatch,
+    ) =>  Pick<State, 'cartItems'>;
   }
 
   export interface State {
