@@ -1,0 +1,93 @@
+$backgroundColor: #f8f8f9;
+$borderColor: #e6e6e6;
+$baseItemHeight: 33px;
+.cart {
+  display: flex;
+  flex-flow: column;
+  &-item:first-of-type {
+    border-top: 1px solid $borderColor;
+  }
+  &-item:hover {
+    filter: brightness(0.97);
+    transition: all 0.2s ease-in;
+  }
+  &-item {
+    height: $baseItemHeight;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 15px;
+    border-bottom: 1px solid $borderColor;
+
+    background-color: $backgroundColor;
+    transition: all 0.4s ease-out;
+    &--name {
+      width: 40%;
+    }
+    &--amount {
+      display: flex;
+      flex-flow: row;
+      &__input {
+        font-size: 17px;
+        height: 20px;
+        width: 53px;
+        padding: 5px;
+        text-align: center;
+      }
+    }
+    &--price {
+      &__sum {
+        font-weight: bold;
+      }
+    }
+    &--del {
+      &__button {
+        font-size: 15px;
+        font-weight: bold;
+        color: #b71111;
+      }
+    }
+  }
+  &-extraItem{
+    &--name, &--price{
+      color:gray;
+    }
+  }
+  &-sum {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    padding: 15px;
+    background-color: #cecdc5;
+    &--sumWord {
+      width: 40%;
+      font-weight: bold;
+    }
+  }
+}
+.vertical {
+  display: flex;
+  flex-flow: column;
+}
+@media only screen and (max-width: 768px) {
+  $lineHeight: 34px;
+  .cart-item {
+    flex-wrap: wrap;
+    height: 60px;
+    &--name {
+      width: 100%;
+    }
+    &--amount {
+      height: $lineHeight;
+      &__button {
+        width: 45px;
+      }
+    }
+    &--del {
+      height: $lineHeight;
+    }
+  }
+  .horizontal-sm {
+    flex-flow: row;
+  }
+}

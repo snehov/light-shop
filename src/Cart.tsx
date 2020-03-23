@@ -1,6 +1,7 @@
 import React, { useDispatch, useGlobal, useEffect } from 'reactn'
 import CartItem from './components/CartItem'
 import { CartItemType } from './utils/types'
+import { formatPriceOutput } from 'utils/priceOperations'
 
 const Cart = () => {
   const fetchCart = useDispatch('getCart') //useDispatch().getCartItems//
@@ -12,7 +13,7 @@ const Cart = () => {
   }, [fetchCart])
 
   return (
-    <div>
+    <div className="cart">
       košík
       <br />
       {cartItems.map((item: CartItemType, index: number) => (
@@ -22,18 +23,42 @@ const Cart = () => {
           key={`${item.product_id}-${item.variant_attr1}-${item.variant_attr2}`}
         />
       ))}
-      <hr />
       {cartInfo.vatIncl && (
-        <div>
-          <div>
-            sum: zboží celkem:<b>{cartInfo.vatIncl.goodsSum}</b>
+        <div className="cart-item cart-extraItem">
+          <div className="cart-extraItem--name">
+            dprava: {cartInfo.notes.shipping_note}
           </div>
-          <div>
-            dprava: {cartInfo.notes.shipping_note} za{' '}
+          <div className="cart-extraItem--price">
+            {formatPriceOutput(cartInfo.vatIncl.shipping)}
+          </div>
+        </div>
+      )}
+      {cartInfo.vatIncl && cartInfo.vatIncl.paymentFee > 0 && (
+        <div className="cart-item cart-extraItem">
+          <div className="cart-extraItem--name">
+            platba: {cartInfo.notes.paymentFee_note}
+          </div>
+          <div className="cart-extraItem--price">
+            {formatPriceOutput(cartInfo.vatIncl.paymentFee)}
+          </div>
+        </div>
+      )}
+      {/* cartInfo.vatIncl && (
+        <div className="cart-item cart-extraItem">
+          <div className="cart-extraItem--name">
+            sleva: {cartInfo.notes.shipping_note}
+          </div>
+          <div className="cart-extraItem--price">
             {cartInfo.vatIncl.shipping}kč
           </div>
+        </div>
+      ) */}
+      {cartInfo.vatIncl && (
+        <div className="cart-sum">
+          <div className="cart-sum--sumWord">cena celkem</div>
+
           <div>
-            TOTAL: <b>{cartInfo.vatIncl.total}Kč</b>
+            <b>{formatPriceOutput(cartInfo.vatIncl.total)}</b>
           </div>
         </div>
       )}

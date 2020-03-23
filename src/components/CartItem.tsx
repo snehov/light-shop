@@ -1,6 +1,7 @@
 import React, { useDispatch, useState, useEffect } from 'reactn'
 import { ft } from '../utils/forceTypes'
 import { CartItemType, CartItemTypeObj } from '../utils/types'
+import { formatPriceOutput } from '../utils/priceOperations'
 const Big = require('big-js')
 
 const CartItem = (params: CartItemComponentType) => {
@@ -30,17 +31,45 @@ const CartItem = (params: CartItemComponentType) => {
   const sum = item.price ? Number(new Big(item.price).times(item.amount)) : 0
 
   return (
-    <div>
-      {item.name}(id:{item.product_id})
-      <input type="number" value={amount} onChange={inputAmountChange} />
-      <span onClick={() => changeAmountSafe(index, Number(item.amount) + 1)}>
-        +
-      </span>
-      <span onClick={() => changeAmountSafe(index, Number(item.amount) - 1)}>
-        -
-      </span>
-      {item.price} Kč/ks; celkem: {sum} Kč
-      <span onClick={() => removeFromCart(index)}> (x) </span>
+    <div className="cart-item">
+      <div className="cart-item--name">
+        {item.name}(id:{item.product_id})
+      </div>
+      <div className="cart-item--amount">
+        <input
+          className="cart-item--amount__input"
+          type="number"
+          value={amount}
+          onChange={inputAmountChange}
+        />
+        <div className="vertical horizontal-sm">
+          <button
+            className="cart-item--amount__plus cart-item--amount__button"
+            onClick={() => changeAmountSafe(index, Number(item.amount) + 1)}
+          >
+            +
+          </button>
+          <button
+            className="cart-item--amount__minus  cart-item--amount__button"
+            onClick={() => changeAmountSafe(index, Number(item.amount) - 1)}
+          >
+            -
+          </button>
+        </div>
+      </div>
+      <div className="cart-item--price"></div>
+      <div className="cart-item--price__piece">
+        {formatPriceOutput(item.price)}/ks
+      </div>
+      <div className="cart-item--price__sum"> {formatPriceOutput(sum)}</div>
+      <div className="cart-item--del">
+        <button
+          className="cart-item--del__button"
+          onClick={() => removeFromCart(index)}
+        >
+          x
+        </button>
+      </div>
     </div>
   )
 }
