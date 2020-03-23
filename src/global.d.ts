@@ -1,5 +1,9 @@
 import 'reactn'
-import { CartItemType, DeliveryMethodType } from './utils/types'
+import {
+  CartItemType,
+  DeliveryMethodType,
+  PaymentMethodType,
+} from './utils/types'
 // NOTE: changes here needs SERVER RESTART to apply changes
 
 declare module 'reactn/default' {
@@ -39,8 +43,19 @@ declare module 'reactn/default' {
     changeDeliveryMethod: (
       global: State,
       dispatch: Dispatch,
-      delivery_id: number
+      delivery_id: number,
     ) => Pick<State>
+
+    changePaymentMethod: (
+      global: State,
+      dispatch: Dispatch,
+      payment_id: number,
+    ) => Pick<State>
+
+    fetchOrderInfo: (
+      global: State,
+      dispatch: Dispatch,
+    ) => Pick<State, 'orderInfo'>
   }
 
   // necessary to define due to typescript ability to safely read from useGlobal()
@@ -63,7 +78,12 @@ declare module 'reactn/default' {
         sales_note?: string
       }
     }
+    orderInfo: {
+      deliveryMethod: number
+      paymentMethod: number
+    }
     deliveryMethods: Array<DeliveryMethodType>
-    paymentMethods: []
+    paymentMethods: Array<PaymentMethodType>
+    selectedDelivery: number
   }
 }

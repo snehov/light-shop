@@ -1,14 +1,22 @@
-import React from 'react'
+import React, { useDispatch, useGlobal, useEffect } from 'reactn'
 import './App.scss'
-import "./reducers"
+import './reducers'
 import Cart from './Cart'
-import DeliveryAndPay from "./components/DeliveryAndPay"
+import DeliveryAndPay from './components/DeliveryAndPay'
 
-function App() {
+const App = () => {
+  const fetchCart = useDispatch('getCart')
+  const fetchOrderInfo = useDispatch('fetchOrderInfo')
+  const [cartItems] = useGlobal('cartItems')
+
+  useEffect(() => {
+    fetchCart() //true for first time
+    fetchOrderInfo()
+  }, [fetchCart, fetchOrderInfo])
   return (
     <div className="App">
       <Cart />
-      <DeliveryAndPay/>
+      {cartItems.length > 0 && <DeliveryAndPay />}
     </div>
   )
 }

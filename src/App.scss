@@ -48,9 +48,10 @@ $baseItemHeight: 33px;
       }
     }
   }
-  &-extraItem{
-    &--name, &--price{
-      color:gray;
+  &-extraItem {
+    &--name,
+    &--price {
+      color: gray;
     }
   }
   &-sum {
@@ -64,6 +65,13 @@ $baseItemHeight: 33px;
       font-weight: bold;
     }
   }
+}
+.deliveryAndPay {
+  display: flex;
+  flex-flow: row;
+}
+.deliveryChoice {
+  padding: 15px;
 }
 .vertical {
   display: flex;

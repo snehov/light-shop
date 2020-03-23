@@ -1,18 +1,15 @@
-import React, { useDispatch, useGlobal, useEffect } from 'reactn'
+import React, { useGlobal } from 'reactn'
 import CartItem from './components/CartItem'
 import { CartItemType } from './utils/types'
 import { formatPriceOutput } from 'utils/priceOperations'
 
 const Cart = () => {
-  const fetchCart = useDispatch('getCart') //useDispatch().getCartItems//
   const [cartItems] = useGlobal('cartItems') // needs to define at global.d.ts
   const [cartInfo] = useGlobal('cartInfo')
 
-  useEffect(() => {
-    fetchCart()
-  }, [fetchCart])
-
-  return (
+  return cartItems.length === 0 ? (
+    <div>košík je prázdný</div>
+  ) : (
     <div className="cart">
       košík
       <br />
@@ -23,7 +20,7 @@ const Cart = () => {
           key={`${item.product_id}-${item.variant_attr1}-${item.variant_attr2}`}
         />
       ))}
-      {cartInfo.vatIncl && (
+      {cartInfo.vatIncl && cartInfo.vatIncl.shipping > 0 && (
         <div className="cart-item cart-extraItem">
           <div className="cart-extraItem--name">
             dprava: {cartInfo.notes.shipping_note}

@@ -28,6 +28,9 @@ export const fetchDeliveryPayMethods = () =>
 export const changeDeliveryMethod = delivery_id =>
   api.patch(baseURL + 'changeDeliveryMethod', { delivery_id })
 
-export const getTest = () => api.get(baseURL + 'getTest')
+export const changePaymentMethod = payment_id =>
+  api.patch(baseURL + 'changePaymentMethod', { payment_id })
+
+export const fetchOrderInfo = () => api.get(baseURL + 'getOrderInfo')
 
 //changeDeliveryMethod

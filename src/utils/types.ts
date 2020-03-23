@@ -23,3 +23,13 @@ export const DeliveryMethod = {
   require_address: 1, //TODO at BE remake to bool
 }
 export type DeliveryMethodType = typeof DeliveryMethod
+
+export const PaymentMethod = {
+  payment_id: 1,
+  name: 'a',
+  //description
+  //bank_transfer
+  //pay_before
+  //price
+}
+export type PaymentMethodType = typeof PaymentMethod
