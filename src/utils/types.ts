@@ -15,3 +15,4 @@ export const CartTypeObj = {
   notes: {},
 }
 export type CartType = typeof CartTypeObj
+

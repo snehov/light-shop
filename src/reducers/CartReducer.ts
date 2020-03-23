@@ -1,10 +1,11 @@
 import { setGlobal, addReducer } from 'reactn'
 import { fetchCart, changeCartItemAmount, removeFromCart } from '../api'
+import { CartType, CartItemType } from 'utils/types'
 
 setGlobal({ cartItems: [] })
 setGlobal({ cartInfo: {} })
 
-addReducer('getCart', async (global, dispatch, i, j) => {
+addReducer('getCart', async () => {
   let response = await fetchCart()
   //console.log('>>přisla data pres reducer', response.data)
   return parseIncomingCart(response.data)
@@ -25,7 +26,12 @@ addReducer('removeFromCart', async (global, dispatch, index) => {
   return parseIncomingCart(response.data)
 })
 
-const parseIncomingCart = data => {
+const parseIncomingCart = (data: CartData) => {
   // TODO: check incoming data format!!!
   return { cartItems: data.cart, cartInfo: data.sum }
+}
+
+type CartData = {
+  cart: CartItemType
+  sum: CartType
 }

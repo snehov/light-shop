@@ -4,7 +4,8 @@ import { CartItemType } from './utils/types'
 
 declare module 'reactn/default' {
   export interface Reducers {
-    /*   append: (
+    /* //example 
+      append: (
       global: State,
       dispatch: Dispatch,
       ...strings: any[]
@@ -15,16 +16,20 @@ declare module 'reactn/default' {
       dispatch: Dispatch,
       i: number,
     ) => Pick<State, 'count'>;
-
-    doNothing: (
+ */
+    changeCartItemAmount: (
       global: State,
       dispatch: Dispatch,
-    ) => null;
+      index: number,
+      newAmount: number,
+    ) => Pick<State>
 
-    getCartItems: (
+    removeFromCart: (
       global: State,
       dispatch: Dispatch,
-    ) => null; */
+      index: number,
+    ) => Pick<State>//, 'cartInfo'
+
     getCart: (global: State, dispatch: Dispatch) => Pick<State, 'cartItems'>
   }
 
