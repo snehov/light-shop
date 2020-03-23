@@ -22,4 +22,12 @@ export const removeFromCart = index =>
 export const addItem = () =>
   api.post(baseURL + 'addToCart', { product_id: 7, variant: '' })
 
+export const fetchDeliveryPayMethods = () =>
+  api.get(baseURL + 'getDeliveryAndPay')
+
+export const changeDeliveryMethod = delivery_id =>
+  api.patch(baseURL + 'changeDeliveryMethod', { delivery_id })
+
 export const getTest = () => api.get(baseURL + 'getTest')
+
+//changeDeliveryMethod
