@@ -7,46 +7,50 @@ const PaymentMethods = (/* { selectedDelivery }: { selectedDelivery: number } */
   const [deliveryMethods] = useGlobal('deliveryMethods')
   const [orderInfo] = useGlobal('orderInfo')
   const [paymentMethod, setPaymentMethod] = useState(0)
-  const changeDeliveryMethod = useDispatch('changePaymentMethod')
   const [selectedDelivery] = useGlobal('selectedDelivery')
-  //const [allowedPayments, setAllowedPayments] = useState([])
+  const changePaymentMethod = useDispatch('changePaymentMethod')
+
   useEffect(() => {
-    !isEmpty(orderInfo) && setPaymentMethod(orderInfo.paymentMethod)
+    if (!isEmpty(orderInfo)) {
+      // preselect historicaly chosen option (used with page refresh)
+      setPaymentMethod(orderInfo.paymentMethod)
+    }
   }, [orderInfo])
+
+  useEffect(() => {
+    changePaymentMethod(paymentMethod)
+  }, [paymentMethod]) // eslint-disable-line
+
+  useEffect(() => {
+    // when delivery methods loaded
+    if (paymentMethod !== 0 && deliveryMethods !== []) {
+      const allowedPayments = getAllowedPayments()
+      // if delivery changes and current payment is not supported by that delivery, change to fist in list of suppored
+      if (!allowedPayments.includes(paymentMethod.toString())) {
+        allowedPayments.length > 0
+          ? setPaymentMethod(Number(allowedPayments[0]))
+          : setPaymentMethod(0)
+      }
+    }
+  }, [selectedDelivery]) // eslint-disable-line
 
   const changeMethod = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedValue = Number(e.target.value)
     setPaymentMethod(selectedValue)
-    changeDeliveryMethod(selectedValue)
   }
   const getAllowedPayments = () => {
     if (selectedDelivery === 0 || isEmpty(deliveryMethods)) {
-      return false
+      return []
     }
     const allowedPayements = deliveryMethods
       .filter(d => d.delivery_id == selectedDelivery)[0] // eslint-disable-line eqeqeq
       .payments.split(',')
     return allowedPayements
   }
-  /* const getPaymentIds = () => {
-    let ids = []
-    //paymentsMethods.forEach(p => ids.push(p.payment_id))
-    return "ids"
-    //return paymentsMethods.reduce((acc, cur) => [...acc, cur.payment_id], [])
-  } */
 
-  console.log(
-    'paymentMethod',
-    paymentMethod,
-    'deliveryMethods',
-    deliveryMethods,
-    selectedDelivery,
-    'parsed>',
-    getAllowedPayments(),
-  )
   return (
     <div className="paymentChoice">
-      <h2>způsoby doručení</h2>
+      <h2>způsoby platby</h2>
       {!isEmpty(paymentsMethods) &&
         paymentsMethods.map((method: PaymentMethodType) => (
           <div key={method.payment_id}>
@@ -57,6 +61,11 @@ const PaymentMethods = (/* { selectedDelivery }: { selectedDelivery: number } */
               onChange={changeMethod}
               value={method.payment_id}
               checked={method.payment_id == paymentMethod ? true : false} // eslint-disable-line eqeqeq
+              disabled={
+                isEmpty(getAllowedPayments())
+                  ? false
+                  : !getAllowedPayments().includes(method.payment_id.toString())
+              }
             />
             <label htmlFor={`payment_${method.payment_id}`}>
               {method.name}({method.payment_id})
