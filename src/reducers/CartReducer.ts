@@ -16,6 +16,7 @@ setGlobal({ orderInfo: {} })
 setGlobal({ deliveryMethods: {} })
 setGlobal({ paymentMethods: {} })
 setGlobal({ selectedDelivery: 0 })
+setGlobal({ selectedPayment: 0 })
 
 addReducer('getCart', async () => {
   let response = await fetchCart() //firstTime=bool
@@ -49,6 +50,7 @@ addReducer('changeDeliveryMethod', async (global, dispatch, delivery_id) => {
   return parseIncomingCart(response.data)
 })
 addReducer('changePaymentMethod', async (global, dispatch, payment_id) => {
+  setGlobal({ selectedPayment: payment_id })
   let response = await changePaymentMethod(payment_id)
   return parseIncomingCart(response.data)
 })
