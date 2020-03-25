@@ -1,7 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 //import { useForm } from 'react-hook-form'
 import { InputLine } from 'components/ui-components'
+import {
+  getProperInputValue,
+  fieldValidation,
+  validateAllFields,
+} from 'utils/formsFnc'
 const isNil = require('ramda').isNil
+const isEmpty = require('ramda').isEmpty
+
 const formSettings = {
   name: {
     value: null,
@@ -10,10 +17,10 @@ const formSettings = {
     minLength: 2,
     error: null,
   },
-  surname: { value: 'prefilled' },
-  street: { value: null , minLength:3},
+  surname: { value: 'prefilled', required: true },
+  street: { value: null, minLength: 3 },
   city: { value: null },
-  zip: { value: null },
+  zip: { value: null, minLength: 5, maxLength: 5 },
   detail: { value: null },
 }
 console.log('formSEttins', formSettings)
@@ -24,81 +31,58 @@ const FFerrors = Object.keys(formSettings).reduce((acc, curr) => {
   return { ...acc, [curr]: null }
 }, {})
 
-//console.log('FFvalues', FFvalues)
 const Address = ({ addresType }: { addresType: string }) => {
   const [fieldsVal, changeFieldsVal] = useState(FFvalues)
   const [fieldsErr, changeFieldsErr] = useState(FFerrors)
-  //const [fieldsState, changeFieldsStat]=useState(formSettings)
-  /* const { register, handleSubmit, watch, errors } = useForm()
-  const onSubmit = (data: any) => {
-    console.log(data, errors)
-  } */
-  console.log('values', fieldsVal)
-  console.log('errors', fieldsErr)
+  const [formPassed, setFormPassed] = useState(false)
 
-  const runValidate = (name: string, value: any) => {
+  const runValidateAll = (close: boolean) => {
+    const res = validateAllFields(formSettings, fieldsVal, fieldsErr, close)
+    close && changeFieldsErr({ ...fieldsErr, ...res.errors })
+    setFormPassed(res.passed)
+  }
+
+  const runValidateOne = (name: string, value: any) => {
     let err = ''
-    let tmpVal = value.toString()
-    //    const safeName = Object.keys(formSettings).filter(k => k === name)[0]
-    if (
-      !isNil((formSettings as any)[name]) &&
-      (formSettings as any)[name].minLength &&
-      tmpVal.length < (formSettings as any)[name].minLength
-    ) {
-      err = 'moc krátké'
+    // const safeName = Object.keys(formSettings).filter(k => k === name)[0]
+    if (!isNil((formSettings as any)[name])) {
+      err = fieldValidation(formSettings, name, value)
     }
     changeFieldsErr({ ...fieldsErr, [name]: err })
   }
 
   const changeVal = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const target = e.target
-    const name = target.name
-
-    let safeValue
-    if (target.type === 'number') {
-      safeValue = Number(target.value)
-    } else {
-      safeValue = target.value
-    }
+    const name = e.target.name
+    const safeValue = getProperInputValue(e)
     const newFields = { ...fieldsVal, [name]: safeValue }
     console.log('newFields', newFields)
     changeFieldsVal(newFields)
     //------run validation----
-    //const
     // wait after first blur, then with every type
-
-    if (
-      ![undefined, null].includes((fieldsErr as any)[name])
-      //(fieldsErr as any)[name] !== null
-    ) {
-      runValidate(name, safeValue)
-      /* if (maxLength && tmpVal.length > maxLength) {
-      err.push('moc dlouhé')
-    } */
+    if (![undefined, null].includes((fieldsErr as any)[name])) {
+      runValidateOne(name, safeValue)
     }
   }
-  const callValidate = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('blurr, called', e.target.name, e.target.value)
-    runValidate(e.target.name, e.target.value)
+
+  const inputBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
+    runValidateOne(e.target.name, getProperInputValue(e))
+    runValidateAll(false)
   }
+
   return (
     <div>
-      {/*  <form onSubmit={handleSubmit(onSubmit)}>
-        <input name="example" defaultValue="test" ref={register} />
-        <input name="exampleRequired" ref={register({ required: true })} />
-        {errors.exampleRequired && <span>This field is required</span>}
-      </form> */}
+      <button onClick={() => runValidateAll(true)}>validace end</button>
+      <button onClick={() => runValidateAll(false)}>validace prubeh</button>
+      {formPassed && <span>form must go on</span>}
       <InputLine
         name="name"
         label="Jméno"
         type="text"
         groupName={addresType}
-        errors={fieldsErr}
-        //@ts-ignore
-        value={fieldsVal.name}
+        value={(fieldsVal as any).name}
         onChange={changeVal}
-        minLength={2}
-        onBlur={callValidate}
+        onBlur={inputBlur}
+        errors={fieldsErr}
       />
 
       <InputLine
@@ -106,9 +90,10 @@ const Address = ({ addresType }: { addresType: string }) => {
         label="Příjmení"
         type="text"
         groupName={addresType}
-        //@ts-ignore
-        value={fieldsVal.surname}
+        value={(fieldsVal as any).surname}
         onChange={changeVal}
+        onBlur={inputBlur}
+        errors={fieldsErr}
       />
       <InputLine
         name="detail"
@@ -116,43 +101,40 @@ const Address = ({ addresType }: { addresType: string }) => {
         placeholder="firma/patro/recepce..."
         type="text"
         groupName={addresType}
-        //@ts-ignore
-        value={fieldsVal.detail}
+        value={(fieldsVal as any).detail}
         onChange={changeVal}
-        minLength={2}
+        onBlur={inputBlur}
+        errors={fieldsErr}
       />
       <InputLine
         name="street"
         label="Ulice"
         type="text"
         groupName={addresType}
-        //@ts-ignore
-        value={fieldsVal.street}
+        value={(fieldsVal as any).street}
         onChange={changeVal}
-        onBlur={callValidate}
+        onBlur={inputBlur}
         errors={fieldsErr}
-        minLength={2}
       />
       <InputLine
         name="city"
         label="Město"
         type="text"
         groupName={addresType}
-        //@ts-ignore
-        value={fieldsVal.city}
+        value={(fieldsVal as any).city}
         onChange={changeVal}
-        minLength={2}
+        onBlur={inputBlur}
+        errors={fieldsErr}
       />
       <InputLine
         name="zip"
         label="PSČ"
         type="number"
         groupName={addresType}
-        //@ts-ignore
-        value={fieldsVal.zip}
+        value={(fieldsVal as any).zip}
         onChange={changeVal}
-        minLength={5}
-        maxLength={5}
+        onBlur={inputBlur}
+        errors={fieldsErr}
       />
     </div>
   )

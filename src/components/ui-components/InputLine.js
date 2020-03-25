@@ -1,11 +1,6 @@
 import React from 'react'
 import Input from './Inputjs.js'
-/* enum inputTypes {
-  number,
-  text,
-} */
-//@ts-ignore
-//
+
 const InputLine = ({ name, groupName = '', type, label, ...props }) => {
   const id = groupName ? `${groupName}_${name}` : name
 
