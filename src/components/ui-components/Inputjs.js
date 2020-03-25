@@ -27,7 +27,7 @@ const Input = ({
     setErrors(err)
     return err.length > 0 ? false : true
   } */
-  const localChange = e => {
+  /* const localChange = e => {
     onChange(e)
     if (errors.length > 0) {
       //validation(e)
@@ -35,7 +35,7 @@ const Input = ({
   }
   const blur = e => {
     //validation(e)
-  }
+  } */
   console.log("errors in inputs", errors)
   return (
     <span>
@@ -44,9 +44,9 @@ const Input = ({
         type={type}
         name={name}
         value={value === null ? '' : value}
-        onChange={localChange}
+        onChange={onChange}
         {...props}
-        onBlur={blur}
+       /*  onBlur={blur} */
       />
       {errors && errors[name]!=null && errors[name]}
     </span>

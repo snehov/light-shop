@@ -10,15 +10,15 @@ const formSettings = {
     minLength: 2,
     error: null,
   },
-  surname: { value: "prefilled" },
-  street: { value: null },
+  surname: { value: 'prefilled' },
+  street: { value: null , minLength:3},
   city: { value: null },
   zip: { value: null },
   detail: { value: null },
 }
 console.log('formSEttins', formSettings)
 const FFvalues = Object.keys(formSettings).reduce((acc, curr) => {
-  return { ...acc, [curr]: (formSettings as any)[curr].value||null }
+  return { ...acc, [curr]: (formSettings as any)[curr].value || null }
 }, {})
 const FFerrors = Object.keys(formSettings).reduce((acc, curr) => {
   return { ...acc, [curr]: null }
@@ -35,23 +35,10 @@ const Address = ({ addresType }: { addresType: string }) => {
   } */
   console.log('values', fieldsVal)
   console.log('errors', fieldsErr)
-  const changeVal = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const target = e.target
-    const name = target.name
 
-    let saveValue
-    if (target.type === 'number') {
-      saveValue = Number(target.value)
-    } else {
-      saveValue = target.value
-    }
-    const newFields = { ...fieldsVal, [name]: saveValue }
-    console.log('newFields', newFields)
-    changeFieldsVal(newFields)
-    //
-    let err = null
-    let tmpVal = saveValue.toString()
-   
+  const runValidate = (name: string, value: any) => {
+    let err = ''
+    let tmpVal = value.toString()
     //    const safeName = Object.keys(formSettings).filter(k => k === name)[0]
     if (
       !isNil((formSettings as any)[name]) &&
@@ -61,9 +48,38 @@ const Address = ({ addresType }: { addresType: string }) => {
       err = 'moc krátké'
     }
     changeFieldsErr({ ...fieldsErr, [name]: err })
-    /* if (maxLength && tmpVal.length > maxLength) {
+  }
+
+  const changeVal = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const target = e.target
+    const name = target.name
+
+    let safeValue
+    if (target.type === 'number') {
+      safeValue = Number(target.value)
+    } else {
+      safeValue = target.value
+    }
+    const newFields = { ...fieldsVal, [name]: safeValue }
+    console.log('newFields', newFields)
+    changeFieldsVal(newFields)
+    //------run validation----
+    //const
+    // wait after first blur, then with every type
+
+    if (
+      ![undefined, null].includes((fieldsErr as any)[name])
+      //(fieldsErr as any)[name] !== null
+    ) {
+      runValidate(name, safeValue)
+      /* if (maxLength && tmpVal.length > maxLength) {
       err.push('moc dlouhé')
     } */
+    }
+  }
+  const callValidate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log('blurr, called', e.target.name, e.target.value)
+    runValidate(e.target.name, e.target.value)
   }
   return (
     <div>
@@ -82,6 +98,7 @@ const Address = ({ addresType }: { addresType: string }) => {
         value={fieldsVal.name}
         onChange={changeVal}
         minLength={2}
+        onBlur={callValidate}
       />
 
       <InputLine
@@ -112,6 +129,8 @@ const Address = ({ addresType }: { addresType: string }) => {
         //@ts-ignore
         value={fieldsVal.street}
         onChange={changeVal}
+        onBlur={callValidate}
+        errors={fieldsErr}
         minLength={2}
       />
       <InputLine
