@@ -6,7 +6,9 @@ const InputLine = ({ name, groupName = '', type, label, ...props }) => {
 
   return (
     <div className="inputLine">
-      <label htmlFor={id}>{label}</label>
+      <label className="labelToInput" htmlFor={id}>
+        {label}
+      </label>
       <Input name={name} type={type} id={id} {...props} />
     </div>
   )

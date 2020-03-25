@@ -62,11 +62,12 @@ const Address = ({ addresType }: { addresType: string }) => {
     if (![undefined, null].includes((fieldsErr as any)[name])) {
       runValidateOne(name, safeValue)
     }
+    // invisible validation of form, here with every change value
+    runValidateAll(false)
   }
 
   const inputBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
     runValidateOne(e.target.name, getProperInputValue(e))
-    runValidateAll(false)
   }
 
   return (

@@ -1,20 +1,14 @@
 import React from 'react'
 
-const Input = ({
-  type,
-  name,
-  value,
-  onChange,
-  minLength,
-  maxLength,
-  validate,
-  errors,
-  ...props
-}) => {
+const Input = ({ type, name, value, onChange, errors, ...props }) => {
   return (
     <span>
       <input
-        className={errors && errors[name] != null ? 'inputError' : ''}
+        className={
+          errors && [null, ''].includes(errors[name])
+            ? 'input'
+            : 'input inputError'
+        }
         type={type}
         name={name}
         value={value === null ? '' : value}
