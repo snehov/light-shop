@@ -8,13 +8,14 @@ const Input = ({
   minLength,
   maxLength,
   validate,
+  errors,
   ...props
 }) => {
-  const [errors, setErrors] = useState([])
+  //const [errors, setErrors] = useState([])
   /* const validate = () => {
     validation({ target: { value } })
   } */
-  const validation = e => {
+  /* const validation = e => {
     let err = []
     let tmpVal = e.target.value ? e.target.value.toString() : ''
     if (minLength && tmpVal.length < minLength) {
@@ -25,20 +26,21 @@ const Input = ({
     }
     setErrors(err)
     return err.length > 0 ? false : true
-  }
+  } */
   const localChange = e => {
     onChange(e)
     if (errors.length > 0) {
-      validation(e)
+      //validation(e)
     }
   }
   const blur = e => {
-    validation(e)
+    //validation(e)
   }
+  console.log("errors in inputs", errors)
   return (
     <span>
       <input
-        className={errors.length > 0 ? 'inputError' : ''}
+        className={errors && errors[name]!=null ? 'inputError' : ''}
         type={type}
         name={name}
         value={value === null ? '' : value}
@@ -46,7 +48,7 @@ const Input = ({
         {...props}
         onBlur={blur}
       />
-      {errors.length > 0 && errors.join()}
+      {errors && errors[name]!=null && errors[name]}
     </span>
   )
 }
