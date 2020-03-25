@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-//import { useForm } from 'react-hook-form'
 import { InputLine } from 'components/ui-components'
 import {
   getProperInputValue,
@@ -7,7 +6,6 @@ import {
   validateAllFields,
 } from 'utils/formsFnc'
 const isNil = require('ramda').isNil
-const isEmpty = require('ramda').isEmpty
 
 const formSettings = {
   name: {
@@ -23,7 +21,6 @@ const formSettings = {
   zip: { value: null, minLength: 5, maxLength: 5 },
   detail: { value: null },
 }
-console.log('formSEttins', formSettings)
 const FFvalues = Object.keys(formSettings).reduce((acc, curr) => {
   return { ...acc, [curr]: (formSettings as any)[curr].value || null }
 }, {})
@@ -31,20 +28,30 @@ const FFerrors = Object.keys(formSettings).reduce((acc, curr) => {
   return { ...acc, [curr]: null }
 }, {})
 
-const Address = ({ addresType }: { addresType: string }) => {
+const Address = ({
+  addresType,
+  saveFormData,
+}: {
+  addresType: string
+  saveFormData: any
+}) => {
   const [fieldsVal, changeFieldsVal] = useState(FFvalues)
   const [fieldsErr, changeFieldsErr] = useState(FFerrors)
   const [formPassed, setFormPassed] = useState(false)
+  useEffect(() => {
+    const passed = runValidateAll(false)
+    saveFormData(addresType, fieldsVal, passed)
+  }, [fieldsVal]) // eslint-disable-line
 
   const runValidateAll = (close: boolean) => {
     const res = validateAllFields(formSettings, fieldsVal, fieldsErr, close)
     close && changeFieldsErr({ ...fieldsErr, ...res.errors })
     setFormPassed(res.passed)
+    return res.passed
   }
 
   const runValidateOne = (name: string, value: any) => {
     let err = ''
-    // const safeName = Object.keys(formSettings).filter(k => k === name)[0]
     if (!isNil((formSettings as any)[name])) {
       err = fieldValidation(formSettings, name, value)
     }
@@ -53,17 +60,13 @@ const Address = ({ addresType }: { addresType: string }) => {
 
   const changeVal = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name
-    const safeValue = getProperInputValue(e)
-    const newFields = { ...fieldsVal, [name]: safeValue }
-    console.log('newFields', newFields)
+    const properValue = getProperInputValue(e)
+    const newFields = { ...fieldsVal, [name]: properValue }
     changeFieldsVal(newFields)
-    //------run validation----
-    // wait after first blur, then with every type
+    //------run validation----> wait after first blur, then run with every type
     if (![undefined, null].includes((fieldsErr as any)[name])) {
-      runValidateOne(name, safeValue)
+      runValidateOne(name, properValue)
     }
-    // invisible validation of form, here with every change value
-    runValidateAll(false)
   }
 
   const inputBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
