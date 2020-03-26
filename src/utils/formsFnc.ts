@@ -1,3 +1,4 @@
+const isEmpty = require('ramda').isEmpty
 export const getProperInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
   const target = e.target
   let safeValue
@@ -18,7 +19,6 @@ export const fieldValidation = (
   let tmpVal = value.toString()
   const nameKey = (formSettings as any)[name]
   const required = nameKey.required
-  console.log('fieldValidation', formSettings, name, tmpVal)
 
   if (required || tmpVal.length > 0) {
     if (nameKey.minLength && tmpVal.length < nameKey.minLength) {
@@ -34,11 +34,9 @@ export const fieldValidation = (
       }
     }
   }
-
   if (required && ['', null].includes(value)) {
     err = 'vyžadováno'
   }
-
   return err
 }
 
@@ -47,7 +45,6 @@ export const validateAllFields = (formSettings: object, fieldsVal: object) => {
   let errors = {}
   Object.entries(formSettings).forEach(([name, item]) => {
     const currentValue = (fieldsVal as any)[name] || ''
-
     const err = fieldValidation(formSettings, name, currentValue)
     if (err !== '') {
       passed = false
@@ -55,4 +52,19 @@ export const validateAllFields = (formSettings: object, fieldsVal: object) => {
     }
   })
   return { passed, errors }
+}
+
+// implementation specifics of chosen form sys, here is react-final-form-hooks
+export const finalFormValidation = (
+  values: any,
+  setFormValid: any,
+  form: any,
+  inputsConfig: object,
+) => {
+  if (isEmpty(form)) {
+    return undefined
+  }
+  const { errors, passed } = validateAllFields(inputsConfig, values)
+  setFormValid(passed)
+  return passed ? undefined : errors
 }

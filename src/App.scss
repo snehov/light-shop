@@ -77,6 +77,35 @@ $baseItemHeight: 33px;
   display: flex;
   flex-flow: column;
 }
+.inputLine {
+  padding: 3px;
+}
+.labelToInput {
+  display: inline-block;
+  width: 150px;
+  text-align: right;
+  margin-right: 10px;
+}
+.input {
+  border: 1px solid #bbbbbb;
+  transition: all 0.2s ease-in;
+  padding: 2px 5px;
+  border-radius: 2px;
+  margin: 2px 5px;
+}
+
+.inputError {
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 3px rgba(236, 82, 82, 0.6);
+  border-color: rgba(236, 82, 82, 0.8);
+  outline: 0px;
+  border: 1px solid #ff000040;
+  transition: all 0.2s ease-in;
+}
+.input:focus {
+  border-color: #84a1cc;
+  outline: 0;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px #2e73da;
+}
 @media only screen and (max-width: 768px) {
   $lineHeight: 34px;
   .cart-item {
