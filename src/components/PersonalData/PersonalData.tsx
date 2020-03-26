@@ -1,16 +1,23 @@
 import React, { useEffect, useState } from 'react'
 import { useForm, useField } from 'react-final-form-hooks'
 // https://github.com/final-form/react-final-form-hooks#validate-valuesobject--object--promiseobject
+import { validateAllFields } from 'utils/formsFnc'
 import Address from './Address'
-const inputs = [
-  { name: 'firstName' },
-  { name: 'tel', label: 'Telefon' },
-  { name: 'mail', label: 'mail' },
-]
+const isNil = require('ramda').isNil
+const isEmpty = require('ramda').isEmpty
+
+const inputsConfig = {
+  firstName: { required: true, minLength: 2 },
+  lastName: { minLength: 2 },
+  street: { required: true },
+  zip: { minLength: 5, maxLength: 5, type: 'number' },
+  email: { type: 'email' },
+}
 const PersonalData = () => {
   const [formValid, setFormValid] = useState(false)
   let genForm = {}
-  const validate = (values: any) => validation(values, setFormValid, genForm)
+  const validate = (values: any) =>
+    validation(values, setFormValid, genForm, inputsConfig)
   const onSubmit = (values: any) => {
     console.log('onSubmit', values)
   }
@@ -20,88 +27,83 @@ const PersonalData = () => {
   })
   genForm = form
   useEffect(() => {
-    console.log('values', values)
+    //console.log('values', values)
   }, [values])
   useEffect(() => {
-    form.change('firstName', 'nekdo jiný')
+    //form.change('firstName', 'nekdo jiný')
   }, [form])
-  const firstName = useField('firstName', form) //, value => oneFvalid(value, { minLength: 2 }))
+  const firstName = useField('firstName', form) 
   const lastName = useField('lastName', form)
-  console.log('getRegisteredFields ', form.getRegisteredFields())
-  console.log('getFieldState lastName', form.getFieldState('lastName'))
-  
-  /* inputs.forEach((input)=>{
-    console.log("input", input)
-    const [[input.name] => useField(input.name, form)
-  }) */
-  /* const oneFvalid = (value: string, valid: any) => {
-    console.log('oneFvalid', value, valid)
-    if (valid.minLength && value && value.length < valid.minLength) {
-      return 'krátké'
-    }
-    return undefined
-  } */
-  const extraEvent=()=>{
-    console.log('EEgetRegisteredFields ', form.getRegisteredFields())
-    form.registerField('lastName', () => {}, {})
-    console.log('EEgetRegisteredFields ', form.getRegisteredFields())
-  }
+  const street = useField('street', form)
+  const zip = useField('zip', form)
+  const email = useField('email', form)
 
   return (
     <div>
-      <button onClick={extraEvent} >make EXTRA!</button>
       <form onSubmit={handleSubmit}>
         <div>
-          {formValid && <div>VPO58DKU!!</div>}
-          <label>First Name</label>
-          <input {...firstName.input} placeholder="First Name" />
-          {firstName.meta.touched && firstName.meta.error && (
-            <span>{firstName.meta.error}</span>
-          )}
+          <Inp field={firstName} label="Jméno" config={inputsConfig} />
+          <Inp field={lastName} label="Příjmení" config={inputsConfig} />
+          <Inp field={street} label="Ulice" config={inputsConfig} />
+          <Inp field={zip} label="PSČ" config={inputsConfig} />
+          <Inp field={email} label="emil" config={inputsConfig} />
         </div>
-        <div>
-          <label>Last Name</label>
-          <input {...lastName.input} placeholder="Last Name" minLength={2} />
-          {lastName.meta.touched && lastName.meta.error && (
-            <span>{lastName.meta.error}</span>
-          )}
-        </div>
-        <button type="submit" disabled={pristine || submitting}>
+        <button type="submit" disabled={pristine || submitting || !formValid}>
           Submit
         </button>
-        <button
-          type="button"
-          onClick={() => form.reset()}
-          disabled={submitting || pristine}
-        >
-          Reset
-        </button>
       </form>
-      {/* 
-      <h2>osobní udaje</h2>
-      <div>
-        <h3>Adresa doručení</h3>
-        <Address addresType="delivery" />
-      </div>
-      <div>
-        <h3>Fakturační údaje</h3>
-        <Address addresType="invoce" />
-      </div> */}
     </div>
   )
 }
-const validation = (values: any, setFormValid: any, genForm: any) => {
-  console.log('validate values', values, genForm) //only touched values
-  const errors = { firstName: '', lastName: '' }
-  if (!values.firstName) {
-    errors.firstName = 'Required'
+const Inp = ({
+  field,
+  label,
+  config,
+}: {
+  field: any
+  label: string
+  config: any
+}) => {
+  const name = field.input.name
+  console.log('NAME CONFIG', config, name)
+  const type = config[name].type || 'text'
+  const required = config[name].required || false
+  return (
+    <div>
+      <label>{label}</label>
+      {console.log('ZIP.input', field.input)}
+      <input
+        {...field.input}
+        placeholder={label}
+        type={type}
+        className={field.meta.error ? 'inputError input' : 'input'}
+      />
+      {required && '*'}
+      {field.meta.touched && field.meta.error && (
+        <span>{field.meta.error}</span>
+      )}
+    </div>
+  )
+}
+const validation = (
+  values: any,
+  setFormValid: any,
+  form: any,
+  inputsConfig: object,
+) => {
+  if (isEmpty(form)) {
+    return undefined
   }
-  if (values.lastName && values.lastName.length < 2) {
-    errors.lastName = 'too short'
-  }
-  const allPassed = Object.entries(errors).every(([key, item]) => item === '')
-  setFormValid(allPassed)
-  console.log('error from validation', errors, 'allOK', allPassed)
-  return allPassed ? undefined : errors
+  console.log(
+    'validate values',
+    values,
+    /* form, */
+    form.getRegisteredFields(),
+    inputsConfig,
+  ) //only touched values
+  const { errors, passed } = validateAllFields(inputsConfig, values)
+  setFormValid(passed)
+  console.log('error from validation', errors, 'allOK', passed)
+  return passed ? undefined : errors
 }
 export default PersonalData
