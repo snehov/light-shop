@@ -79,32 +79,54 @@ $baseItemHeight: 33px;
 }
 .inputLine {
   padding: 3px;
+  max-width: 300px;
+  margin: 4px 0px;
 }
 .labelToInput {
-  display: inline-block;
-  width: 150px;
-  text-align: right;
+  display: block;
+  width: 100%;
+  text-align: left;
   margin-right: 10px;
+  font-weight: bold;
+  font-size: 13px;
+  padding-bottom: 3px;
 }
 .input {
   border: 1px solid #bbbbbb;
   transition: all 0.2s ease-in;
-  padding: 2px 5px;
+  padding: 8px 10px;
   border-radius: 2px;
-  margin: 2px 5px;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  &:focus {
+    outline: 0px;
+    box-shadow: 0 1px 1px rgba(20, 93, 226, 0.075), 0 0 3px rgba(17, 107, 199, 0.6);
+    border: 1px solid rgba(82, 144, 236, 0.85);
+  }
+  &--error {
+    outline: 0px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 3px rgba(236, 82, 82, 0.6) !important;
+    border: 1px solid rgba(236, 82, 82, 0.7) !important;
+    transition: all 0.2s ease-in;
+  }
 }
-
-.inputError {
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 3px rgba(236, 82, 82, 0.6);
-  border-color: rgba(236, 82, 82, 0.8);
-  outline: 0px;
-  border: 1px solid #ff000040;
-  transition: all 0.2s ease-in;
-}
-.input:focus {
-  border-color: #84a1cc;
-  outline: 0;
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px #2e73da;
+.validation {
+  &--error {
+    background-color: rgba(236, 82, 82, 1);
+    padding: 3px 8px;
+    font-size: 14px;
+    color: white;
+    width: 100%;
+    box-sizing: border-box;
+    height: 25px;
+    transition: height 0.3s ease-out;
+  }
+  &--empty {
+    height: 0px;
+    background-color: rgba(236, 82, 82, 1);
+    transition: height 0.3s ease-in;
+  }
 }
 @media only screen and (max-width: 768px) {
   $lineHeight: 34px;

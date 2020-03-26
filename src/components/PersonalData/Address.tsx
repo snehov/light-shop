@@ -1,97 +1,48 @@
-import React, { useState } from 'react'
-//import { useForm } from 'react-hook-form'
-import { InputLine } from 'components/ui-components'
+import React, { useEffect, useState } from 'react'
+import { useForm, useField } from 'react-final-form-hooks'
+import { finalFormValidation } from 'utils/formsFnc'
+import { InputFF } from 'components/ui-components'
 
-const Address = ({ addresType }: { addresType: string }) => {
-  const [fieldsVal, changeFieldsVal] = useState({
-    name: null,
-    surname: null,
-    street: null,
-    city: null,
-    zip: null,
-    detail: null,
+const inputsConfig = {
+  street: {
+    required: true,
+    minLength: 2,
+    label: 'Ulice a č.p.',
+    placeholder: 'např.: Stoupající 983/25',
+  },
+  city: { required: true, placeholder: '+420 ' },
+  zip: { type: 'number', minLength: 5, maxLength: 5, required: true },
+}
+const Address = ({
+  dataName,
+  returnValues,
+}: {
+  dataName: string
+  returnValues: Function
+}) => {
+  const [formValid, setFormValid] = useState(false)
+  let formSource = {}
+  const { form, handleSubmit, values, pristine, submitting } = useForm({
+    onSubmit: (values: any) => {},
+    validate: (values: any) =>
+      finalFormValidation(values, setFormValid, formSource, inputsConfig),
   })
-  /* const { register, handleSubmit, watch, errors } = useForm()
-  const onSubmit = (data: any) => {
-    console.log(data, errors)
-  } */
+  formSource = form
+  useEffect(() => {
+    returnValues({ [dataName]: { data: values }, dataValid: formValid })
+  }, [formValid, values]) // eslint-disable-line
+  // Change values programatically =>// form.change('firstName', 'nekdo jiný')
 
-  const changeVal = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const target = e.target
-    let saveValue
-    if (target.type === 'number') {
-      saveValue = Number(target.value)
-    } else {
-      saveValue = target.value
-    }
-    const newFields = { ...fieldsVal, [target.name]: saveValue }
-    //console.log('newFields', newFields)
-    changeFieldsVal(newFields)
-  }
+  const street = useField('street', form)
+  const city = useField('city', form)
+  const zip = useField('zip', form)
+
   return (
     <div>
-     {/*  <form onSubmit={handleSubmit(onSubmit)}>
-        <input name="example" defaultValue="test" ref={register} />
-        <input name="exampleRequired" ref={register({ required: true })} />
-        {errors.exampleRequired && <span>This field is required</span>}
-      </form> */}
-      <InputLine
-        name="name"
-        label="Jméno"
-        type="text"
-        groupName={addresType}
-        value={fieldsVal.name}
-        onChange={changeVal}
-        minLength={2}
-      />
-      <input type="submit" />
-
-      <InputLine
-        name="surname"
-        label="Příjmení"
-        type="text"
-        groupName={addresType}
-        value={fieldsVal.surname}
-        onChange={changeVal}
-      />
-      <InputLine
-        name="detail"
-        label="Upřesnění místa"
-        placeholder="firma/patro/recepce..."
-        type="text"
-        groupName={addresType}
-        value={fieldsVal.detail}
-        onChange={changeVal}
-        minLength={2}
-      />
-      <InputLine
-        name="street"
-        label="Ulice"
-        type="text"
-        groupName={addresType}
-        value={fieldsVal.street}
-        onChange={changeVal}
-        minLength={2}
-      />
-      <InputLine
-        name="city"
-        label="Město"
-        type="text"
-        groupName={addresType}
-        value={fieldsVal.city}
-        onChange={changeVal}
-        minLength={2}
-      />
-      <InputLine
-        name="zip"
-        label="PSČ"
-        type="number"
-        groupName={addresType}
-        value={fieldsVal.zip}
-        onChange={changeVal}
-        minLength={5}
-        maxLength={5}
-      />
+      <h3>Adresa</h3>
+      <InputFF field={street} config={inputsConfig} />
+      <InputFF field={city} config={inputsConfig} />
+      <InputFF field={zip} config={inputsConfig} />
     </div>
   )
 }

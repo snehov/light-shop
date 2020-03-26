@@ -2,11 +2,9 @@ import React, { useEffect, useState } from 'react'
 
 const InputFF = ({
   field,
-  label,
   config,
 }: {
   field: any
-  label: string
   config: any
 }) => {
   const name = field.input.name
@@ -27,19 +25,21 @@ const InputFF = ({
     }
   }, []) // eslint-disable-line
   return (
-    <div>
+    <div className="inputLine">
       <label className="labelToInput" htmlFor={useId}>
-        {label}
+        {config[name].label}
+        {required && <span title="povinné pole">*</span>}
       </label>
       <input
         {...field.input}
-        placeholder={label}
+        placeholder={config[name].placeholder}
         type={type}
-        className={showError ? 'inputError input' : 'input'}
+        className={showError ? 'input--error input' : 'input'}
         id={useId}
       />
-      {required && '*'}
-      {showError && <span>{field.meta.error}</span>}
+      <div className={showError ? 'validation--error' : 'validation--empty'}>
+        {showError && field.meta.error}
+      </div>
     </div>
   )
 }

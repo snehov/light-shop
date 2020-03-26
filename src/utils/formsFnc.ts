@@ -16,7 +16,7 @@ export const fieldValidation = (
   value: any,
 ) => {
   let err = ''
-  let tmpVal = value.toString()
+  let tmpVal = value.toString().trim()
   const nameKey = (formSettings as any)[name]
   const required = nameKey.required
 
