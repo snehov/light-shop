@@ -33,4 +33,8 @@ export const changePaymentMethod = payment_id =>
 
 export const fetchOrderInfo = () => api.get(baseURL + 'getOrderInfo')
 
+export const saveAddressInfo = forms_data => 
+  api.post(baseURL + 'saveAddressInfo', forms_data)
+
+
 //changeDeliveryMethod

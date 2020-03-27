@@ -38,6 +38,7 @@ const Address = forwardRef(
       copyContent,
       hidden,
       altName,
+      prefillData,
     }: {
       dataName: string
       returnValues: Function
@@ -45,6 +46,7 @@ const Address = forwardRef(
       copyContent?: any
       hidden?: boolean
       altName?: string
+      prefillData?: any
     },
     ref,
   ) => {
@@ -56,6 +58,27 @@ const Address = forwardRef(
         finalFormValidation(values, setFormValid, formSource, inputsConfig),
     })
     formSource = form
+    //const defaults = prefillData && prefillData[dataName]
+    useEffect(() => {
+      console.log(
+        'getting prefiled datat',
+        dataName,
+        prefillData,
+        prefillData && prefillData[dataName],
+      )
+      if (prefillData && prefillData[dataName]) {
+        console.log(
+          form,
+          'jsemv tom ifu',
+          form.getRegisteredFields(),
+          prefillData[dataName],
+        )
+        //doesnt work here, because form fields are not added here yet
+        form.getRegisteredFields().forEach(key => {
+          form.change(key, prefillData[dataName][key])
+        })
+      }
+    }, []) // eslint-disable-line
     useImperativeHandle(ref, () => ({
       runValidation() {
         handleSubmit()
@@ -79,11 +102,11 @@ const Address = forwardRef(
     const street = useField('street', form)
     const city = useField('city', form)
     const zip = useField('zip', form)
-
+    console.log('form.getRegisteredFields()', form.getRegisteredFields())
     return (
       <div className={`formBlock ${hidden ? 'hidden' : ''}`}>
         <h3>{altName || 'Adresa doručení'}</h3>
-        <InputFF field={descr} config={inputsConfig} />
+        <InputFF field={descr} config={inputsConfig} /* defaults={defaults} */ />
         <InputFF field={street} config={inputsConfig} />
         <InputFF field={city} config={inputsConfig} />
         <InputFF field={zip} config={inputsConfig} />

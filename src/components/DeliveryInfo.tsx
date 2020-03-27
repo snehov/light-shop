@@ -1,4 +1,10 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  useDispatch,
+  useGlobal,
+} from 'reactn'
 import { Address, PersonalInfo, CompanyBaseInfo } from './forms'
 import { debounce } from 'utils/formsFnc'
 const isEmpty = require('ramda').isEmpty
@@ -12,12 +18,26 @@ const DeliveryInfo = () => {
   const [companyVisible, setCompanyVisible] = useState(false)
   const [formParts, setFormParts] = useState({})
   const [allFormsAreValid, setAllFormsAreValid] = useState(false)
+  const saveAddressInfo = useDispatch('saveAddressInfo')
+  const [ {addressName} ] = useGlobal('orderInfo')
+  useEffect(() => {
+    // prazdne je to UNDEFINED
+    console.log('addressName', addressName)
+  }, [addressName])
 
   useEffect(() => {
     setAllFormsAreValid(checkAllFormsValid())
     !isEmpty(formParts) &&
       debounceFnc(() => {
-        console.log('debounced api call', formParts)
+        const currentParts = Object.values(formParts).reduce(
+          (acc: any, curr) => {
+            console.log('curr je', (curr as any).name, (curr as any).data)
+            return { ...acc, [(curr as any).name]: (curr as any).data }
+          },
+          {},
+        )
+        console.log('debounced api call', currentParts)
+        saveAddressInfo(currentParts as object)
       })
     //console.log('formParts', formParts)
   }, [formParts]) // eslint-disable-line
@@ -83,6 +103,7 @@ const DeliveryInfo = () => {
         <Address
           dataName="delivery"
           returnValues={setValues}
+          prefillData={addressName}
           ref={validateDelivery}
         />
         <div>
@@ -121,7 +142,8 @@ const DeliveryInfo = () => {
       <cite>
         Next steps:
         <br />
-        1) make endpoint for saving form data
+        1) make endpoint for saving form data;{' '}
+        <b>BE should re-check data validity again</b>
         <br />
         <s>2) sync it on blur, but better with DEBOUNCE on 2sec </s>
         <br />

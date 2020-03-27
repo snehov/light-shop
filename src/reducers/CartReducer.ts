@@ -7,6 +7,7 @@ import {
   changeDeliveryMethod,
   fetchOrderInfo,
   changePaymentMethod,
+  saveAddressInfo,
 } from '../api'
 import { CartType, CartItemType } from 'utils/types'
 
@@ -60,6 +61,10 @@ addReducer('fetchOrderInfo', async () => {
   return {
     orderInfo: response.data,
   }
+})
+addReducer('saveAddressInfo', async (global, dispatch, forms_data) => {
+  let response = await saveAddressInfo(forms_data)
+  return response.data
 })
 
 const parseIncomingCart = (data: CartData) => {

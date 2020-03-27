@@ -14,12 +14,6 @@ declare module 'reactn/default' {
       dispatch: Dispatch,
       ...strings: any[]
     ) => Pick<State, 'value'>;
-
-    increment: (
-      global: State,
-      dispatch: Dispatch,
-      i: number,
-    ) => Pick<State, 'count'>;
  */
     changeCartItemAmount: (
       global: State,
@@ -55,7 +49,13 @@ declare module 'reactn/default' {
     fetchOrderInfo: (
       global: State,
       dispatch: Dispatch,
-    ) => Pick<State, 'orderInfo'>
+    ) => Pick<State, 'deliveryMethod', 'paymentMethod', 'addressName'> //previously just 'orderInfo'>
+
+    saveAddressInfo: (
+      global: State,
+      dispatch: Dispatch,
+      forms_data: object,
+    ) => null
   }
 
   // necessary to define due to typescript ability to safely read from useGlobal()
@@ -81,6 +81,7 @@ declare module 'reactn/default' {
     orderInfo: {
       deliveryMethod: number
       paymentMethod: number
+      addressName: object
     }
     deliveryMethods: Array<DeliveryMethodType>
     paymentMethods: Array<PaymentMethodType>

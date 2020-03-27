@@ -42,9 +42,11 @@ const PaymentMethods = (/* { selectedDelivery }: { selectedDelivery: number } */
     if (selectedDelivery === 0 || isEmpty(deliveryMethods)) {
       return []
     }
-    const allowedPayements = deliveryMethods
-      .filter(d => d.delivery_id == selectedDelivery)[0] // eslint-disable-line eqeqeq
-      .payments.split(',')
+    const allowedPayements = !selectedDelivery
+      ? ''
+      : deliveryMethods
+          .filter(d => d.delivery_id == selectedDelivery)[0] //eslint-disable-line eqeqeq
+          .payments.split(',')
     return allowedPayements
   }
 
