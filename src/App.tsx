@@ -3,7 +3,6 @@ import './App.scss'
 import './reducers'
 import Cart from './Cart'
 import DeliveryAndPay from './components/DeliveryAndPay'
-import PersonalData from './components/PersonalData'
 import DeliveryInfo from "./components/PersonalData/DeliveryInfo"
 
 const App = () => {
