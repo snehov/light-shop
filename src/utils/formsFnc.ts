@@ -1,4 +1,5 @@
 const isEmpty = require('ramda').isEmpty
+
 export const getProperInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
   const target = e.target
   let safeValue
@@ -68,3 +69,33 @@ export const finalFormValidation = (
   setFormValid(passed)
   return passed ? undefined : errors
 }
+
+// TS versin of debounce
+export const debounce = <F extends (...args: any[]) => any>(
+  func: F,
+  waitFor: number,
+) => {
+  let timeout: ReturnType<typeof setTimeout>
+
+  return (...args: Parameters<F>): Promise<ReturnType<F>> =>
+    new Promise(resolve => {
+      if (timeout) {
+        clearTimeout(timeout)
+      }
+
+      timeout = setTimeout(() => resolve(func(...args)), waitFor)
+    })
+}
+/* 
+//JS version of debounce
+export const debounce = (func, delay) => {
+  let inDebounce
+  return function() {
+    const context = this
+    const args = arguments
+    clearTimeout(inDebounce)
+    inDebounce = setTimeout(() =>
+      func.apply(context, args)
+    , delay)
+  }
+} */

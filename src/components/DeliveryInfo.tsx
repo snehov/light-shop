@@ -1,14 +1,24 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { Address, PersonalInfo, CompanyBaseInfo } from './forms'
-//import Address from './Address'
+import { debounce } from 'utils/formsFnc'
+const isEmpty = require('ramda').isEmpty
+
+const debounceFnc = debounce((launchDebounced: any) => {
+  launchDebounced()
+}, 1000)
 
 const DeliveryInfo = () => {
   const [copyInvoiceAddr, setCopyInvoiceAddr] = useState(true)
   const [companyVisible, setCompanyVisible] = useState(false)
   const [formParts, setFormParts] = useState({})
   const [allFormsAreValid, setAllFormsAreValid] = useState(false)
+
   useEffect(() => {
     setAllFormsAreValid(checkAllFormsValid())
+    !isEmpty(formParts) &&
+      debounceFnc(() => {
+        console.log('debounced api call', formParts)
+      })
     //console.log('formParts', formParts)
   }, [formParts]) // eslint-disable-line
   useEffect(() => {
@@ -108,13 +118,43 @@ const DeliveryInfo = () => {
           />
         )}
       </div>
+      <cite>
+        Next steps:
+        <br />
+        1) make endpoint for saving form data
+        <br />
+        <s>2) sync it on blur, but better with DEBOUNCE on 2sec </s>
+        <br />
+        3) make endpoint for send/close order
+        <br />
+        4) after refresh prefill already sent data
+        <br />
+        5) from server sent link to terms&amp;conditions which you can
+        click/redirect (_blank/lightbox) other) on first load, let server
+        generate known values to JSON to &lt;script&gt;
+        <br />
+        -------> and in react ask if (JSON available) -parse it and load -ELSE-
+        send BE request for them <br />
+        another) prevent session expire by saving basic values to localStorage
+        (make it friendly with previous point)
+        <br />
+        BE) make work sending proper data types
+        <br />
+        CSS) make perfect styling for form in checkbox/radio...
+      </cite>
+      <br />
+      <br />
+      <br />
       {!allowedToFinish && <div>ještě není vše vyplněno</div>}
       {allowedToFinish ? (
         <button className="formSubmit formSubmit--ready" onClick={submitData}>
           Objednat
         </button>
       ) : (
-        <button className="formSubmit  formSubmit--notReady" onClick={onScreenValidation}>
+        <button
+          className="formSubmit  formSubmit--notReady"
+          onClick={onScreenValidation}
+        >
           Objednat
         </button>
       )}
