@@ -85,5 +85,6 @@ declare module 'reactn/default' {
     deliveryMethods: Array<DeliveryMethodType>
     paymentMethods: Array<PaymentMethodType>
     selectedDelivery: number
+    selectedPayment: number
   }
 }
