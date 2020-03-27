@@ -87,6 +87,18 @@ $baseItemHeight: 33px;
 .formBlock {
   width: 350px;
 }
+.formSubmit {
+  font-size: 19px;
+  padding: 5px 35px;
+  border: none;
+  cursor: pointer;
+  &--ready {
+    background-color: rgb(108, 205, 108);
+  }
+  &--notReady {
+    background-color: rgb(112, 160, 242);
+  }
+}
 .inputLine {
   padding: 3px;
   width: 100%;

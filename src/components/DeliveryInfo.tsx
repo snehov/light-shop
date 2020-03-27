@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { Address, PersonalInfo, CompanyBaseInfo } from './forms'
 //import Address from './Address'
 
@@ -9,7 +9,7 @@ const DeliveryInfo = () => {
   const [allFormsAreValid, setAllFormsAreValid] = useState(false)
   useEffect(() => {
     setAllFormsAreValid(checkAllFormsValid())
-    console.log('formParts', formParts)
+    //console.log('formParts', formParts)
   }, [formParts]) // eslint-disable-line
   useEffect(() => {
     if (!companyVisible) {
@@ -43,49 +43,81 @@ const DeliveryInfo = () => {
     if (!Object.values(formParts).every(item => (item as any).dataValid)) {
       passed = false
     }
-    console.log('TOTAL PASSSED', passed)
     return passed
+  }
+
+  const submitData = () => {
+    console.log('SUBMIT form', formParts)
+  }
+  const validatePersonal = useRef()
+  const validateDelivery = useRef()
+  const validateInvoice = useRef()
+  const validateCompany = useRef()
+  const onScreenValidation = () => {
+    ;(validatePersonal as any).current.runValidation()
+    ;(validateDelivery as any).current.runValidation()
+    ;(validateInvoice as any).current.runValidation()
+    if ((validateCompany as any).current) {
+      ;(validateCompany as any).current.runValidation()
+    }
   }
   const allowedToFinish = allFormsAreValid
   return (
     <div>
-      <form /* onSubmit={handleSubmit} */>
-        <div className="elemsToRow">
-          <PersonalInfo dataName="personal" returnValues={setValues} />
-          <Address dataName="delivery" returnValues={setValues} />
-          <div>
-            <input
-              type="checkbox"
-              checked={copyInvoiceAddr}
-              onChange={e => setCopyInvoiceAddr(e.target.checked)}
-            />
-            {/* Fakturační adresa je stejná jako dodací adresa */}
-          </div>
-          {
-            <Address
-              dataName="invoice"
-              altName="Fakturační údaje"
-              returnValues={setValues}
-              copyValues={copyInvoiceAddr}
-              hidden={copyInvoiceAddr}
-              copyContent={(formParts as any).delivery}
-            />
-          }
+      <div className="elemsToRow">
+        <PersonalInfo
+          dataName="personal"
+          returnValues={setValues}
+          ref={validatePersonal}
+        />
+        <Address
+          dataName="delivery"
+          returnValues={setValues}
+          ref={validateDelivery}
+        />
+        <div>
           <input
             type="checkbox"
-            checked={companyVisible}
-            onChange={e => setCompanyVisible(e.target.checked)}
+            checked={copyInvoiceAddr}
+            onChange={e => setCopyInvoiceAddr(e.target.checked)}
           />
-          firma
-          {companyVisible && (
-            <CompanyBaseInfo dataName="company" returnValues={setValues} />
-          )}
+          {/* Fakturační adresa je stejná jako dodací adresa */}
         </div>
-      </form>
+        {
+          <Address
+            dataName="invoice"
+            altName="Fakturační údaje"
+            returnValues={setValues}
+            ref={validateInvoice}
+            copyValues={copyInvoiceAddr}
+            hidden={copyInvoiceAddr}
+            copyContent={(formParts as any).delivery}
+          />
+        }
+        <input
+          type="checkbox"
+          checked={companyVisible}
+          onChange={e => setCompanyVisible(e.target.checked)}
+        />
+        firma
+        {companyVisible && (
+          <CompanyBaseInfo
+            dataName="company"
+            returnValues={setValues}
+            ref={validateCompany}
+          />
+        )}
+      </div>
       {!allowedToFinish && <div>ještě není vše vyplněno</div>}
-      <button type="submit" disabled={!allowedToFinish}>
-        Objednat
-      </button>
+      {allowedToFinish ? (
+        <button className="formSubmit formSubmit--ready" onClick={submitData}>
+          Objednat
+        </button>
+      ) : (
+        <button className="formSubmit  formSubmit--notReady" onClick={onScreenValidation}>
+          Objednat
+        </button>
+      )}
     </div>
   )
 }
