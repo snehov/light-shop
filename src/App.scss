@@ -77,8 +77,19 @@ $baseItemHeight: 33px;
   display: flex;
   flex-flow: column;
 }
+.hidden {
+  display: none;
+}
+.elemsToRow {
+  display: flex;
+  flex-flow: row;
+}
+.formBlock {
+  width: 350px;
+}
 .inputLine {
   padding: 3px;
+  width: 100%;
   max-width: 300px;
   margin: 4px 0px;
 }
@@ -101,7 +112,8 @@ $baseItemHeight: 33px;
   box-sizing: border-box;
   &:focus {
     outline: 0px;
-    box-shadow: 0 1px 1px rgba(20, 93, 226, 0.075), 0 0 3px rgba(17, 107, 199, 0.6);
+    box-shadow: 0 1px 1px rgba(20, 93, 226, 0.075),
+      0 0 3px rgba(17, 107, 199, 0.6);
     border: 1px solid rgba(82, 144, 236, 0.85);
   }
   &--error {

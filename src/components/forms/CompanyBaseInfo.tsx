@@ -4,42 +4,47 @@ import { finalFormValidation } from 'utils/formsFnc'
 import { InputFF } from 'components/ui-components'
 
 const inputsConfig = {
-  name: { required: true, minLength: 2, label: 'Jméno a příjmení' },
-  tel: { required: true, type: 'tel', placeholder: '+420 ', label: 'Telefon' },
-  email: { type: 'email', label: 'e-mail' },
+  name: { required: true, minLength: 5, label: 'Obchodní název' },
+  crn: { required: true, type: 'number', minLength: 5, label: 'IČ' },
+  utr: { minLength: 5, label: 'DIČ' },
 }
-const PersonalData = ({
+const CompanyBaseInfo = ({
   dataName,
   returnValues,
+  hidden,
 }: {
   dataName: string
   returnValues: Function
+  hidden?:boolean
 }) => {
   const [formValid, setFormValid] = useState(false)
   let formSource = {}
-  const { form, handleSubmit, values, pristine, submitting } = useForm({
+  const { form, values } = useForm({
     onSubmit: (values: any) => {},
     validate: (values: any) =>
       finalFormValidation(values, setFormValid, formSource, inputsConfig),
   })
   formSource = form
   useEffect(() => {
-    returnValues({ [dataName]: { data: values }, dataValid: formValid })
+    returnValues({
+      data: values,
+      name: dataName,
+      dataValid: formValid,
+    })
   }, [formValid, values]) // eslint-disable-line
-  // Change values programatically =>// form.change('firstName', 'nekdo jiný')
 
   const name = useField('name', form)
-  const tel = useField('tel', form)
-  const email = useField('email', form)
+  const crn = useField('crn', form)
+  const utr = useField('utr', form)
 
   return (
-    <div>
-      <h3>Základní údaje</h3>
+    <div className={`formBlock ${hidden ? 'hidden' : ''}`}>
+      <h3>Informace o firmě</h3>
       <InputFF field={name} config={inputsConfig} />
-      <InputFF field={tel} config={inputsConfig} />
-      <InputFF field={email} config={inputsConfig} />
+      <InputFF field={crn} config={inputsConfig} />
+      <InputFF field={utr} config={inputsConfig} />
     </div>
   )
 }
 
-export default PersonalData
+export default CompanyBaseInfo

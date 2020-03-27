@@ -3,7 +3,7 @@ import './App.scss'
 import './reducers'
 import Cart from './Cart'
 import DeliveryAndPay from './components/DeliveryAndPay'
-import DeliveryInfo from "./components/PersonalData/DeliveryInfo"
+import DeliveryInfo from "./components/DeliveryInfo"
 
 const App = () => {
   const fetchCart = useDispatch('getCart')
