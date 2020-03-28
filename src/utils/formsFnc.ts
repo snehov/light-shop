@@ -1,4 +1,5 @@
 const isEmpty = require('ramda').isEmpty
+const isNil = require('ramda').isNil
 
 export const getProperInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
   const target = e.target
@@ -69,6 +70,56 @@ export const finalFormValidation = (
   setFormValid(passed)
   return passed ? undefined : errors
 }
+
+// form is assembled from form parts, this check if exists and its inputs are valid
+export const checkAllFormPartsValid = (
+  requiredParts: Array<string>,
+  formParts: object,
+) => {
+  let passed = true
+  const currentParts = Object.values(formParts).reduce((acc: any, curr) => {
+    return [...acc, (curr as any).name]
+  }, [])
+  //all required form parts are present
+  requiredParts.forEach(part => {
+    if (!(currentParts as any).includes(part)) {
+      passed = false
+    }
+  })
+  // all available form parts are valid
+  if (!Object.values(formParts).every(item => (item as any).dataValid)) {
+    passed = false
+  }
+  return passed
+}
+
+// dont save input to BE, after input recceived prefilled values
+export const changedByUserInput = (form: any, values: object) => {
+  let save = false
+  Object.keys(values).forEach(item => {
+    if (form.getFieldState(item)?.dirty === true) {
+      save = true
+    }
+  })
+  return save
+  // FORM INPUT attributes related to initial values
+  // by setInitialValues
+  // dirty:false, initial:"TOTAL jarmil", modified:false, pristine: true, touched:false, visited:false, value: "TOTAL jarmil"
+
+  // by form.change(..)
+  // dirty: true, initial:undefined      ,modified:false, pristine: false, touched: false, visited:false
+
+  // withou setiing, but typing
+  // dirty:true, initial:undefined,      modified:true,   pristine: false, touched:false, visited:false, value "ds"
+
+  // dirty- bude modifikovano od initial stata
+  // modified - bude asi userem pres typing
+  // pristine - same value as init (init je starnardne undefined a hned dostane "")
+  // touched - uz jednou ztratil focus
+  // visited - uz jednou dostal focus
+}
+
+// compare two object and check if equal
 export const areObjectsEqual = (a: any, b: any) => {
   let s = (o: any) =>
     Object.entries(o)
@@ -79,7 +130,7 @@ export const areObjectsEqual = (a: any, b: any) => {
       })
   return JSON.stringify(s(a)) === JSON.stringify(s(b))
 }
-//export const ad
+
 // TS versin of debounce
 export const debounce = <F extends (...args: any[]) => any>(
   func: F,
@@ -109,8 +160,35 @@ export const debounce = (func, delay) => {
     , delay)
   }
 } */
+
+// transform from BE format to internal format (one level deeper structure)
 export const fromApiAddrToAppAddrForm = (api: any) => {
   return Object.entries(api).reduce((acc, [key, value]) => {
     return { ...acc, [key]: { data: value, name: key, dataValid: false } }
   }, {})
+}
+
+export const setAllValuesEmpty = (object: object) => {
+  return Object.keys(object).reduce((acc, cur) => {
+    return { ...acc, [cur]: '' }
+  }, {})
+}
+
+export const clearCompanyValues = (formParts: object) => {
+  if (!(formParts as any).company) {
+    return formParts
+  } else {
+    return {
+      ...formParts,
+      company: {
+        ...(formParts as any).company,
+        data: setAllValuesEmpty((formParts as any).company?.data),
+      },
+    }
+  }
+    // let withoutCompany = { ...formParts }
+  // delete (withoutCompany as any).company
+}
+export const hasAllEmptyValues = (object: object) => {
+  return Object.values(object).every(value => value === '' || isNil(value))
 }

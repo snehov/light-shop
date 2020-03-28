@@ -5,7 +5,7 @@ import React, {
   useImperativeHandle,
 } from 'react'
 import { useForm, useField } from 'react-final-form-hooks'
-import { finalFormValidation } from 'utils/formsFnc'
+import { finalFormValidation, changedByUserInput } from 'utils/formsFnc'
 import { InputFF } from 'components/ui-components'
 
 const inputsConfig = {
@@ -44,7 +44,7 @@ const PersonalInfo = forwardRef(
     const [formValid, setFormValid] = useState(false)
     let formSource = {}
     const { form, values, handleSubmit } = useForm({
-      onSubmit: (values: any) => {},
+      onSubmit: (values: any) => {console.log("submitnuti personalinfa")},
       validate: (values: any) =>
         finalFormValidation(values, setFormValid, formSource, inputsConfig),
     })
@@ -59,15 +59,9 @@ const PersonalInfo = forwardRef(
         handleSubmit()
       },
     }))
-    
+
     useEffect(() => {
-      let save = false
-      Object.keys(values).forEach(item => {
-        if (form.getFieldState(item)?.dirty === true) {
-          save = true
-        }
-      })
-      save &&
+      changedByUserInput(form, values) &&
         returnValues({
           data: values,
           name: dataName,
@@ -92,17 +86,4 @@ const PersonalInfo = forwardRef(
 
 export default PersonalInfo
 
-//with setInitialValues
-// dirty:false, initial:"TOTAL jarmil", modified:false, pristine: true, touched:false, visited:false, value: "TOTAL jarmil"
 
-// by form.change(..)
-// dirty: true, initial:undefined      ,modified:false, pristine: false, touched: false, visited:false
-
-//withou setiing, but typing
-// dirty:true, initial:undefined,      modified:true,   pristine: false, touched:false, visited:false, value "ds"
-
-// dirty- bude modifikovano od initial stata
-// modified - bude asi userem pres typing
-// pristine - same value as init (init je starnardne undefined a hned dostane "")
-// touched - uz jednou ztratil focus
-// visited - uz jednou dostal focus

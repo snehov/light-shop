@@ -5,7 +5,7 @@ import React, {
   useImperativeHandle,
 } from 'react'
 import { useForm, useField } from 'react-final-form-hooks'
-import { finalFormValidation } from 'utils/formsFnc'
+import { finalFormValidation, changedByUserInput } from 'utils/formsFnc'
 import { InputFF } from 'components/ui-components'
 
 const inputsConfig = {
@@ -19,10 +19,12 @@ const CompanyBaseInfo = forwardRef(
       dataName,
       returnValues,
       hidden,
+      prefillData,
     }: {
       dataName: string
       returnValues: Function
       hidden?: boolean
+      prefillData?: any
     },
     ref,
   ) => {
@@ -34,17 +36,24 @@ const CompanyBaseInfo = forwardRef(
         finalFormValidation(values, setFormValid, formSource, inputsConfig),
     })
     formSource = form
+    useEffect(() => {
+      prefillData?.[dataName] &&
+        form.setConfig('initialValues', prefillData[dataName])
+    }, [form, prefillData]) // eslint-disable-line
+
     useImperativeHandle(ref, () => ({
       runValidation() {
         handleSubmit()
       },
     }))
+    
     useEffect(() => {
-      returnValues({
-        data: values,
-        name: dataName,
-        dataValid: formValid,
-      })
+      changedByUserInput(form, values) &&
+        returnValues({
+          data: values,
+          name: dataName,
+          dataValid: formValid,
+        })
     }, [formValid, values]) // eslint-disable-line
 
     const name = useField('name', form)

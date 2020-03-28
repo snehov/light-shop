@@ -6,9 +6,14 @@ import React, {
   useGlobal,
 } from 'reactn'
 import { Address, PersonalInfo, CompanyBaseInfo } from './forms'
-import { debounce } from 'utils/formsFnc'
-import { areObjectsEqual, fromApiAddrToAppAddrForm } from 'utils/formsFnc'
-import { isNull } from 'util'
+import {
+  areObjectsEqual,
+  fromApiAddrToAppAddrForm,
+  debounce,
+  checkAllFormPartsValid,
+  clearCompanyValues,
+  hasAllEmptyValues,
+} from 'utils/formsFnc'
 const isEmpty = require('ramda').isEmpty
 
 const debounceFnc = debounce((launchDebounced: any) => {
@@ -16,89 +21,70 @@ const debounceFnc = debounce((launchDebounced: any) => {
 }, 1000)
 
 const DeliveryInfo = () => {
-  //const[pokus, setPokus]=useState(false)
   const [copyInvoiceAddr, setCopyInvoiceAddr] = useState(true)
-  const [companyVisible, setCompanyVisible] = useState(false)
+  const [companyVisible, setCompanyVisible] = useState<boolean | undefined>(
+    undefined,
+  )
   const [formParts, setFormParts] = useState({})
   const [allFormsAreValid, setAllFormsAreValid] = useState(false)
   const saveAddressInfo = useDispatch('saveAddressInfo')
   const [{ addressName }] = useGlobal('orderInfo')
-  /* useEffect(()=>{
-    console.log("pokus", pokus)
-  },[pokus]) */
-  useEffect(() => {
-    // prazdne je to UNDEFINED
 
+  useEffect(() => {
+    // when getting init data from BE find out whether delivery/invoice are different, or copied, then preselect copy option
     const an = addressName as any
     if (an.invoice && an.delivery) {
-      //setFormsParts(an)
-      const cr = areObjectsEqual(
-        (addressName as any)?.invoice,
-        (addressName as any)?.delivery,
-      )
+      const cr = areObjectsEqual(an?.invoice, an?.delivery)
       !cr && setCopyInvoiceAddr(false)
-      console.log(
-        'addressName',
-        addressName,
-        'cr res',
-        cr,
-        cr === false && 'odlišné adresy, nekopíruj',
-      )
-    } else {
-      console.log('addressName', addressName)
+    }
+    // show company info when preselected data exists
+    if (an.company && !isEmpty(an.company)) {
+      //setCompanyVisible(true)
     }
   }, [addressName])
-  useEffect(() => {
-    if (!copyInvoiceAddr) {
-      //setFormParts({...formParts},delivery:formParts. )
-    }
-    console.log('zmena v kopírování na ', copyInvoiceAddr, addressName)
-  }, [addressName, copyInvoiceAddr])
 
   useEffect(() => {
-    console.log(
-      'FFFFPARTSs',
-      formParts,
-      isEmpty(formParts),
-      addressName,
-      !isEmpty(addressName),
-    )
-    console.log(
-      'APAD',
-      areObjectsEqual(fromApiAddrToAppAddrForm(addressName), formParts),
-    )
     if (isEmpty(formParts) && !isEmpty(addressName)) {
-      //first time set up from session to local
-      console.log('FIRST time syncs data objects')
+      //first time set up form data from BE to local (if exists)
       setFormParts(fromApiAddrToAppAddrForm(addressName))
     } else if (
       areObjectsEqual(fromApiAddrToAppAddrForm(addressName), formParts)
     ) {
-      console.log('NIC, is equal')
+      // this is save after previous set-up, no actions needed now (avoiding data sending to BE)
     } else {
       setAllFormsAreValid(checkAllFormsValid())
       !isEmpty(formParts) &&
         debounceFnc(() => {
           const currentParts = Object.values(formParts).reduce(
             (acc: any, curr) => {
-              console.log('curr je', (curr as any).name, (curr as any).data)
               return { ...acc, [(curr as any).name]: (curr as any).data }
             },
             {},
           )
-          console.log('debounced api call', currentParts)
+          console.log('debounced API call to save data', currentParts)
           saveAddressInfo(currentParts as object)
         })
     }
-    //console.log('formParts', formParts)
   }, [formParts]) // eslint-disable-line
+
   useEffect(() => {
-    if (!companyVisible) {
-      let withoutCompany = { ...formParts }
+    console.log(
+      'companyNOTVisible ',
+      companyVisible,
+      addressName,
+      '##',
+      hasAllEmptyValues((addressName as any).company),
+    )
+    if (companyVisible === undefined) {
+      setCompanyVisible(!hasAllEmptyValues((addressName as any).company))
+    } else if (companyVisible === false) {
+      /* let withoutCompany = { ...formParts }
       delete (withoutCompany as any).company
-      setFormParts(withoutCompany)
+      setFormParts(withoutCompany) */
+      setFormParts(clearCompanyValues(formParts))
     }
-  }, [companyVisible]) // eslint-disable-line
+  }, [companyVisible /* , addressName */]) // eslint-disable-line
+
   const setValues = (values: any) => {
     const from = values.name
     let saveData
@@ -108,31 +94,23 @@ const DeliveryInfo = () => {
     } else {
       saveData = { ...formParts, [values.name]: values }
     }
-    console.log('savedata', saveData)
     setFormParts(saveData)
   }
+
   const checkAllFormsValid = () => {
-    let passed = true
     const requiredParts = ['personal', 'delivery', 'invoice']
-    const currentParts = Object.values(formParts).reduce((acc: any, curr) => {
-      return [...acc, (curr as any).name]
-    }, [])
-    //all required form parts are present
-    requiredParts.forEach(part => {
-      if (!(currentParts as any).includes(part)) {
-        passed = false
-      }
-    })
-    // all available form parts are valid
-    if (!Object.values(formParts).every(item => (item as any).dataValid)) {
-      passed = false
-    }
-    return passed
+    console.log(
+      'validate all',
+      formParts,
+      checkAllFormPartsValid(requiredParts, formParts),
+    )
+    return checkAllFormPartsValid(requiredParts, formParts)
   }
 
   const submitData = () => {
     console.log('SUBMIT form', formParts)
   }
+
   const validatePersonal = useRef()
   const validateDelivery = useRef()
   const validateInvoice = useRef()
@@ -141,12 +119,19 @@ const DeliveryInfo = () => {
     ;(validatePersonal as any).current.runValidation()
     ;(validateDelivery as any).current.runValidation()
     ;(validateInvoice as any).current.runValidation()
-    if ((validateCompany as any).current) {
+    if ((validateCompany as any).current /* && companyVisible */) {
+      console.log("validate company on screen")
+      //&& (formParts as any).company)
       ;(validateCompany as any).current.runValidation()
+    }else{
+      console.log("SKIP validate company on screen")
+      /* let withoutCompany = { ...formParts }
+      delete (withoutCompany as any).company
+      setFormParts(withoutCompany) */
     }
+    //checkAllFormsValid()
   }
-  console.log('formParts', formParts)
-  const allowedToFinish = allFormsAreValid
+  const allowedToFinish = allFormsAreValid // && isSending #later, dont forget
   return (
     <div>
       <div className="elemsToRow">
@@ -184,7 +169,7 @@ const DeliveryInfo = () => {
         }
         <input
           type="checkbox"
-          checked={companyVisible}
+          checked={Boolean(companyVisible)}
           onChange={e => setCompanyVisible(e.target.checked)}
         />
         firma
@@ -192,14 +177,13 @@ const DeliveryInfo = () => {
           <CompanyBaseInfo
             dataName="company"
             returnValues={setValues}
+            prefillData={addressName}
             ref={validateCompany}
           />
         )}
       </div>
 
-      <b style={{ color: 'red' }}>
-        now take care of proper work of copy addres doruc/faktur
-      </b>
+      <b style={{ color: 'red' }}>in progress is...?</b>
       <br />
       <cite>
         Next steps:
@@ -211,8 +195,11 @@ const DeliveryInfo = () => {
         <br />
         3) make endpoint for send/close order
         <br />
-        4) <s>after refresh prefill already sent data</s> make it better! and be
-        carefull about hidden/opened copy items block
+        4){' '}
+        <s>
+          after refresh, prefill already sent data (be aware of copy invoice
+          addre dependecy)
+        </s>
         <br />
         5) from server sent link to terms&amp;conditions which you can
         click/redirect (_blank/lightbox) other) on first load, let server

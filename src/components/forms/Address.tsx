@@ -5,7 +5,7 @@ import React, {
   useImperativeHandle,
 } from 'react'
 import { useForm, useField } from 'react-final-form-hooks'
-import { finalFormValidation } from 'utils/formsFnc'
+import { finalFormValidation, changedByUserInput } from 'utils/formsFnc'
 import { InputFF } from 'components/ui-components'
 
 const inputsConfig = {
@@ -71,30 +71,22 @@ const Address = forwardRef(
     }))
 
     useEffect(() => {
-      let save = false
-      Object.keys(values).forEach(item => {
-        if (form.getFieldState(item)?.dirty === true) {
-          save = true
-        }
-      })
-      save &&
-      returnValues({
-        data: values,
-        name: dataName,
-        dataValid: formValid,
-      })
+      changedByUserInput(form, values) &&
+        returnValues({
+          data: values,
+          name: dataName,
+          dataValid: formValid,
+        })
     }, [formValid, values]) // eslint-disable-line
 
     useEffect(() => {
-      console.log("inside addr copyContent",copyContent,copyValues)
-
       if (copyValues && copyContent) {
         Object.entries(copyContent.data).forEach(([key, data]) => {
           form.change(key, copyContent.data[key])
         })
       }
-    }, [copyContent,copyValues]) // eslint-disable-line
-    
+    }, [copyContent, copyValues]) // eslint-disable-line
+
     const descr = useField('descr', form)
     const street = useField('street', form)
     const city = useField('city', form)
