@@ -7,7 +7,8 @@ import React, {
 } from 'reactn'
 import { Address, PersonalInfo, CompanyBaseInfo } from './forms'
 import { debounce } from 'utils/formsFnc'
-import { areObjectsEqual } from 'utils/formsFnc'
+import { areObjectsEqual, fromApiAddrToAppAddrForm } from 'utils/formsFnc'
+import { isNull } from 'util'
 const isEmpty = require('ramda').isEmpty
 
 const debounceFnc = debounce((launchDebounced: any) => {
@@ -27,6 +28,7 @@ const DeliveryInfo = () => {
   },[pokus]) */
   useEffect(() => {
     // prazdne je to UNDEFINED
+
     const an = addressName as any
     if (an.invoice && an.delivery) {
       //setFormsParts(an)
@@ -54,19 +56,40 @@ const DeliveryInfo = () => {
   }, [addressName, copyInvoiceAddr])
 
   useEffect(() => {
-    setAllFormsAreValid(checkAllFormsValid())
-    !isEmpty(formParts) &&
-      debounceFnc(() => {
-        const currentParts = Object.values(formParts).reduce(
-          (acc: any, curr) => {
-            console.log('curr je', (curr as any).name, (curr as any).data)
-            return { ...acc, [(curr as any).name]: (curr as any).data }
-          },
-          {},
-        )
-        console.log('debounced api call', currentParts)
-        saveAddressInfo(currentParts as object)
-      })
+    console.log(
+      'FFFFPARTSs',
+      formParts,
+      isEmpty(formParts),
+      addressName,
+      !isEmpty(addressName),
+    )
+    console.log(
+      'APAD',
+      areObjectsEqual(fromApiAddrToAppAddrForm(addressName), formParts),
+    )
+    if (isEmpty(formParts) && !isEmpty(addressName)) {
+      //first time set up from session to local
+      console.log('FIRST time syncs data objects')
+      setFormParts(fromApiAddrToAppAddrForm(addressName))
+    } else if (
+      areObjectsEqual(fromApiAddrToAppAddrForm(addressName), formParts)
+    ) {
+      console.log('NIC, is equal')
+    } else {
+      setAllFormsAreValid(checkAllFormsValid())
+      !isEmpty(formParts) &&
+        debounceFnc(() => {
+          const currentParts = Object.values(formParts).reduce(
+            (acc: any, curr) => {
+              console.log('curr je', (curr as any).name, (curr as any).data)
+              return { ...acc, [(curr as any).name]: (curr as any).data }
+            },
+            {},
+          )
+          console.log('debounced api call', currentParts)
+          saveAddressInfo(currentParts as object)
+        })
+    }
     //console.log('formParts', formParts)
   }, [formParts]) // eslint-disable-line
   useEffect(() => {
