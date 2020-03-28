@@ -69,7 +69,14 @@ export const finalFormValidation = (
   setFormValid(passed)
   return passed ? undefined : errors
 }
-
+export const areObjectsEqual = (a:any, b:any) => { 
+  let s = (o:any) => Object.entries(o).sort().map(i => { 
+     if(i[1] instanceof Object) i[1] = s(i[1]);
+     return i 
+  }) 
+  return JSON.stringify(s(a)) === JSON.stringify(s(b))
+}
+//export const ad
 // TS versin of debounce
 export const debounce = <F extends (...args: any[]) => any>(
   func: F,

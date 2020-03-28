@@ -33,9 +33,11 @@ const PersonalInfo = forwardRef(
     {
       dataName,
       returnValues,
+      prefillData,
     }: {
       dataName: string
       returnValues: Function
+      prefillData?: any
     },
     ref,
   ) => {
@@ -47,19 +49,31 @@ const PersonalInfo = forwardRef(
         finalFormValidation(values, setFormValid, formSource, inputsConfig),
     })
     formSource = form
+    useEffect(() => {
+      prefillData?.[dataName] &&
+        form.setConfig('initialValues', prefillData[dataName])
+    }, [form, prefillData]) // eslint-disable-line
+
     useImperativeHandle(ref, () => ({
       runValidation() {
         handleSubmit()
       },
     }))
+    
     useEffect(() => {
-      returnValues({
-        data: values,
-        name: dataName,
-        dataValid: formValid,
+      let save = false
+      Object.keys(values).forEach(item => {
+        if (form.getFieldState(item)?.dirty === true) {
+          save = true
+        }
       })
+      save &&
+        returnValues({
+          data: values,
+          name: dataName,
+          dataValid: formValid,
+        })
     }, [formValid, values]) // eslint-disable-line
-    // Change values programatically =>// form.change('firstName', 'nekdo jiný')
 
     const name = useField('name', form)
     const tel = useField('tel', form)
@@ -77,3 +91,18 @@ const PersonalInfo = forwardRef(
 )
 
 export default PersonalInfo
+
+//with setInitialValues
+// dirty:false, initial:"TOTAL jarmil", modified:false, pristine: true, touched:false, visited:false, value: "TOTAL jarmil"
+
+// by form.change(..)
+// dirty: true, initial:undefined      ,modified:false, pristine: false, touched: false, visited:false
+
+//withou setiing, but typing
+// dirty:true, initial:undefined,      modified:true,   pristine: false, touched:false, visited:false, value "ds"
+
+// dirty- bude modifikovano od initial stata
+// modified - bude asi userem pres typing
+// pristine - same value as init (init je starnardne undefined a hned dostane "")
+// touched - uz jednou ztratil focus
+// visited - uz jednou dostal focus

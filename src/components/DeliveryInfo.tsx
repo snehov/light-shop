@@ -7,6 +7,7 @@ import React, {
 } from 'reactn'
 import { Address, PersonalInfo, CompanyBaseInfo } from './forms'
 import { debounce } from 'utils/formsFnc'
+import { areObjectsEqual } from 'utils/formsFnc'
 const isEmpty = require('ramda').isEmpty
 
 const debounceFnc = debounce((launchDebounced: any) => {
@@ -14,16 +15,43 @@ const debounceFnc = debounce((launchDebounced: any) => {
 }, 1000)
 
 const DeliveryInfo = () => {
+  //const[pokus, setPokus]=useState(false)
   const [copyInvoiceAddr, setCopyInvoiceAddr] = useState(true)
   const [companyVisible, setCompanyVisible] = useState(false)
   const [formParts, setFormParts] = useState({})
   const [allFormsAreValid, setAllFormsAreValid] = useState(false)
   const saveAddressInfo = useDispatch('saveAddressInfo')
-  const [ {addressName} ] = useGlobal('orderInfo')
+  const [{ addressName }] = useGlobal('orderInfo')
+  /* useEffect(()=>{
+    console.log("pokus", pokus)
+  },[pokus]) */
   useEffect(() => {
     // prazdne je to UNDEFINED
-    console.log('addressName', addressName)
+    const an = addressName as any
+    if (an.invoice && an.delivery) {
+      //setFormsParts(an)
+      const cr = areObjectsEqual(
+        (addressName as any)?.invoice,
+        (addressName as any)?.delivery,
+      )
+      !cr && setCopyInvoiceAddr(false)
+      console.log(
+        'addressName',
+        addressName,
+        'cr res',
+        cr,
+        cr === false && 'odlišné adresy, nekopíruj',
+      )
+    } else {
+      console.log('addressName', addressName)
+    }
   }, [addressName])
+  useEffect(() => {
+    if (!copyInvoiceAddr) {
+      //setFormParts({...formParts},delivery:formParts. )
+    }
+    console.log('zmena v kopírování na ', copyInvoiceAddr, addressName)
+  }, [addressName, copyInvoiceAddr])
 
   useEffect(() => {
     setAllFormsAreValid(checkAllFormsValid())
@@ -50,12 +78,15 @@ const DeliveryInfo = () => {
   }, [companyVisible]) // eslint-disable-line
   const setValues = (values: any) => {
     const from = values.name
+    let saveData
     if (copyInvoiceAddr && from === 'delivery') {
       const invoice = { ...values, name: 'invoice' }
-      setFormParts({ ...formParts, [values.name]: values, invoice })
+      saveData = { ...formParts, [values.name]: values, invoice }
     } else {
-      setFormParts({ ...formParts, [values.name]: values })
+      saveData = { ...formParts, [values.name]: values }
     }
+    console.log('savedata', saveData)
+    setFormParts(saveData)
   }
   const checkAllFormsValid = () => {
     let passed = true
@@ -91,6 +122,7 @@ const DeliveryInfo = () => {
       ;(validateCompany as any).current.runValidation()
     }
   }
+  console.log('formParts', formParts)
   const allowedToFinish = allFormsAreValid
   return (
     <div>
@@ -98,6 +130,7 @@ const DeliveryInfo = () => {
         <PersonalInfo
           dataName="personal"
           returnValues={setValues}
+          prefillData={addressName}
           ref={validatePersonal}
         />
         <Address
@@ -119,6 +152,7 @@ const DeliveryInfo = () => {
             dataName="invoice"
             altName="Fakturační údaje"
             returnValues={setValues}
+            prefillData={addressName}
             ref={validateInvoice}
             copyValues={copyInvoiceAddr}
             hidden={copyInvoiceAddr}
@@ -139,17 +173,23 @@ const DeliveryInfo = () => {
           />
         )}
       </div>
+
+      <b style={{ color: 'red' }}>
+        now take care of proper work of copy addres doruc/faktur
+      </b>
+      <br />
       <cite>
         Next steps:
         <br />
-        1) make endpoint for saving form data;{' '}
+        1)<s> make endpoint for saving form data; </s>
         <b>BE should re-check data validity again</b>
         <br />
         <s>2) sync it on blur, but better with DEBOUNCE on 2sec </s>
         <br />
         3) make endpoint for send/close order
         <br />
-        4) after refresh prefill already sent data
+        4) <s>after refresh prefill already sent data</s> make it better! and be
+        carefull about hidden/opened copy items block
         <br />
         5) from server sent link to terms&amp;conditions which you can
         click/redirect (_blank/lightbox) other) on first load, let server
