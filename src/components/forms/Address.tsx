@@ -52,8 +52,7 @@ const Address = forwardRef(
   ) => {
     const [formValid, setFormValid] = useState(false)
     let formSource = {}
-    //pristine = true if the form values are the same as the initial values. false otherwise
-    const { form, handleSubmit, values, pristine, submitting } = useForm({
+    const { form, handleSubmit, values} = useForm({
       onSubmit: (values: any) => {},
       validate: (values: any) =>
         finalFormValidation(values, setFormValid, formSource, inputsConfig),
@@ -71,12 +70,14 @@ const Address = forwardRef(
     }))
 
     useEffect(() => {
-      changedByUserInput(form, values) &&
-        returnValues({
+      returnValues(
+        {
           data: values,
           name: dataName,
           dataValid: formValid,
-        })
+        },
+        changedByUserInput(form, values) ? true : false,
+      )
     }, [formValid, values]) // eslint-disable-line
 
     useEffect(() => {

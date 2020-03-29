@@ -12,7 +12,9 @@ import {
   debounce,
   checkAllFormPartsValid,
   clearCompanyValues,
+  fromFullFormatToSimple,
   hasAllEmptyValues,
+  setAllValuesEmpty,
 } from 'utils/formsFnc'
 const isEmpty = require('ramda').isEmpty
 
@@ -20,12 +22,25 @@ const debounceFnc = debounce((launchDebounced: any) => {
   launchDebounced()
 }, 1000)
 
+const checkAllFormsValid = () => {
+  const requiredParts = ['personal', 'delivery', 'invoice']
+  return checkAllFormPartsValid(requiredParts, formParts)
+}
+
+let formParts = {}
+const setFormParts = (newVersion: object, updateValidStatus?: any) => {
+  formParts = newVersion
+  if (updateValidStatus) {
+    updateValidStatus(checkAllFormsValid())
+  }
+}
+
 const DeliveryInfo = () => {
   const [copyInvoiceAddr, setCopyInvoiceAddr] = useState(true)
   const [companyVisible, setCompanyVisible] = useState<boolean | undefined>(
     undefined,
   )
-  const [formParts, setFormParts] = useState({})
+  //const [formParts, setFormParts] = useState({}) // unreliable as state, moved to variable
   const [allFormsAreValid, setAllFormsAreValid] = useState(false)
   const saveAddressInfo = useDispatch('saveAddressInfo')
   const [{ addressName }] = useGlobal('orderInfo')
@@ -41,51 +56,47 @@ const DeliveryInfo = () => {
     if (an.company && !isEmpty(an.company)) {
       //setCompanyVisible(true)
     }
+    //first time set up form data from BE to local (if exists)
+    if (isEmpty(formParts) && !isEmpty(addressName)) {
+      setFormParts(fromApiAddrToAppAddrForm(addressName), setAllFormsAreValid)
+    }
   }, [addressName])
 
-  useEffect(() => {
-    if (isEmpty(formParts) && !isEmpty(addressName)) {
-      //first time set up form data from BE to local (if exists)
-      setFormParts(fromApiAddrToAppAddrForm(addressName))
-    } else if (
-      areObjectsEqual(fromApiAddrToAppAddrForm(addressName), formParts)
-    ) {
-      // this is save after previous set-up, no actions needed now (avoiding data sending to BE)
-    } else {
-      setAllFormsAreValid(checkAllFormsValid())
-      !isEmpty(formParts) &&
-        debounceFnc(() => {
-          const currentParts = Object.values(formParts).reduce(
-            (acc: any, curr) => {
-              return { ...acc, [(curr as any).name]: (curr as any).data }
-            },
-            {},
-          )
-          console.log('debounced API call to save data', currentParts)
-          saveAddressInfo(currentParts as object)
-        })
-    }
-  }, [formParts]) // eslint-disable-line
+  const saveDataToServer = () => {
+    !isEmpty(formParts) &&
+      debounceFnc(() => {
+        const currentParts = Object.values(formParts).reduce(
+          (acc: any, curr) => {
+            return { ...acc, [(curr as any).name]: (curr as any).data }
+          },
+          {},
+        )
+        console.log('debounced API call to save data', currentParts)
+        saveAddressInfo(currentParts as object)
+      })
+  }
 
   useEffect(() => {
-    console.log(
-      'companyNOTVisible ',
-      companyVisible,
-      addressName,
-      '##',
-      hasAllEmptyValues((addressName as any).company),
-    )
     if (companyVisible === undefined) {
-      setCompanyVisible(!hasAllEmptyValues((addressName as any).company))
+      ;(addressName as any).company &&
+        setCompanyVisible(!hasAllEmptyValues((addressName as any).company))
     } else if (companyVisible === false) {
-      /* let withoutCompany = { ...formParts }
-      delete (withoutCompany as any).company
-      setFormParts(withoutCompany) */
-      setFormParts(clearCompanyValues(formParts))
+      if ((formParts as any).company) {
+        /* const emptyCompany = {
+          ...(formParts as any)?.company,
+          data: setAllValuesEmpty((formParts as any)?.company?.data),
+        } */
+        let withoutCompany = { ...formParts }
+        delete (withoutCompany as any).company
+        console.log('empty company', withoutCompany)
+        //setValues(emptyCompany, true)
+        setFormParts(withoutCompany, setAllFormsAreValid)
+        saveDataToServer()
+      }
     }
   }, [companyVisible /* , addressName */]) // eslint-disable-line
 
-  const setValues = (values: any) => {
+  const setValues = (values: any, sendToServer: boolean = false) => {
     const from = values.name
     let saveData
     if (copyInvoiceAddr && from === 'delivery') {
@@ -94,17 +105,10 @@ const DeliveryInfo = () => {
     } else {
       saveData = { ...formParts, [values.name]: values }
     }
-    setFormParts(saveData)
-  }
-
-  const checkAllFormsValid = () => {
-    const requiredParts = ['personal', 'delivery', 'invoice']
-    console.log(
-      'validate all',
-      formParts,
-      checkAllFormPartsValid(requiredParts, formParts),
-    )
-    return checkAllFormPartsValid(requiredParts, formParts)
+    setFormParts(saveData, setAllFormsAreValid)
+    if (sendToServer) {
+      saveDataToServer()
+    }
   }
 
   const submitData = () => {
@@ -120,18 +124,13 @@ const DeliveryInfo = () => {
     ;(validateDelivery as any).current.runValidation()
     ;(validateInvoice as any).current.runValidation()
     if ((validateCompany as any).current /* && companyVisible */) {
-      console.log("validate company on screen")
+      console.log('validate company on screen')
       //&& (formParts as any).company)
       ;(validateCompany as any).current.runValidation()
-    }else{
-      console.log("SKIP validate company on screen")
-      /* let withoutCompany = { ...formParts }
-      delete (withoutCompany as any).company
-      setFormParts(withoutCompany) */
     }
-    //checkAllFormsValid()
   }
   const allowedToFinish = allFormsAreValid // && isSending #later, dont forget
+
   return (
     <div>
       <div className="elemsToRow">
@@ -183,6 +182,22 @@ const DeliveryInfo = () => {
         )}
       </div>
 
+      {!allowedToFinish && <div>ještě není vše vyplněno</div>}
+      {allowedToFinish ? (
+        <button className="formSubmit formSubmit--ready" onClick={submitData}>
+          Objednat
+        </button>
+      ) : (
+        <button
+          className="formSubmit  formSubmit--notReady"
+          onClick={onScreenValidation}
+        >
+          Objednat
+        </button>
+      )}
+
+      <br />
+      <br />
       <b style={{ color: 'red' }}>in progress is...?</b>
       <br />
       <cite>
@@ -215,21 +230,6 @@ const DeliveryInfo = () => {
         CSS) make perfect styling for form in checkbox/radio...
       </cite>
       <br />
-      <br />
-      <br />
-      {!allowedToFinish && <div>ještě není vše vyplněno</div>}
-      {allowedToFinish ? (
-        <button className="formSubmit formSubmit--ready" onClick={submitData}>
-          Objednat
-        </button>
-      ) : (
-        <button
-          className="formSubmit  formSubmit--notReady"
-          onClick={onScreenValidation}
-        >
-          Objednat
-        </button>
-      )}
     </div>
   )
 }

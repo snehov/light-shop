@@ -44,7 +44,7 @@ const PersonalInfo = forwardRef(
     const [formValid, setFormValid] = useState(false)
     let formSource = {}
     const { form, values, handleSubmit } = useForm({
-      onSubmit: (values: any) => {console.log("submitnuti personalinfa")},
+      onSubmit: (values: any) => {},
       validate: (values: any) =>
         finalFormValidation(values, setFormValid, formSource, inputsConfig),
     })
@@ -61,12 +61,14 @@ const PersonalInfo = forwardRef(
     }))
 
     useEffect(() => {
-      changedByUserInput(form, values) &&
-        returnValues({
+      returnValues(
+        {
           data: values,
           name: dataName,
           dataValid: formValid,
-        })
+        },
+        changedByUserInput(form, values) ? true : false,
+      )
     }, [formValid, values]) // eslint-disable-line
 
     const name = useField('name', form)
@@ -85,5 +87,3 @@ const PersonalInfo = forwardRef(
 )
 
 export default PersonalInfo
-
-

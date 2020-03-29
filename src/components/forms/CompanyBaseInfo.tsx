@@ -46,14 +46,16 @@ const CompanyBaseInfo = forwardRef(
         handleSubmit()
       },
     }))
-    
+
     useEffect(() => {
-      changedByUserInput(form, values) &&
-        returnValues({
+      returnValues(
+        {
           data: values,
           name: dataName,
           dataValid: formValid,
-        })
+        },
+        changedByUserInput(form, values) ? true : false,
+      )
     }, [formValid, values]) // eslint-disable-line
 
     const name = useField('name', form)

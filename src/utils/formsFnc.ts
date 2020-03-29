@@ -164,8 +164,13 @@ export const debounce = (func, delay) => {
 // transform from BE format to internal format (one level deeper structure)
 export const fromApiAddrToAppAddrForm = (api: any) => {
   return Object.entries(api).reduce((acc, [key, value]) => {
-    return { ...acc, [key]: { data: value, name: key, dataValid: false } }
+    return { ...acc, [key]: { data: value, name: key, dataValid: undefined } }
   }, {})
+}
+export const fromFullFormatToSimple = (formParts:object)=>{
+  return Object.entries(formParts).reduce((acc, [key, value]) => {
+    return {...acc,[key]:{ ...value.data}}
+  },{})
 }
 
 export const setAllValuesEmpty = (object: object) => {
@@ -186,7 +191,7 @@ export const clearCompanyValues = (formParts: object) => {
       },
     }
   }
-    // let withoutCompany = { ...formParts }
+  // let withoutCompany = { ...formParts }
   // delete (withoutCompany as any).company
 }
 export const hasAllEmptyValues = (object: object) => {
