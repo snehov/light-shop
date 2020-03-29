@@ -139,52 +139,65 @@ const DeliveryInfo = () => {
   return (
     <div>
       <div className="elemsToRow">
-        <PersonalInfo
-          dataName="personal"
-          returnValues={setValues}
-          prefillData={addressName}
-          ref={validatePersonal}
-        />
-        <Address
-          dataName="delivery"
-          returnValues={setValues}
-          prefillData={addressName}
-          ref={validateDelivery}
-        />
-        <div>
-          <input
-            type="checkbox"
-            checked={copyInvoiceAddr}
-            onChange={e => setCopyInvoiceAddr(e.target.checked)}
+        <div className="stdPadding">
+          <PersonalInfo
+            dataName="personal"
+            returnValues={setValues}
+            prefillData={addressName}
+            ref={validatePersonal}
           />
-          {/* Fakturační adresa je stejná jako dodací adresa */}
         </div>
-        {
+        <div className="stdPadding">
           <Address
-            dataName="invoice"
-            altName="Fakturační údaje"
+            dataName="delivery"
             returnValues={setValues}
             prefillData={addressName}
-            ref={validateInvoice}
-            copyValues={copyInvoiceAddr}
-            hidden={copyInvoiceAddr}
-            copyContent={(formParts as any).delivery}
+            ref={validateDelivery}
           />
-        }
-        <input
-          type="checkbox"
-          checked={Boolean(companyVisible)}
-          onChange={e => setCompanyVisible(e.target.checked)}
-        />
-        firma
-        {companyVisible && (
-          <CompanyBaseInfo
-            dataName="company"
-            returnValues={setValues}
-            prefillData={addressName}
-            ref={validateCompany}
-          />
-        )}
+        </div>
+        <div className="stdPadding">
+          <label className="inputCont">
+            Fakturační adresa je stejná jako dodací adresa
+            <input
+              type="checkbox"
+              checked={copyInvoiceAddr}
+              onChange={e => setCopyInvoiceAddr(e.target.checked)}
+            />
+            <span className="checkmark"></span>
+          </label>
+
+          {
+            <Address
+              dataName="invoice"
+              altName="Fakturační údaje"
+              returnValues={setValues}
+              prefillData={addressName}
+              ref={validateInvoice}
+              copyValues={copyInvoiceAddr}
+              hidden={copyInvoiceAddr}
+              copyContent={(formParts as any).delivery}
+            />
+          }
+        </div>
+        <div className="stdPadding">
+          <label className="inputCont">
+            Objednávka na firmu
+            <input
+              type="checkbox"
+              checked={Boolean(companyVisible)}
+              onChange={e => setCompanyVisible(e.target.checked)}
+            />
+            <span className="checkmark"></span>
+          </label>
+          {companyVisible && (
+            <CompanyBaseInfo
+              dataName="company"
+              returnValues={setValues}
+              prefillData={addressName}
+              ref={validateCompany}
+            />
+          )}
+        </div>
       </div>
 
       {!allFormsAreValid && <div>ještě není vše vyplněno</div>}
@@ -212,31 +225,22 @@ const DeliveryInfo = () => {
       <cite>
         Next steps:
         <br />
-        1)<s> make endpoint for saving form data; </s>
-        <b>BE should re-check data validity again</b>
+        1) submit endpoint, validate FE data and process order, on FE redirect
+        to succes screen
         <br />
-        <s>2) sync it on blur, but better with DEBOUNCE on 2sec </s>
+        2) from server sent link to terms&amp;conditions to click/redirect
+        (_blank/lightbox) other)
         <br />
-        3) make endpoint for send/close order
-        <br />
-        4){' '}
-        <s>
-          after refresh, prefill already sent data (be aware of copy invoice
-          addre dependecy)
-        </s>
-        <br />
-        5) from server sent link to terms&amp;conditions which you can
-        click/redirect (_blank/lightbox) other) on first load, let server
-        generate known values to JSON to &lt;script&gt;
+        3) on first load, let server generate known values to JSON to
+        &lt;script&gt;
         <br />
         -------> and in react ask if (JSON available) -parse it and load -ELSE-
         send BE request for them <br />
         another) prevent session expire by saving basic values to localStorage
         (make it friendly with previous point)
         <br />
-        BE) make work sending proper data types
-        <br />
-        CSS) make perfect styling for form in checkbox/radio...
+        BE) make work sending proper data types, and on FE try to forcheck and
+        event. stop app notice wrong data and prevent app from failing
       </cite>
       <br />
     </div>

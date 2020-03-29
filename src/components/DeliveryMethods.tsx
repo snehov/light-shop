@@ -23,16 +23,20 @@ const DeliveryMethods = () => {
       {!isEmpty(deliveryMethods) &&
         deliveryMethods.map((method: DeliveryMethodType) => (
           <div key={method.delivery_id}>
-            <input
-              type="radio"
-              name="delivery"
-              id={`delivery_${method.delivery_id}`}
-              onChange={changeMethod}
-              value={method.delivery_id}
-              checked={method.delivery_id == deliveryMethod ? true : false} // eslint-disable-line eqeqeq
-            />
-            <label htmlFor={`delivery_${method.delivery_id}`}>
+            <label
+              htmlFor={`delivery_${method.delivery_id}`}
+              className="inputCont"
+            >
               {method.name}({method.delivery_id})
+              <input
+                type="radio"
+                name="delivery"
+                id={`delivery_${method.delivery_id}`}
+                onChange={changeMethod}
+                value={method.delivery_id}
+                checked={method.delivery_id == deliveryMethod ? true : false} // eslint-disable-line eqeqeq
+              />
+              <span className="radiobtn"></span>
             </label>
           </div>
         ))}

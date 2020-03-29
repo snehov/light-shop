@@ -54,26 +54,31 @@ const PaymentMethods = (/* { selectedDelivery }: { selectedDelivery: number } */
     <div className="paymentChoice">
       <h2>způsoby platby</h2>
       {!isEmpty(paymentsMethods) &&
-        paymentsMethods.map((method: PaymentMethodType) => (
-          <div key={method.payment_id}>
-            <input
-              type="radio"
-              name="payment"
-              id={`payment_${method.payment_id}`}
-              onChange={changeMethod}
-              value={method.payment_id}
-              checked={method.payment_id == paymentMethod ? true : false} // eslint-disable-line eqeqeq
-              disabled={
-                isEmpty(getAllowedPayments())
-                  ? false
-                  : !getAllowedPayments().includes(method.payment_id.toString())
-              }
-            />
-            <label htmlFor={`payment_${method.payment_id}`}>
-              {method.name}({method.payment_id})
-            </label>
-          </div>
-        ))}
+        paymentsMethods.map((method: PaymentMethodType) => {
+          const disabled = isEmpty(getAllowedPayments())
+            ? false
+            : !getAllowedPayments().includes(method.payment_id.toString())
+          return (
+            <div key={method.payment_id}>
+              <label
+                htmlFor={`payment_${method.payment_id}`}
+                className={`inputCont ${disabled ? 'inputCont--disabled' : ''}`}
+              >
+                {method.name}({method.payment_id})
+                <input
+                  type="radio"
+                  name="payment"
+                  id={`payment_${method.payment_id}`}
+                  onChange={changeMethod}
+                  value={method.payment_id}
+                  checked={method.payment_id == paymentMethod ? true : false} // eslint-disable-line eqeqeq
+                  disabled={disabled}
+                />
+                <span className="radiobtn"></span>
+              </label>
+            </div>
+          )
+        })}
     </div>
   )
 }
