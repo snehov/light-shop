@@ -15,6 +15,7 @@ import {
   fromFullFormatToSimple,
   hasAllEmptyValues,
   setAllValuesEmpty,
+  removeFormPart,
 } from 'utils/formsFnc'
 import {
   FormPartType,
@@ -28,21 +29,30 @@ const debounceFnc = debounce((launchDebounced: any) => {
   launchDebounced()
 }, 1000)
 
-const checkAllFormsValid = () => {
-  const requiredParts = ['personal', 'delivery', 'invoice']
-  return checkAllFormPartsValid(requiredParts, formParts)
+const checkAllFormsValid = (noDeliveryAddress: boolean) => {
+  let requiredParts = ['personal', 'invoice']
+  !noDeliveryAddress && requiredParts.push('delivery')
+  const CV = checkAllFormPartsValid(requiredParts, formParts)
+  console.log('requiredParts', requiredParts, formParts, CV)
+
+  return CV
 }
 
 let formParts: FormPartsType = {}
-const setFormParts = (newVersion: FormPartsType, updateValidStatus?: any) => {
+const setFormParts = (
+  newVersion: FormPartsType,
+  updateValidStatus: any,
+  noDeliveryAddress: boolean,
+) => {
   formParts = newVersion
   if (updateValidStatus) {
-    updateValidStatus(checkAllFormsValid())
+    updateValidStatus(checkAllFormsValid(noDeliveryAddress))
   }
 }
 
 const DeliveryInfo = () => {
   const [copyInvoiceAddr, setCopyInvoiceAddr] = useState(true)
+  const [noDeliveryAddress, setNoDeliveryAddress] = useState(false)
   const [companyVisible, setCompanyVisible] = useState<boolean | undefined>(
     undefined,
   )
@@ -52,6 +62,8 @@ const DeliveryInfo = () => {
   const submitOrderToServer = useDispatch('submitOrder')
   const [{ addressName }] = useGlobal('orderInfo')
   const [isSubmittingOrder] = useGlobal('isSubmittingOrder')
+  const [selectedDelivery] = useGlobal('selectedDelivery')
+  const [deliveryMethods] = useGlobal('deliveryMethods')
 
   useEffect(() => {
     console.log('addresname', addressName)
@@ -68,10 +80,41 @@ const DeliveryInfo = () => {
       }
       //first time set up form data from BE to local (if exists)
       if (isEmpty(formParts) && !isEmpty(addressName)) {
-        setFormParts(fromApiAddrToAppAddrForm(addressName), setAllFormsAreValid)
+        setFormParts(
+          fromApiAddrToAppAddrForm(addressName),
+          setAllFormsAreValid,
+          noDeliveryAddress,
+        )
       }
     }
-  }, [addressName])
+  }, [addressName]) // eslint-disable-line
+
+  useEffect(() => {
+    console.log('deliveryMethods', deliveryMethods)
+    if (!isEmpty(deliveryMethods)) {
+      const methodInfo = deliveryMethods.filter(
+        m => m.delivery_id == selectedDelivery, // eslint-disable-line
+      )[0] // TODO: api send proper data types pls!!
+      if (methodInfo.personal_pickup === '1') {
+        // || methodInfo.personal_pickup
+
+        //TODO connect to delivery type atrrib=personal
+        console.log('trojka')
+        setCopyInvoiceAddr(false)
+        setNoDeliveryAddress(true)
+        setFormParts(
+          removeFormPart(formParts, 'delivery'),
+          setAllFormsAreValid,
+          true,
+        )
+        // setAllFormsAreValid(checkAllFormsValid(true))
+      } else {
+        setNoDeliveryAddress(false)
+        setFormParts(formParts, setAllFormsAreValid, false)
+        // setAllFormsAreValid(checkAllFormsValid(false))
+      }
+    }
+  }, [selectedDelivery, deliveryMethods]) // eslint-disable-line
 
   const saveDataToServer = () => {
     !isEmpty(formParts) &&
@@ -96,7 +139,7 @@ const DeliveryInfo = () => {
         delete withoutCompany.company
         console.log('empty company', withoutCompany)
         //setValues(emptyCompany, true)
-        setFormParts(withoutCompany, setAllFormsAreValid)
+        setFormParts(withoutCompany, setAllFormsAreValid, noDeliveryAddress)
         saveDataToServer()
       }
     }
@@ -111,7 +154,7 @@ const DeliveryInfo = () => {
     } else {
       saveData = { ...formParts, [values.name]: values }
     }
-    setFormParts(saveData, setAllFormsAreValid)
+    setFormParts(saveData, setAllFormsAreValid, noDeliveryAddress)
     if (sendToServer) {
       saveDataToServer()
     }
@@ -129,7 +172,9 @@ const DeliveryInfo = () => {
   const validateCompany = useRef()
   const onScreenValidation = () => {
     ;(validatePersonal as any).current.runValidation()
-    ;(validateDelivery as any).current.runValidation()
+    if (!noDeliveryAddress) {
+      ;(validateDelivery as any).current.runValidation()
+    }
     ;(validateInvoice as any).current.runValidation()
     if ((validateCompany as any).current /* && companyVisible */) {
       console.log('validate company on screen')
@@ -137,7 +182,11 @@ const DeliveryInfo = () => {
       ;(validateCompany as any).current.runValidation()
     }
   }
-
+  const pickupLine = isEmpty(deliveryMethods)
+    ? 'adesa...'
+    : deliveryMethods.filter(
+        m => m.delivery_id == selectedDelivery, // eslint-disable-line
+      )[0].description
   return (
     <div>
       <div className="elemsToRow">
@@ -150,23 +199,38 @@ const DeliveryInfo = () => {
           />
         </div>
         <div className="stdPadding">
-          <Address
-            dataName="delivery"
-            returnValues={setValues}
-            prefillData={addressName}
-            ref={validateDelivery}
-          />
-        </div>
-        <div className="stdPadding">
-          <label className="inputCont">
-            Fakturační adresa je stejná jako dodací adresa
-            <input
-              type="checkbox"
-              checked={copyInvoiceAddr}
-              onChange={e => setCopyInvoiceAddr(e.target.checked)}
+          {noDeliveryAddress ? (
+            <div className="formBlock">
+              <h3>Adresa vyzvednutí</h3>
+              <p dangerouslySetInnerHTML={{ __html: pickupLine }}>
+                {/* !isEmpty(deliveryMethods) &&
+                  deliveryMethods.filter(
+                    m => m.delivery_id == selectedDelivery, // eslint-disable-line
+                  )[0].description */}
+              </p>
+            </div>
+          ) : (
+            <Address
+              dataName="delivery"
+              returnValues={setValues}
+              prefillData={addressName}
+              ref={validateDelivery}
             />
-            <span className="checkmark"></span>
-          </label>
+          )}
+        </div>
+
+        <div className="stdPadding">
+          {!noDeliveryAddress && (
+            <label className="inputCont">
+              Fakturační adresa je stejná jako dodací adresa
+              <input
+                type="checkbox"
+                checked={copyInvoiceAddr}
+                onChange={e => setCopyInvoiceAddr(e.target.checked)}
+              />
+              <span className="checkmark"></span>
+            </label>
+          )}
 
           {
             <Address

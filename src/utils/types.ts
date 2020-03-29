@@ -22,6 +22,8 @@ export const DeliveryMethod = {
   payments: 'a', //TODO at BE remake to array
   require_address: 1, //TODO at BE remake to bool
   price: 1,
+  personal_pickup: 'a',
+  description: 'a',
 }
 export type DeliveryMethodType = typeof DeliveryMethod
 

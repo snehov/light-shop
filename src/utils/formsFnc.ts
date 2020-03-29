@@ -200,8 +200,14 @@ export const clearCompanyValues = (formParts: FormPartsType) => {
       },
     }
   }
-  // let withoutCompany = { ...formParts }
-  // delete (withoutCompany as any).company
+}
+export const removeFormPart = (
+  formParts: FormPartsType,
+  removePart: string,
+) => {
+  let without = { ...formParts }
+  delete (without as any)[removePart]
+  return without
 }
 export const hasAllEmptyValues = (object: object) => {
   return Object.values(object).every(value => value === '' || isNil(value))
