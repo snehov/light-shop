@@ -16,6 +16,12 @@ import {
   hasAllEmptyValues,
   setAllValuesEmpty,
 } from 'utils/formsFnc'
+import {
+  FormPartType,
+  FormPartsType,
+  DeliveryInfoType,
+  OrderInfoType,
+} from 'utils/types'
 const isEmpty = require('ramda').isEmpty
 
 const debounceFnc = debounce((launchDebounced: any) => {
@@ -27,8 +33,8 @@ const checkAllFormsValid = () => {
   return checkAllFormPartsValid(requiredParts, formParts)
 }
 
-let formParts = {}
-const setFormParts = (newVersion: object, updateValidStatus?: any) => {
+let formParts: FormPartsType = {}
+const setFormParts = (newVersion: FormPartsType, updateValidStatus?: any) => {
   formParts = newVersion
   if (updateValidStatus) {
     updateValidStatus(checkAllFormsValid())
@@ -46,8 +52,9 @@ const DeliveryInfo = () => {
   const [{ addressName }] = useGlobal('orderInfo')
 
   useEffect(() => {
+    console.log('addresname', addressName)
     // when getting init data from BE find out whether delivery/invoice are different, or copied, then preselect copy option
-    const an = addressName as any
+    const an = addressName
     if (an.invoice && an.delivery) {
       const cr = areObjectsEqual(an?.invoice, an?.delivery)
       !cr && setCopyInvoiceAddr(false)
@@ -78,16 +85,16 @@ const DeliveryInfo = () => {
 
   useEffect(() => {
     if (companyVisible === undefined) {
-      ;(addressName as any).company &&
-        setCompanyVisible(!hasAllEmptyValues((addressName as any).company))
+      addressName.company &&
+        setCompanyVisible(!hasAllEmptyValues(addressName.company))
     } else if (companyVisible === false) {
-      if ((formParts as any).company) {
+      if (formParts.company) {
         /* const emptyCompany = {
           ...(formParts as any)?.company,
           data: setAllValuesEmpty((formParts as any)?.company?.data),
         } */
         let withoutCompany = { ...formParts }
-        delete (withoutCompany as any).company
+        delete withoutCompany.company
         console.log('empty company', withoutCompany)
         //setValues(emptyCompany, true)
         setFormParts(withoutCompany, setAllFormsAreValid)
@@ -96,7 +103,7 @@ const DeliveryInfo = () => {
     }
   }, [companyVisible /* , addressName */]) // eslint-disable-line
 
-  const setValues = (values: any, sendToServer: boolean = false) => {
+  const setValues = (values: FormPartType, sendToServer: boolean = false) => {
     const from = values.name
     let saveData
     if (copyInvoiceAddr && from === 'delivery') {

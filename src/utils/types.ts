@@ -33,3 +33,28 @@ export const PaymentMethod = {
   //price
 }
 export type PaymentMethodType = typeof PaymentMethod
+export const FormPart = {
+  data: {},
+  name: 'a',
+  dataValid: true,
+}
+export type FormPartType = typeof FormPart
+
+export type FormPartsType = {
+  personal?: FormPartType
+  delivery?: FormPartType
+  invoice?: FormPartType
+  company?: FormPartType
+}
+
+export type DeliveryInfoType = {
+  personal?: object
+  delivery?: object
+  invoice?: object
+  company?: object
+}
+export type OrderInfoType = {
+  paymentMethod: number
+  deliveryMethod: number
+  addressName: DeliveryInfoType
+}

@@ -1,3 +1,11 @@
+import {
+  FormPartType,
+  FormPartsType,
+  DeliveryInfoType,
+  OrderInfoType,
+} from 'utils/types'
+import { FormApi } from 'final-form'
+
 const isEmpty = require('ramda').isEmpty
 const isNil = require('ramda').isNil
 
@@ -74,11 +82,11 @@ export const finalFormValidation = (
 // form is assembled from form parts, this check if exists and its inputs are valid
 export const checkAllFormPartsValid = (
   requiredParts: Array<string>,
-  formParts: object,
+  formParts: FormPartsType,
 ) => {
   let passed = true
   const currentParts = Object.values(formParts).reduce((acc: any, curr) => {
-    return [...acc, (curr as any).name]
+    return [...acc, curr?.name]
   }, [])
   //all required form parts are present
   requiredParts.forEach(part => {
@@ -94,7 +102,7 @@ export const checkAllFormPartsValid = (
 }
 
 // dont save input to BE, after input recceived prefilled values
-export const changedByUserInput = (form: any, values: object) => {
+export const changedByUserInput = (form: FormApi, values: object) => {
   let save = false
   Object.keys(values).forEach(item => {
     if (form.getFieldState(item)?.dirty === true) {
@@ -162,7 +170,7 @@ export const debounce = (func, delay) => {
 } */
 
 // transform from BE format to internal format (one level deeper structure)
-export const fromApiAddrToAppAddrForm = (api: any) => {
+export const fromApiAddrToAppAddrForm = (api: DeliveryInfoType) => {
   return Object.entries(api).reduce((acc, [key, value]) => {
     return { ...acc, [key]: { data: value, name: key, dataValid: undefined } }
   }, {})
@@ -179,7 +187,7 @@ export const setAllValuesEmpty = (object: object) => {
   }, {})
 }
 
-export const clearCompanyValues = (formParts: object) => {
+export const clearCompanyValues = (formParts: FormPartsType) => {
   if (!(formParts as any).company) {
     return formParts
   } else {

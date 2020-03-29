@@ -3,6 +3,7 @@ import {
   CartItemType,
   DeliveryMethodType,
   PaymentMethodType,
+  OrderInfoType
 } from './utils/types'
 // NOTE: changes here needs SERVER RESTART to apply changes
 
@@ -78,11 +79,7 @@ declare module 'reactn/default' {
         sales_note?: string
       }
     }
-    orderInfo: {
-      deliveryMethod: number
-      paymentMethod: number
-      addressName: object
-    }
+    orderInfo: OrderInfoType
     deliveryMethods: Array<DeliveryMethodType>
     paymentMethods: Array<PaymentMethodType>
     selectedDelivery: number
