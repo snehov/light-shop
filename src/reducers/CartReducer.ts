@@ -72,6 +72,7 @@ addReducer('submitOrder', async (global, dispatch, forms_data) => {
   setGlobal({ isSubmittingOrder: true })
   let response = await submitOrder(forms_data)
   setGlobal({ isSubmittingOrder: false })
+  alert("A tady bude pokračování na stránku oznamující úspěch")
   return response.data
 })
 

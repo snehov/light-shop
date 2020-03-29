@@ -1,5 +1,6 @@
 import React, { useDispatch, useState, useGlobal, useEffect } from 'reactn'
 import { PaymentMethodType } from 'utils/types'
+import { formatPriceOutput } from '../utils/priceOperations'
 const isEmpty = require('ramda').isEmpty
 
 const PaymentMethods = (/* { selectedDelivery }: { selectedDelivery: number } */) => {
@@ -64,7 +65,8 @@ const PaymentMethods = (/* { selectedDelivery }: { selectedDelivery: number } */
                 htmlFor={`payment_${method.payment_id}`}
                 className={`inputCont ${disabled ? 'inputCont--disabled' : ''}`}
               >
-                {method.name}({method.payment_id})
+                {method.name} <b>{formatPriceOutput(method.price)}</b> (id:
+                {method.payment_id})
                 <input
                   type="radio"
                   name="payment"

@@ -1,6 +1,12 @@
 $backgroundColor: #f8f8f9;
 $borderColor: #e6e6e6;
 $baseItemHeight: 33px;
+
+$disabledColor: #f3f3f3;
+$normalColor: #ccc;
+$hoverColor: #999;
+$selectedColor: #2196f3;
+
 .cart {
   display: flex;
   flex-flow: column;
@@ -14,7 +20,7 @@ $baseItemHeight: 33px;
   &-item {
     height: $baseItemHeight;
     display: flex;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     align-items: center;
     padding: 5px 15px;
     border-bottom: 1px solid $borderColor;
@@ -22,11 +28,14 @@ $baseItemHeight: 33px;
     background-color: $backgroundColor;
     transition: all 0.4s ease-out;
     &--name {
-      width: 40%;
+      min-width: 250px;
+      width: 45%;
     }
     &--amount {
       display: flex;
       flex-flow: row;
+      min-width: 100px;
+      width: 15%;
       &__input {
         font-size: 17px;
         height: 20px;
@@ -34,13 +43,29 @@ $baseItemHeight: 33px;
         padding: 5px;
         text-align: center;
       }
+      &__button{
+        background-color: $normalColor;
+      }
+      &__button:hover{
+        background-color: $hoverColor;
+      }
     }
     &--price {
+      &__piece {
+        min-width: 100px;
+        width: 15%;
+      }
       &__sum {
         font-weight: bold;
+        min-width: 130px;
+        width: 20%;
+        text-align: right;
       }
     }
     &--del {
+      min-width: 50px;
+      text-align: center;
+      width: 5%;
       &__button {
         font-size: 15px;
         font-weight: bold;
@@ -52,6 +77,13 @@ $baseItemHeight: 33px;
     &--name,
     &--price {
       color: gray;
+    }
+    &--name {
+      width: 80%;
+    }
+    &--price {
+      width: 20%;
+      text-align: right;
     }
   }
   &-sum {
@@ -69,10 +101,13 @@ $baseItemHeight: 33px;
 .deliveryAndPay {
   display: flex;
   flex-flow: row;
+  flex-wrap: wrap;
 }
 .deliveryChoice,
 .paymentChoice {
   padding: 15px;
+  width: 50%;
+  box-sizing: border-box;
 }
 .vertical {
   display: flex;
@@ -84,6 +119,7 @@ $baseItemHeight: 33px;
 .elemsToRow {
   display: flex;
   flex-flow: row;
+  flex-wrap: wrap;
 }
 .formBlock {
   width: 350px;
@@ -161,10 +197,7 @@ $baseItemHeight: 33px;
   }
 }
 /* ----  inputs styling -----*/
-$disabledColor: #f3f3f3;
-$normalColor: #ccc;
-$hoverColor: #999;
-$selectedColor: #2196f3;
+
 /* inputs container */
 .inputCont {
   display: block;
@@ -302,19 +335,36 @@ $selectedColor: #2196f3;
   $lineHeight: 34px;
   .cart-item {
     flex-wrap: wrap;
-    height: 60px;
+    min-height: 60px;
+    height: auto;
+    justify-content: space-between;
     &--name {
       width: 100%;
     }
     &--amount {
       height: $lineHeight;
+      min-width: 170px;
+      width: 35%;
       &__button {
         width: 45px;
       }
     }
+    &--price {
+      &__piece {
+        width: 25%;
+      }
+      &__sum {
+        width: 30%;
+      }
+    }
     &--del {
       height: $lineHeight;
+      width: 10%;
     }
+  }
+  .deliveryChoice,
+  .paymentChoice {
+    width: 100%;
   }
   .horizontal-sm {
     flex-flow: row;

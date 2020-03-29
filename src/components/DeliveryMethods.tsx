@@ -1,5 +1,6 @@
 import React, { useDispatch, useState, useEffect, useGlobal } from 'reactn'
 import { DeliveryMethodType } from 'utils/types'
+import { formatPriceOutput } from '../utils/priceOperations'
 const isEmpty = require('ramda').isEmpty
 
 const DeliveryMethods = () => {
@@ -27,7 +28,8 @@ const DeliveryMethods = () => {
               htmlFor={`delivery_${method.delivery_id}`}
               className="inputCont"
             >
-              {method.name}({method.delivery_id})
+              {method.name} <b>{formatPriceOutput(method.price)}</b> (id:
+              {method.delivery_id})
               <input
                 type="radio"
                 name="delivery"
