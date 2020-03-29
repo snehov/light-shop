@@ -1,21 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="Web site created using create-react-app" />
+  <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+  <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+  <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
       Only files inside the `public` folder can be referenced from the HTML.
@@ -24,12 +22,14 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>Snow's LightShop</title>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
+  <title>Snow's LightShop</title>
+</head>
+
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+
+  <div id="root"></div>
+  <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
 
@@ -39,5 +39,14 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-  </body>
+  <script>
+    // REMOVE Ending underscore of names when goes to PHP server
+    window.APP_DATA = {
+      delivPayOpts: '{"delivery":[{"delivery_id":"1","name":"PPL","payments":"1,2,3","require_address":"1","description":"","price":"120","personal_pickup":"1","free_shipping_from":"1000","delivery_time":"3","to_country":"cz","delivery_company_id":"0","payment_methods":"1,2,3"},{"delivery_id":"2","name":"Poštou - balík (možná) do ruky","payments":"1,2,3","require_address":"1","description":"","price":"150","personal_pickup":"0","free_shipping_from":"900","delivery_time":"125","to_country":"cz","delivery_company_id":"0","payment_methods":"1,2,3"},{"delivery_id":"3","name":"Osobní odběr","payments":"2,3,4","require_address":"0","description":"vyzvednete si u nás na adrese......","price":"0","personal_pickup":"1","free_shipping_from":"0","delivery_time":"0","to_country":"cz","delivery_company_id":"0","payment_methods":"2,3,4"},{"delivery_id":"4","name":"doprava bez plateb","payments":"","require_address":"0","description":"","price":"0","personal_pickup":"0","free_shipping_from":"0","delivery_time":"0","to_country":"cz","delivery_company_id":"0","payment_methods":""}],"payments":[{"payment_id":"1","name":"při převzetí od spediční firmy","description":"dfas","bank_transfer":"0","pay_before":"0","price":"17"},{"payment_id":"2","name":"Převodem","description":"","bank_transfer":"1","pay_before":"0","price":"0"},{"payment_id":"3","name":"Online platba","description":"","bank_transfer":"0","pay_before":"0","price":"0"},{"payment_id":"4","name":"Hotově při osobním převzetí u nás","description":"","bank_transfer":"0","pay_before":"0","price":"0"}]}',
+      cartItems_: '{"cart":[{"product_id":"7","amount":"3","variant_attr1":"","variant_attr2":"","measure":"ks","price":"230.00","vat":null,"name":"jeste novejsi","link":"jeste-novejsi-592/sekceeeee/","pic":"","category":"čepice","supplier_id":"0","code":""},{"product_id":"4","amount":"2","variant_attr1":"","variant_attr2":"","measure":"ks","price":"123.00","vat":null,"name":"testovací kus","link":"testovaci-kus-879/sekceeeee/","pic":"","category":"čepice","supplier_id":"0","code":""},{"product_id":"9","amount":"2","variant_attr1":"","variant_attr2":"","measure":"ks","price":"16.00","vat":null,"name":"ted bych mel preskocit","link":"ted-bych-mel-preskocit/podsekcee-zb/","pic":"","category":"podsekcee ale zbozi","supplier_id":"0","code":""}],"sum":{"noVat":{"shipping":150,"paymentFee":17,"goodsSum":968,"sales":0,"total":1135},"vatIncl":{"shipping":"150","paymentFee":"17","goodsSum":968,"sales":0,"total":1135},"vat":[{"vat":0.21,"value":37,"name":"základní sazba"}],"notes":{"shipping_note":"Poštou - balík (možná) do ruky","paymentFee_note":"při převzetí od spediční firmy","sales_note":""}}}',
+      orderInfo_: '{"paymentMethod":2,"deliveryMethod":2,"addressName":{"personal":{"name":"ds","tel":"ds"},"delivery":{"descr":"dfsd","street":"dfsd","city":"dsdf","zip":"32423"},"invoice":{"descr":"RER","street":"dfsd","city":"dsdf","zip":"32423"},"company":{"name":"dsfdf"}}}'
+    }
+  </script>
+</body>
+
 </html>

@@ -29,7 +29,7 @@ declare module 'reactn/default' {
       index: number,
     ) => Pick<State> //, 'cartInfo'
 
-    getCart: (global: State, dispatch: Dispatch) => Pick<State, 'cartItems'>
+    getCart: (global: State, dispatch: Dispatch) => Pick<State>// 'cartItems'
     getDeliveryAndPay: (
       global: State,
       dispatch: Dispatch,

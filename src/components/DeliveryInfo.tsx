@@ -235,11 +235,6 @@ const DeliveryInfo = () => {
         2) from server sent link to terms&amp;conditions to click/redirect
         (_blank/lightbox) other)
         <br />
-        3) on first load, let server generate known values to JSON to
-        &lt;script&gt;
-        <br />
-        -------> and in react ask if (JSON available) -parse it and load -ELSE-
-        send BE request for them <br />
         another) prevent session expire by saving basic values to localStorage
         (make it friendly with previous point)
         <br />

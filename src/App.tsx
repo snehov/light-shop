@@ -18,6 +18,7 @@ const App = () => {
   }, [fetchCart, fetchOrderInfo])
   return (
     <div className="App">
+      <span onClick={fetchCart}>pokus</span>
       <Cart />
       {cartItems.length > 0 && <DeliveryAndPay />}
       {selectedDelivery !== 0 && selectedPayment !== 0 && <DeliveryInfo />}
