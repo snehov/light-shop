@@ -43,10 +43,10 @@ $selectedColor: #2196f3;
         padding: 5px;
         text-align: center;
       }
-      &__button{
+      &__button {
         background-color: $normalColor;
       }
-      &__button:hover{
+      &__button:hover {
         background-color: $hoverColor;
       }
     }
@@ -74,6 +74,11 @@ $selectedColor: #2196f3;
     }
   }
   &-extraItem {
+    &--visible {
+      height: $baseItemHeight;
+      transition: height 0.4s ease-out;
+    }
+
     &--name,
     &--price {
       color: gray;
@@ -84,6 +89,16 @@ $selectedColor: #2196f3;
     &--price {
       width: 20%;
       text-align: right;
+    }
+    &--hidden {
+      height: 0px;
+      transition: all 0.4s ease-in;
+      padding-top: 0px;
+      padding-bottom: 0px;
+      & * {
+        color: $backgroundColor;
+        transition: all 0.4s ease-in;
+      }
     }
   }
   &-sum {

@@ -20,26 +20,34 @@ const Cart = () => {
           key={`${item.product_id}-${item.variant_attr1}-${item.variant_attr2}`}
         />
       ))}
-      {cartInfo.vatIncl && cartInfo.vatIncl.shipping > 0 && (
-        <div className="cart-item cart-extraItem">
-          <div className="cart-extraItem--name">
-            dprava: {cartInfo.notes.shipping_note}
-          </div>
-          <div className="cart-extraItem--price">
-            {formatPriceOutput(cartInfo.vatIncl.shipping)}
-          </div>
+      <div
+        className={`cart-item cart-extraItem ${
+          cartInfo.vatIncl && cartInfo.vatIncl.shipping > 0
+            ? 'cart-extraItem--visible'
+            : 'cart-extraItem--hidden'
+        }`}
+      >
+        <div className="cart-extraItem--name">
+          dprava: {cartInfo.notes.shipping_note}
         </div>
-      )}
-      {cartInfo.vatIncl && cartInfo.vatIncl.paymentFee > 0 && (
-        <div className="cart-item cart-extraItem">
-          <div className="cart-extraItem--name">
-            platba: {cartInfo.notes.paymentFee_note}
-          </div>
-          <div className="cart-extraItem--price">
-            {formatPriceOutput(cartInfo.vatIncl.paymentFee)}
-          </div>
+        <div className="cart-extraItem--price">
+          {formatPriceOutput(cartInfo.vatIncl.shipping)}
         </div>
-      )}
+      </div>
+      <div
+        className={`cart-item cart-extraItem ${
+          cartInfo.vatIncl && cartInfo.vatIncl.paymentFee > 0
+            ? 'cart-extraItem--visible'
+            : 'cart-extraItem--hidden'
+        }`}
+      >
+        <div className="cart-extraItem--name">
+          platba: {cartInfo.notes.paymentFee_note}
+        </div>
+        <div className="cart-extraItem--price">
+          {formatPriceOutput(cartInfo.vatIncl.paymentFee)}
+        </div>
+      </div>
       {/* cartInfo.vatIncl && (
         <div className="cart-item cart-extraItem">
           <div className="cart-extraItem--name">
