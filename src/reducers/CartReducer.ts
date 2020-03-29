@@ -8,6 +8,7 @@ import {
   fetchOrderInfo,
   changePaymentMethod,
   saveAddressInfo,
+  submitOrder,
 } from '../api'
 import { CartType, CartItemType } from 'utils/types'
 
@@ -18,6 +19,7 @@ setGlobal({ deliveryMethods: {} })
 setGlobal({ paymentMethods: {} })
 setGlobal({ selectedDelivery: 0 })
 setGlobal({ selectedPayment: 0 })
+setGlobal({ isSubmittingOrder: false })
 
 addReducer('getCart', async () => {
   let response = await fetchCart() //firstTime=bool
@@ -64,6 +66,12 @@ addReducer('fetchOrderInfo', async () => {
 })
 addReducer('saveAddressInfo', async (global, dispatch, forms_data) => {
   let response = await saveAddressInfo(forms_data)
+  return response.data
+})
+addReducer('submitOrder', async (global, dispatch, forms_data) => {
+  setGlobal({ isSubmittingOrder: true })
+  let response = await submitOrder(forms_data)
+  setGlobal({ isSubmittingOrder: false })
   return response.data
 })
 

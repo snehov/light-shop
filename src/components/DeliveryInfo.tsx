@@ -49,7 +49,9 @@ const DeliveryInfo = () => {
   //const [formParts, setFormParts] = useState({}) // unreliable as state, moved to variable
   const [allFormsAreValid, setAllFormsAreValid] = useState(false)
   const saveAddressInfo = useDispatch('saveAddressInfo')
+  const submitOrderToServer = useDispatch('submitOrder')
   const [{ addressName }] = useGlobal('orderInfo')
+  const [isSubmittingOrder] = useGlobal('isSubmittingOrder')
 
   useEffect(() => {
     console.log('addresname', addressName)
@@ -72,14 +74,9 @@ const DeliveryInfo = () => {
   const saveDataToServer = () => {
     !isEmpty(formParts) &&
       debounceFnc(() => {
-        const currentParts = Object.values(formParts).reduce(
-          (acc: any, curr) => {
-            return { ...acc, [(curr as any).name]: (curr as any).data }
-          },
-          {},
-        )
-        console.log('debounced API call to save data', currentParts)
-        saveAddressInfo(currentParts as object)
+        const dataSend = fromFullFormatToSimple(formParts)
+        console.log('debounced API call to save data', dataSend)
+        saveAddressInfo(dataSend)
       })
   }
 
@@ -119,7 +116,9 @@ const DeliveryInfo = () => {
   }
 
   const submitData = () => {
-    console.log('SUBMIT form', formParts)
+    const dataSend = fromFullFormatToSimple(formParts)
+    console.log('SUBMIT form', dataSend)
+    submitOrderToServer(dataSend)
   }
 
   const validatePersonal = useRef()
@@ -136,7 +135,6 @@ const DeliveryInfo = () => {
       ;(validateCompany as any).current.runValidation()
     }
   }
-  const allowedToFinish = allFormsAreValid // && isSending #later, dont forget
 
   return (
     <div>
@@ -189,8 +187,12 @@ const DeliveryInfo = () => {
         )}
       </div>
 
-      {!allowedToFinish && <div>ještě není vše vyplněno</div>}
-      {allowedToFinish ? (
+      {!allFormsAreValid && <div>ještě není vše vyplněno</div>}
+      {isSubmittingOrder ? (
+        <button className="formSubmit formSubmit--submitting" disabled>
+          Odesílá se...
+        </button>
+      ) : allFormsAreValid ? (
         <button className="formSubmit formSubmit--ready" onClick={submitData}>
           Objednat
         </button>

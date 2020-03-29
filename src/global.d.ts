@@ -57,6 +57,12 @@ declare module 'reactn/default' {
       dispatch: Dispatch,
       forms_data: object,
     ) => null
+
+    submitOrder: (
+      global: State,
+      dispatch: Dispatch,
+      forms_data: object,
+    ) => null
   }
 
   // necessary to define due to typescript ability to safely read from useGlobal()
@@ -84,5 +90,6 @@ declare module 'reactn/default' {
     paymentMethods: Array<PaymentMethodType>
     selectedDelivery: number
     selectedPayment: number
+    isSubmittingOrder: boolean
   }
 }

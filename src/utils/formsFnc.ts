@@ -175,10 +175,11 @@ export const fromApiAddrToAppAddrForm = (api: DeliveryInfoType) => {
     return { ...acc, [key]: { data: value, name: key, dataValid: undefined } }
   }, {})
 }
-export const fromFullFormatToSimple = (formParts:object)=>{
+
+export const fromFullFormatToSimple = (formParts: FormPartsType) => {
   return Object.entries(formParts).reduce((acc, [key, value]) => {
-    return {...acc,[key]:{ ...value.data}}
-  },{})
+    return { ...acc, [key]: { ...value?.data } }
+  }, {})
 }
 
 export const setAllValuesEmpty = (object: object) => {
