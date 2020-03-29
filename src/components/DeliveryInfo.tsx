@@ -56,18 +56,20 @@ const DeliveryInfo = () => {
   useEffect(() => {
     console.log('addresname', addressName)
     // when getting init data from BE find out whether delivery/invoice are different, or copied, then preselect copy option
-    const an = addressName
-    if (an.invoice && an.delivery) {
-      const cr = areObjectsEqual(an?.invoice, an?.delivery)
-      !cr && setCopyInvoiceAddr(false)
-    }
-    // show company info when preselected data exists
-    if (an.company && !isEmpty(an.company)) {
-      //setCompanyVisible(true)
-    }
-    //first time set up form data from BE to local (if exists)
-    if (isEmpty(formParts) && !isEmpty(addressName)) {
-      setFormParts(fromApiAddrToAppAddrForm(addressName), setAllFormsAreValid)
+    if (addressName) {
+      const an = addressName
+      if (an.invoice && an.delivery) {
+        const cr = areObjectsEqual(an?.invoice, an?.delivery)
+        !cr && setCopyInvoiceAddr(false)
+      }
+      // show company info when preselected data exists
+      if (an.company && !isEmpty(an.company)) {
+        //setCompanyVisible(true)
+      }
+      //first time set up form data from BE to local (if exists)
+      if (isEmpty(formParts) && !isEmpty(addressName)) {
+        setFormParts(fromApiAddrToAppAddrForm(addressName), setAllFormsAreValid)
+      }
     }
   }, [addressName])
 
@@ -82,7 +84,7 @@ const DeliveryInfo = () => {
 
   useEffect(() => {
     if (companyVisible === undefined) {
-      addressName.company &&
+      addressName?.company &&
         setCompanyVisible(!hasAllEmptyValues(addressName.company))
     } else if (companyVisible === false) {
       if (formParts.company) {
@@ -220,7 +222,9 @@ const DeliveryInfo = () => {
 
       <br />
       <br />
-      <b style={{ color: 'red' }}>in progress is...?</b>
+      <b style={{ color: 'red' }}>
+        reset all sessions and start with empty values, something fail...
+      </b>
       <br />
       <cite>
         Next steps:
