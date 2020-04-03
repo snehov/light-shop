@@ -3,7 +3,7 @@ import './App.scss'
 import './reducers'
 import Cart from './Cart'
 import DeliveryAndPay from './components/DeliveryAndPay'
-import DeliveryInfo from "./components/DeliveryInfo"
+import DeliveryInfo from './components/DeliveryInfo'
 
 const App = () => {
   const fetchCart = useDispatch('getCart')
@@ -20,7 +20,11 @@ const App = () => {
     <div className="App">
       <Cart />
       {cartItems.length > 0 && <DeliveryAndPay />}
-      {selectedDelivery !== 0 && selectedPayment !== 0 && <DeliveryInfo />}
+      {selectedDelivery !== 0 && selectedPayment !== 0 ? (
+        <DeliveryInfo />
+      ) : (
+        <div>Dokončete výběr dopravy a platby</div>
+      )}
     </div>
   )
 }

@@ -2,7 +2,7 @@ import axios from 'axios'
 const baseURL = 'https://snowcorp.cz/ls/contentFILES/Cart_api.php?rquest='
 
 const api = axios.create({
-  //baseURL,
+  baseURL:'https://snowcorp.cz/ls/cart_api/',
   //trailingSlash: true,
   withCredentials: true, // allows to sending sessionID
   headers: {
@@ -11,32 +11,32 @@ const api = axios.create({
   },
 })
 
-export const fetchCart = () => api.get(baseURL + 'getCart')
+export const fetchCart = () => api.get('getCart')
 
 export const changeCartItemAmount = (index, amount) =>
-  api.post(baseURL + 'changeCartItemAmount', { index, amount })
+  api.post('changeCartItemAmount', { index, amount })
 
 export const removeFromCart = index =>
-  api.post(baseURL + 'removeFromCart', { index })
+  api.post('removeFromCart', { index })
 
 export const addItem = () =>
-  api.post(baseURL + 'addToCart', { product_id: 7, variant: '' })
+  api.post('addToCart', { product_id: 7, variant: '' })
 
 export const fetchDeliveryPayMethods = () =>
-  api.get(baseURL + 'getDeliveryAndPay')
+  api.get('getDeliveryAndPay')
 
 export const changeDeliveryMethod = delivery_id =>
-  api.patch(baseURL + 'changeDeliveryMethod', { delivery_id })
+  api.patch('changeDeliveryMethod', { delivery_id })
 
 export const changePaymentMethod = payment_id =>
-  api.patch(baseURL + 'changePaymentMethod', { payment_id })
+  api.patch('changePaymentMethod', { payment_id })
 
-export const fetchOrderInfo = () => api.get(baseURL + 'getOrderInfo')
+export const fetchOrderInfo = () => api.get('getOrderInfo')
 
 export const saveAddressInfo = forms_data =>
-  api.post(baseURL + 'saveAddressInfo', forms_data)
+  api.post('saveAddressInfo', forms_data)
 
 export const submitOrder = forms_data =>
-  api.post(baseURL + 'submitOrder', forms_data)
+  api.post('submitOrder', forms_data)
 
 //changeDeliveryMethod

@@ -4,13 +4,17 @@ export const formatPriceOutput = (
   currencyPostfix = ' Kč',
 ) => {
   let output = currencyPrefix
-  const fPrice = price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ')
-  if (fPrice !== '0') {
-    const split = fPrice.split('.')
-    if (split.length === 2) {
-      output += fPrice.split('.')[1].length === 1 ? `${fPrice}0` : fPrice //desetníky
+  if (price) {
+    const fPrice = price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ')
+    if (fPrice !== '0') {
+      const split = fPrice.split('.')
+      if (split.length === 2) {
+        output += fPrice.split('.')[1].length === 1 ? `${fPrice}0` : fPrice //desetníky
+      } else {
+        output += fPrice
+      }
     } else {
-      output += fPrice
+      output += '0'
     }
   } else {
     output += '0'

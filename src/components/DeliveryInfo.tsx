@@ -94,12 +94,8 @@ const DeliveryInfo = () => {
     if (!isEmpty(deliveryMethods)) {
       const methodInfo = deliveryMethods.filter(
         m => m.delivery_id == selectedDelivery, // eslint-disable-line
-      )[0] // TODO: api send proper data types pls!!
-      if (methodInfo.personal_pickup === '1') {
-        // || methodInfo.personal_pickup
-
-        //TODO connect to delivery type atrrib=personal
-        console.log('trojka')
+      )[0] 
+      if (methodInfo.personal_pickup) {
         setCopyInvoiceAddr(false)
         setNoDeliveryAddress(true)
         setFormParts(

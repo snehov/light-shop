@@ -77,6 +77,7 @@ $selectedColor: #2196f3;
     &--visible {
       height: $baseItemHeight;
       transition: height 0.4s ease-out;
+      visibility: visible;
     }
 
     &--name,
@@ -95,6 +96,8 @@ $selectedColor: #2196f3;
       transition: all 0.4s ease-in;
       padding-top: 0px;
       padding-bottom: 0px;
+      visibility: hidden;
+      border: 0px;
       & * {
         color: $backgroundColor;
         transition: all 0.4s ease-in;
@@ -376,6 +379,11 @@ $selectedColor: #2196f3;
       height: $lineHeight;
       width: 10%;
     }
+  }
+  .cart-extraItem--hidden {
+    height: 0px;
+    min-height: 0px;
+    transition: all 0.3s ease-in;
   }
   .deliveryChoice,
   .paymentChoice {

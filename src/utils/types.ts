@@ -19,12 +19,15 @@ export type CartType = typeof CartTypeObj
 export const DeliveryMethod = {
   delivery_id: 1,
   name: 'a',
-  payments: 'a', //TODO at BE remake to array
-  require_address: 1, //TODO at BE remake to bool
+  payments: 'a', //[] //TODO at BE remake to array
+  require_address: true,
   price: 1,
   personal_pickup: 'a',
   description: 'a',
 }
+//export type DeliveryMethodTypeIncl = typeof DeliveryMethod
+//type EE = { payments: Array<number> }
+//export type DeliveryMethodType = DeliveryMethodTypeIncl & EE
 export type DeliveryMethodType = typeof DeliveryMethod
 
 export const PaymentMethod = {
