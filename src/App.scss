@@ -10,6 +10,15 @@ $selectedColor: #2196f3;
 .cart {
   display: flex;
   flex-flow: column;
+  &__header{
+    text-align: center;
+    font-size: 20px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    &--empty{
+
+    }
+  }
   &-item:first-of-type {
     border-top: 1px solid $borderColor;
   }
@@ -212,6 +221,30 @@ $selectedColor: #2196f3;
     height: 0px;
     background-color: rgba(236, 82, 82, 1);
     transition: height 0.3s ease-in;
+  }
+}
+.disabledBlock {
+  pointer-events: none;
+  position: relative;
+  &:after {
+    content: ' ';
+    z-index: 2;
+    display: block;
+    position: absolute;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(248, 248, 248, 0.76)
+  }
+  &__message{
+    z-index: 3;
+    color: black;
+    font-size: 20px;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    top: 25%;
   }
 }
 /* ----  inputs styling -----*/

@@ -8,11 +8,10 @@ const Cart = () => {
   const [cartInfo] = useGlobal('cartInfo')
 
   return cartItems.length === 0 ? (
-    <div>košík je prázdný</div>
+    <div className="cart__header cart__header--empty">Košík je prázdný</div>
   ) : (
     <div className="cart">
-      košík
-      <br />
+      <div className="cart__header">Košík</div>
       {cartItems.map((item: CartItemType, index: number) => (
         <CartItem
           index={index}

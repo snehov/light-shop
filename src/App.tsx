@@ -13,18 +13,19 @@ const App = () => {
   const [selectedPayment] = useGlobal('selectedPayment')
 
   useEffect(() => {
-    fetchCart() //true for first time
+    fetchCart()
     fetchOrderInfo()
   }, [fetchCart, fetchOrderInfo])
+
+  const dapAllowed = cartItems.length > 0
+  const addressAllowed =
+    dapAllowed && selectedDelivery !== 0 && selectedPayment !== 0
+
   return (
     <div className="App">
       <Cart />
-      {cartItems.length > 0 && <DeliveryAndPay />}
-      {selectedDelivery !== 0 && selectedPayment !== 0 ? (
-        <DeliveryInfo />
-      ) : (
-        <div>Dokončete výběr dopravy a platby</div>
-      )}
+      {dapAllowed && <DeliveryAndPay disabled={!dapAllowed} />}
+      {dapAllowed && <DeliveryInfo disabled={!addressAllowed} />}
     </div>
   )
 }

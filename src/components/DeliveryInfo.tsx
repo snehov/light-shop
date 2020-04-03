@@ -50,7 +50,7 @@ const setFormParts = (
   }
 }
 
-const DeliveryInfo = () => {
+const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
   const [copyInvoiceAddr, setCopyInvoiceAddr] = useState(true)
   const [noDeliveryAddress, setNoDeliveryAddress] = useState(false)
   const [companyVisible, setCompanyVisible] = useState<boolean | undefined>(
@@ -94,8 +94,8 @@ const DeliveryInfo = () => {
     if (!isEmpty(deliveryMethods)) {
       const methodInfo = deliveryMethods.filter(
         m => m.delivery_id == selectedDelivery, // eslint-disable-line
-      )[0] 
-      if (methodInfo.personal_pickup) {
+      )[0]
+      if (methodInfo?.personal_pickup) {
         setCopyInvoiceAddr(false)
         setNoDeliveryAddress(true)
         setFormParts(
@@ -178,13 +178,23 @@ const DeliveryInfo = () => {
       ;(validateCompany as any).current.runValidation()
     }
   }
-  const pickupLine = isEmpty(deliveryMethods)
-    ? 'adesa...'
+  console.log('DD', deliveryMethods, selectedDelivery)
+  const dm = isEmpty(deliveryMethods)
+    ? []
     : deliveryMethods.filter(
         m => m.delivery_id == selectedDelivery, // eslint-disable-line
-      )[0].description
+      )
+  const pickupLine = dm.length === 0 ? 'adesa...' : dm[0].description// eslint-disable-line
   return (
-    <div>
+    <div className={disabled ? 'disabledBlock' : ''}>
+      {disabled && (
+        <div
+          className="disabledBlock__message"
+          title="Dokončete výběr dopravy a platby"
+        >
+          Dokončete výběr dopravy a platby
+        </div>
+      )}
       <div className="elemsToRow">
         <div className="stdPadding">
           <PersonalInfo
