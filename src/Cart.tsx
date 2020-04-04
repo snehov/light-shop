@@ -20,7 +20,7 @@ const Cart = () => {
         />
       ))}
       <div
-        className={`cart-item cart-extraItem ${
+        className={`cart-item cart-extraItem cy-cart-delivery ${
           cartInfo.vatIncl && cartInfo.vatIncl.shipping > 0
             ? 'cart-extraItem--visible'
             : 'cart-extraItem--hidden'
@@ -34,7 +34,7 @@ const Cart = () => {
         </div>
       </div>
       <div
-        className={`cart-item cart-extraItem ${
+        className={`cart-item cart-extraItem cy-cart-payment ${
           cartInfo.vatIncl && cartInfo.vatIncl.paymentFee > 0
             ? 'cart-extraItem--visible'
             : 'cart-extraItem--hidden'
@@ -62,7 +62,7 @@ const Cart = () => {
           <div className="cart-sum--sumWord">cena celkem</div>
 
           <div>
-            <b>{formatPriceOutput(cartInfo.vatIncl.total)}</b>
+            <b className="cart-sum__TOTAL">{formatPriceOutput(cartInfo.vatIncl.total)}</b>
           </div>
         </div>
       )}

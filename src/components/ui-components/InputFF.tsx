@@ -3,9 +3,11 @@ import React, { useEffect, useState } from 'react'
 const InputFF = ({
   field,
   config,
+  g,
 }: {
   field: any
   config: any
+  g?: string
 }) => {
   const name = field.input.name
   const [useId, setUseId] = useState(name)
@@ -15,13 +17,17 @@ const InputFF = ({
   useEffect(() => {
     // check for duplicate html tag ID
     // maybe GET RID OF THIS CHECK
-    const elements = [...(document.querySelectorAll('[id]') as any)]
-    const ids = elements.map(el => el.id)
-    const dups = elements.filter(
-      el => ids.filter(id => id === el.id).length > 1,
-    )
-    if (dups.length > 0) {
-      setUseId(`${name}_${Math.floor(Math.random() * 100)}`)
+    if (g) {
+      setUseId(`${name}_${g}`)
+    } else {
+      const elements = [...(document.querySelectorAll('[id]') as any)]
+      const ids = elements.map(el => el.id)
+      const dups = elements.filter(
+        el => ids.filter(id => id === el.id).length > 1,
+      )
+      if (dups.length > 0) {
+        setUseId(`${name}_${Math.floor(Math.random() * 100)}`)
+      }
     }
   }, []) // eslint-disable-line
   return (

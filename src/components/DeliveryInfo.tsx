@@ -186,7 +186,7 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
       )
   const pickupLine = dm.length === 0 ? 'adesa...' : dm[0].description // eslint-disable-line
   return (
-    <div className={disabled ? 'disabledBlock' : ''}>
+    <div className={disabled ? 'deliveryInfoInputs disabledBlock' : 'deliveryInfoInputs'}>
       {disabled && (
         <div
           className="disabledBlock__message"

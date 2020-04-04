@@ -78,9 +78,9 @@ const PersonalInfo = forwardRef(
     return (
       <div className="formBlock">
         <h3>Základní údaje</h3>
-        <InputFF field={name} config={inputsConfig} />
-        <InputFF field={tel} config={inputsConfig} />
-        <InputFF field={email} config={inputsConfig} />
+        <InputFF field={name} config={inputsConfig} g={dataName} />
+        <InputFF field={tel} config={inputsConfig} g={dataName} />
+        <InputFF field={email} config={inputsConfig} g={dataName} />
       </div>
     )
   },

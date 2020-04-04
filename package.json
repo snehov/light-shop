@@ -26,7 +26,8 @@
     "start": "react-scripts start",
     "build": "PUBLIC_URL=./ react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "cypress:open": "cypress open"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -44,6 +45,8 @@
     ]
   },
   "devDependencies": {
+    "cypress": "^4.3.0",
+    "eslint-plugin-cypress": "^2.10.3",
     "react-test-renderer": "^16.13.1",
     "reactn-devtools": "^1.1.0",
     "redux": "^4.0.5"
