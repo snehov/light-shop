@@ -36,9 +36,18 @@ describe('Tests selecting delivery and payment methods', () => {
     cy.totalSum().contains('237 Kč')
   })
   it('Change delivery with incosistent payment to current one', () => {
-    cy.selectFreeDelivery()
-    cy.get("#payment_1").should('not.be.checked')
-    cy.get("#payment_1").should('be.disabled')
+    cy.get('label[for=delivery_3]').click()
+    cy.get('#payment_1').should('not.be.checked')
+    cy.get('#payment_1').should('be.disabled')
+    cy.get('#payment_2').should('be.checked')
+  })
+})
 
+describe('Test refresh and pre-filling already selected values', () => {
+  it('After refresh it should have still same selected values', () => {
+    cy.wait(2000) // eslint-disable-line
+    cy.reload()
+    cy.get('#delivery_3').should('be.checked')
+    cy.get('#payment_2').should('be.checked')
   })
 })

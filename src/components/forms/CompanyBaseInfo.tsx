@@ -65,9 +65,9 @@ const CompanyBaseInfo = forwardRef(
     return (
       <div className={`formBlock ${hidden ? 'hidden' : ''}`}>
         <h3>Informace o firmě</h3>
-        <InputFF field={name} config={inputsConfig} />
-        <InputFF field={crn} config={inputsConfig} />
-        <InputFF field={utr} config={inputsConfig} />
+        <InputFF field={name} config={inputsConfig} g={dataName} />
+        <InputFF field={crn} config={inputsConfig} g={dataName} />
+        <InputFF field={utr} config={inputsConfig} g={dataName} />
       </div>
     )
   },

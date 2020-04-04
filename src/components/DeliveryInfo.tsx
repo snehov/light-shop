@@ -252,7 +252,7 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
           }
         </div>
         <div className="stdPadding">
-          <label className="inputCont">
+          <label className="inputCont cy-fillCompany">
             Objednávka na firmu
             <input
               type="checkbox"

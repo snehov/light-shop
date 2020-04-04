@@ -1,4 +1,9 @@
-describe('Open cart with some item in it', () => {
+const deliverDescr = 'Delivery 2nd place'
+const delivStreet = 'Wilkinson 2nd'
+const delivCity = 'Mojokerto'
+const zip = '14900'
+
+describe('Play with input form fields', () => {
   it('Fill only name, submit, expect error submit', () => {
     cy.clearedOrderWithOneProduct()
     cy.selectPaidDelivery()
@@ -32,9 +37,6 @@ describe('Open cart with some item in it', () => {
         cy.get('.validation--empty')
       })
   })
-  const delivStreet = 'Wilkinson 2nd'
-  const delivCity = 'Mojokerto'
-  const zip = '14900'
   it('Fill delivery address', () => {
     cy.get('#descr_delivery').type('Reception at 2nd floor')
     cy.get('#street_delivery').type(delivStreet)
@@ -42,7 +44,7 @@ describe('Open cart with some item in it', () => {
     cy.get('#zip_delivery').type(zip)
     cy.formIsValid()
   })
-  it('Fill uncheck invoice addr same as delivery', () => {
+  it('Uncheck invoice addr which shoul be now same as delivery', () => {
     cy.get('#street_invoice').should('not.be.visible')
     cy.get('.cy-invAsDeliv').click()
     cy.get('#street_invoice').should('be.visible')
@@ -51,6 +53,52 @@ describe('Open cart with some item in it', () => {
     cy.get('#zip_invoice').should('have.value', zip)
     cy.formIsValid()
   })
+  it('Write different delivery addres, uncheck and check copy invoice addr', () => {
+    cy.get('#descr_delivery')
+      .clear()
+      .type(deliverDescr)
+    cy.get('#descr_invoice')
+      .clear()
+      .type('Invoice descr')
+    cy.get('.cy-invAsDeliv').click()
+    cy.get('#descr_invoice').should('not.be.visible')
+    cy.get('.cy-invAsDeliv').click()
+    cy.get('#descr_invoice').should('have.value', deliverDescr)
+    cy.get('.cy-invAsDeliv').click()
+    cy.formIsValid()
+  })
+  it('Check if company info get cleared if uncheck and check company again', () => {
+    cy.get('#name_company').should('not.be.visible')
+    cy.get('.cy-fillCompany').click()
+    cy.get('#name_company').should('be.visible')
+    cy.get('#name_company').type('TestCorp s.r.o.')
+    cy.get('.cy-fillCompany').click()
+    cy.get('#name_company').should('not.be.visible')
+    cy.get('.cy-fillCompany').click()
+    cy.get('#name_company').should('have.value', '')
+    cy.get('.cy-fillCompany').click()
+  })
+  it('Fill company info', () => {
+    cy.get('#name_company').should('not.be.visible')
+    cy.get('.cy-fillCompany').click()
+    cy.get('#name_company').should('be.visible')
+    cy.get('#name_company').type('TestCorp s.r.o.')
+    cy.get('#crn_company').type('783259')
+    cy.get('#utr_company').type('CZ783259')
+    cy.formIsValid()
+  })
   // TODO add reload (cy.reload()) and check pre-filling
   // TODO add company value checking
+})
+
+describe('Test refresh and pre-filling already filled values', () => {
+  it('After refresh it should have still same input values', () => {
+    cy.wait(2000) // eslint-disable-line
+    cy.reload()
+    cy.get('#descr_delivery').should('have.value', deliverDescr)
+    cy.get('#street_delivery').should('have.value', delivStreet)
+    cy.get('#city_delivery').should('have.value', delivCity)
+    cy.get('#zip_delivery').should('have.value', zip)
+
+  })
 })
