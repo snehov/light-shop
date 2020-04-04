@@ -184,7 +184,7 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
     : deliveryMethods.filter(
         m => m.delivery_id == selectedDelivery, // eslint-disable-line
       )
-  const pickupLine = dm.length === 0 ? 'adesa...' : dm[0].description// eslint-disable-line
+  const pickupLine = dm.length === 0 ? 'adesa...' : dm[0].description // eslint-disable-line
   return (
     <div className={disabled ? 'disabledBlock' : ''}>
       {disabled && (
@@ -292,15 +292,13 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
 
       <br />
       <br />
-      <b style={{ color: 'red' }}>
-        reset all sessions and start with empty values, something fail...
-      </b>
+      <b style={{ color: 'red' }}>...</b>
       <br />
       <cite>
         Next steps:
         <br />
-        1) submit endpoint, validate FE data and process order, on FE redirect
-        to succes screen
+        1) <s>submit endpoint</s>, validate FE data and process order, on FE
+        redirect to succes screen
         <br />
         2) from server sent link to terms&amp;conditions to click/redirect
         (_blank/lightbox) other)
@@ -308,8 +306,9 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
         another) prevent session expire by saving basic values to localStorage
         (make it friendly with previous point)
         <br />
-        BE) make work sending proper data types, and on FE try to forcheck and
-        event. stop app notice wrong data and prevent app from failing
+        BE) <s>make work sending proper data types</s>, and on FE try to
+        forcheck and event. stop app notice wrong data and prevent app from
+        failing
       </cite>
       <br />
     </div>
