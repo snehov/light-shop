@@ -1,9 +1,3 @@
-describe('My First test Test', function() {
-  it('Does not do much!', function() {
-    expect(true).to.equal(true)
-  })
-})
-
 describe('It opens empty cart', function() {
   it('Visits empty cart', function() {
     cy.request('https://snowcorp.cz/ls/cart_api/resetAll')

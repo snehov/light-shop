@@ -227,7 +227,7 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
 
         <div className="stdPadding">
           {!noDeliveryAddress && (
-            <label className="inputCont">
+            <label className="inputCont cy-invAsDeliv">
               Fakturační adresa je stejná jako dodací adresa
               <input
                 type="checkbox"

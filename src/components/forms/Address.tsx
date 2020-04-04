@@ -52,7 +52,7 @@ const Address = forwardRef(
   ) => {
     const [formValid, setFormValid] = useState(false)
     let formSource = {}
-    const { form, handleSubmit, values} = useForm({
+    const { form, handleSubmit, values } = useForm({
       onSubmit: (values: any) => {},
       validate: (values: any) =>
         finalFormValidation(values, setFormValid, formSource, inputsConfig),
@@ -96,10 +96,10 @@ const Address = forwardRef(
     return (
       <div className={`formBlock ${hidden ? 'hidden' : ''}`}>
         <h3>{altName || 'Adresa doručení'}</h3>
-        <InputFF field={descr} config={inputsConfig} />
-        <InputFF field={street} config={inputsConfig} />
-        <InputFF field={city} config={inputsConfig} />
-        <InputFF field={zip} config={inputsConfig} />
+        <InputFF field={descr} config={inputsConfig} g={dataName} />
+        <InputFF field={street} config={inputsConfig} g={dataName} />
+        <InputFF field={city} config={inputsConfig} g={dataName} />
+        <InputFF field={zip} config={inputsConfig} g={dataName} />
       </div>
     )
   },
