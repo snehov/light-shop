@@ -15,6 +15,7 @@ const App = () => {
   useEffect(() => {
     fetchCart()
     fetchOrderInfo()
+    console.log("process.env.NODE_ENV", process.env)
   }, [fetchCart, fetchOrderInfo])
 
   const dapAllowed = cartItems.length > 0
@@ -23,6 +24,7 @@ const App = () => {
 
   return (
     <div className="App">
+      NODE_ENV:{process.env.NODE_ENV},{process.env.REACT_APP_MYENV}
       <Cart />
       {dapAllowed && <DeliveryAndPay disabled={!dapAllowed} />}
       {dapAllowed && <DeliveryInfo disabled={!addressAllowed} />}

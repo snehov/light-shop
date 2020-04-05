@@ -1,15 +1,18 @@
+const name = 'jarmil'
 const deliverDescr = 'Delivery 2nd place'
 const delivStreet = 'Wilkinson 2nd'
 const delivCity = 'Mojokerto'
 const zip = '14900'
 
 describe('Play with input form fields', () => {
-  it('Fill only name, submit, expect error submit', () => {
+  it('Launch app', () => {
     cy.clearedOrderWithOneProduct()
+  })
+  it('Fill only name, submit, expect error submit', () => {
     cy.selectPaidDelivery()
     cy.selectFreePayment()
     cy.formIsNotValid()
-    cy.get('#name_personal').type('jarmil')
+    cy.get('#name_personal').type(name)
     cy.formIsNotValid()
     cy.get('.formSubmit').click()
     cy.get('label[for=tel_personal]')
@@ -87,18 +90,26 @@ describe('Play with input form fields', () => {
     cy.get('#utr_company').type('CZ783259')
     cy.formIsValid()
   })
-  // TODO add reload (cy.reload()) and check pre-filling
-  // TODO add company value checking
 })
 
 describe('Test refresh and pre-filling already filled values', () => {
   it('After refresh it should have still same input values', () => {
     cy.wait(2000) // eslint-disable-line
     cy.reload()
+    cy.get('#name_personal').should('have.value', name)
     cy.get('#descr_delivery').should('have.value', deliverDescr)
     cy.get('#street_delivery').should('have.value', delivStreet)
     cy.get('#city_delivery').should('have.value', delivCity)
     cy.get('#zip_delivery').should('have.value', zip)
+  })
+})
 
+describe('Check personal pickup behaviour', () => {
+  it('Test if delivery addres hide, and pickup addr appear instead', () => {
+    cy.selectPersonalPickup()
+    cy.get('#street_delivery').should('not.be.visible')
+    cy.selectPaidDelivery()
+    cy.get('#street_delivery').should('be.visible')
+    cy.formIsValid()
   })
 })

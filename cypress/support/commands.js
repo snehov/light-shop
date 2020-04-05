@@ -60,11 +60,17 @@ Cypress.Commands.add('selectFreeDelivery', (email, pw) => {
 Cypress.Commands.add('selectPaidDelivery', (email, pw) => {
   cy.get('label[for=delivery_1]').click()
 })
+Cypress.Commands.add('selectPersonalPickup', (email, pw) => {
+  cy.get('label[for=delivery_3]').click()
+})
 Cypress.Commands.add('selectFreePayment', (email, pw) => {
   cy.get('label[for=payment_3]').click()
 })
 Cypress.Commands.add('selectPaidPayment', (email, pw) => {
   cy.get('label[for=payment_1]').click()
+})
+Cypress.Commands.add('paidPaymentCheckbox', (email, pw) => {
+  cy.get('#payment_1')
 })
 
 // Form general

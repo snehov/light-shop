@@ -1,5 +1,6 @@
+//Cypress.env('REACT_APP_TT')
 describe('It opens empty cart', function() {
-  it('Visits empty cart', function() {
+  it('Visits empty cart ', function() {
     cy.request('https://snowcorp.cz/ls/cart_api/resetAll')
     cy.visit('/')
     cy.get('.cart__header').should('have.class', 'cart__header--empty')
@@ -32,12 +33,14 @@ describe('Try some item changes', () => {
     cy.get('.cart-item--price__sum').contains('200 Kč')
     cy.get('.cart-sum__TOTAL').contains('200 Kč')
   })
-  it("Changing amount input to another number",()=>{
-    cy.get('.cart-item--amount__input').type('{backspace}').type(7)
+  it('Changing amount input to another number', () => {
+    cy.get('.cart-item--amount__input')
+      .type('{backspace}')
+      .type(7)
     cy.get('.cart-item--price__sum').contains('700 Kč')
     cy.get('.cart-sum__TOTAL').contains('700 Kč')
   })
-  it("Reudce count by one by click on minus",()=>{
+  it('Reudce count by one by click on minus', () => {
     cy.get('.cart-item--amount__minus').click()
     cy.get('.cart-item--price__sum').contains('600 Kč')
   })
@@ -50,5 +53,3 @@ describe('After reload cart loads already changed values', () => {
     cy.get('.cart-sum__TOTAL').contains('600 Kč')
   })
 })
-
-

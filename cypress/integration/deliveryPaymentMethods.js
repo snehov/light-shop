@@ -36,9 +36,9 @@ describe('Tests selecting delivery and payment methods', () => {
     cy.totalSum().contains('237 Kč')
   })
   it('Change delivery with incosistent payment to current one', () => {
-    cy.get('label[for=delivery_3]').click()
-    cy.get('#payment_1').should('not.be.checked')
-    cy.get('#payment_1').should('be.disabled')
+    cy.selectPersonalPickup()
+    cy.paidPaymentCheckbox().should('not.be.checked')
+    cy.paidPaymentCheckbox().should('be.disabled')
     cy.get('#payment_2').should('be.checked')
   })
 })
