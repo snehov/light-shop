@@ -23,61 +23,64 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
-
-Cypress.Commands.add('clearedOrderWithOneProduct', (email, pw) => {
+const rootUrl='/?env=test'
+Cypress.Commands.add('clearedOrderWithOneProduct', () => {
   cy.request('https://snowcorp.cz/ls/cart_api/resetAll')
   cy.request('https://snowcorp.cz/ls/cart_api/addTestProduct1')
-  cy.visit('/')
+  cy.visit(rootUrl)
+})
+Cypress.Commands.add('visitRoot', () => {
+  cy.visit(rootUrl)
 })
 // Cart 
-Cypress.Commands.add('cartHaveDeliveryItem', (email, pw) => {
+Cypress.Commands.add('cartHaveDeliveryItem', () => {
   cy.get('.cy-cart-delivery').should('have.class', 'cart-extraItem--visible')
 })
-Cypress.Commands.add('cartNotHaveDeliveryItem', (email, pw) => {
+Cypress.Commands.add('cartNotHaveDeliveryItem', () => {
   cy.get('.cy-cart-delivery').should('have.class', 'cart-extraItem--hidden')
 })
-Cypress.Commands.add('cartHavePaymentItem', (email, pw) => {
+Cypress.Commands.add('cartHavePaymentItem', () => {
   cy.get('.cy-cart-payment').should('have.class', 'cart-extraItem--visible')
 })
-Cypress.Commands.add('cartNotHavePaymentItem', (email, pw) => {
+Cypress.Commands.add('cartNotHavePaymentItem', () => {
   cy.get('.cy-cart-payment').should('have.class', 'cart-extraItem--hidden')
 })
 
-Cypress.Commands.add('totalSum', (email, pw) => {
+Cypress.Commands.add('totalSum', () => {
   cy.get('.cart-sum__TOTAL')
 })
 // Delivery and Payment methods
-Cypress.Commands.add('deliveryInfoInputsDisabled', (email, pw) => {
+Cypress.Commands.add('deliveryInfoInputsDisabled', () => {
   cy.get('.deliveryInfoInputs').should('have.class', 'disabledBlock')
 })
-Cypress.Commands.add('deliveryInfoInputsEnabled', (email, pw) => {
+Cypress.Commands.add('deliveryInfoInputsEnabled', () => {
   cy.get('.deliveryInfoInputs').should('have.not.class', 'disabledBlock')
 })
 
-Cypress.Commands.add('selectFreeDelivery', (email, pw) => {
+Cypress.Commands.add('selectFreeDelivery', () => {
   cy.get('label[for=delivery_3]').click()
 })
-Cypress.Commands.add('selectPaidDelivery', (email, pw) => {
+Cypress.Commands.add('selectPaidDelivery', () => {
   cy.get('label[for=delivery_1]').click()
 })
-Cypress.Commands.add('selectPersonalPickup', (email, pw) => {
+Cypress.Commands.add('selectPersonalPickup', () => {
   cy.get('label[for=delivery_3]').click()
 })
-Cypress.Commands.add('selectFreePayment', (email, pw) => {
+Cypress.Commands.add('selectFreePayment', () => {
   cy.get('label[for=payment_3]').click()
 })
-Cypress.Commands.add('selectPaidPayment', (email, pw) => {
+Cypress.Commands.add('selectPaidPayment', () => {
   cy.get('label[for=payment_1]').click()
 })
-Cypress.Commands.add('paidPaymentCheckbox', (email, pw) => {
+Cypress.Commands.add('paidPaymentCheckbox', () => {
   cy.get('#payment_1')
 })
 
 // Form general
-Cypress.Commands.add('formIsValid', (email, pw) => {
+Cypress.Commands.add('formIsValid', () => {
   cy.get('.formSubmit').should('have.class', 'formSubmit--ready')
 })
-Cypress.Commands.add('formIsNotValid', (email, pw) => {
+Cypress.Commands.add('formIsNotValid', () => {
   cy.get('.formSubmit').should('have.class', 'formSubmit--notReady')
 })
 

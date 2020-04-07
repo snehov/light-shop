@@ -11,7 +11,7 @@ import {
   submitOrder,
 } from '../api'
 import { CartType, CartItemType } from 'utils/types'
-import { parseSimpleCartList } from 'utils/cartFunctions'
+import { parseSimpleCartList } from 'utils/functions'
 const isEmpty = require('ramda').isEmpty
 
 setGlobal({ cartItems: [] })

@@ -293,7 +293,7 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
         2) from server sent link to terms&amp;conditions to click/redirect
         (_blank/lightbox) other)
         <br />
-        another) prevent session expire by saving basic values to localStorage
+        <s>another) prevent session expire by saving basic values to localStorage</s>
         (make it friendly with previous point)
         <br />
         BE) <s>make work sending proper data types</s>, and on FE try to

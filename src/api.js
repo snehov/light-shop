@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { getEnv } from 'utils/functions'
 
 const api = axios.create({
   baseURL: 'https://snowcorp.cz/ls/cart_api/',
@@ -7,6 +8,7 @@ const api = axios.create({
   headers: {
     Accept: 'application/json, application/xml, text/play, text/html,',
     'Content-Type': 'application/json; charset=utf-8',
+    env: getEnv(),
   },
 })
 

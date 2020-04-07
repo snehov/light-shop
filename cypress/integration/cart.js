@@ -2,14 +2,14 @@
 describe('It opens empty cart', function () {
   it('Visits empty cart ', function () {
     cy.request('https://snowcorp.cz/ls/cart_api/resetAll')
-    cy.visit('/')
+    cy.visitRoot()
     cy.get('.cart__header').should('have.class', 'cart__header--empty')
   })
 })
 describe('Open cart with some item in it', () => {
   it('Check present items in cart', () => {
     cy.request('https://snowcorp.cz/ls/cart_api/addTestProduct1')
-    cy.visit('/')
+    cy.visitRoot()
     cy.get('.cart')
     cy.get('.cart-item')
   })
@@ -54,7 +54,7 @@ describe('After reload cart loads already changed values', () => {
 describe('Test session expiration and reloading of previous cart items', () => {
   it('Set empty localStorage, empty session, load (empty) cart', () => {
     cy.request('https://snowcorp.cz/ls/cart_api/resetAll')
-    cy.visit('/')
+    cy.visitRoot()
     cy.get('.cart__header').should('have.class', 'cart__header--empty')
 
     cy.clearLocalStorage('cartSimple')
@@ -63,7 +63,7 @@ describe('Test session expiration and reloading of previous cart items', () => {
   it('add item to cart, empty session, load cart from locastorage', () => {
     cy.get('.cart__header').should('have.class', 'cart__header--empty')
     cy.request('https://snowcorp.cz/ls/cart_api/addTestProduct1')
-    cy.visit('/')
+    cy.visitRoot()
     cy.get('.cart-item')
     cy.request('https://snowcorp.cz/ls/cart_api/resetAll')
     cy.reload()
