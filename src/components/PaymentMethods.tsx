@@ -3,7 +3,7 @@ import { PaymentMethodType } from 'utils/types'
 import { formatPriceOutput } from '../utils/priceOperations'
 const isEmpty = require('ramda').isEmpty
 
-const PaymentMethods = (/* { selectedDelivery }: { selectedDelivery: number } */) => {
+const PaymentMethods = () => {
   const [paymentsMethods] = useGlobal('paymentMethods')
   const [deliveryMethods] = useGlobal('deliveryMethods')
   const [orderInfo] = useGlobal('orderInfo')

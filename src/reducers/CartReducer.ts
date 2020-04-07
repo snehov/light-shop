@@ -11,6 +11,7 @@ import {
   submitOrder,
 } from '../api'
 import { CartType, CartItemType } from 'utils/types'
+import { parseSimpleCartList } from 'utils/cartFunctions'
 const isEmpty = require('ramda').isEmpty
 
 setGlobal({ cartItems: [] })
@@ -23,10 +24,13 @@ setGlobal({ selectedPayment: 0 })
 setGlobal({ isSubmittingOrder: false })
 
 addReducer('getCart', async (global, dispatch) => {
+  const cartSimple =
+    JSON.stringify(window.localStorage.getItem('cartSimple')) || ''
+
   const data: any = await dataFromHtmlOrApi_firstTimeOnly(
     global.cartItems,
     'cartItems',
-    () => fetchCart(),
+    () => fetchCart(cartSimple),
   )
   return parseIncomingCart(data)
 })
@@ -61,7 +65,7 @@ addReducer('changePaymentMethod', async (global, dispatch, payment_id) => {
   let response = await changePaymentMethod(payment_id)
   return parseIncomingCart(response.data)
 })
-addReducer('fetchOrderInfo', async global => {
+addReducer('fetchOrderInfo', async (global) => {
   const data: any = await dataFromHtmlOrApi_firstTimeOnly(
     global.orderInfo,
     'orderInfo',
@@ -84,10 +88,19 @@ addReducer('submitOrder', async (global, dispatch, forms_data) => {
   let response = await submitOrder(forms_data)
   setGlobal({ isSubmittingOrder: false })
   alert('A tady bude pokračování na stránku oznamující úspěch')
-  return response.data
+  console.log('response.data', typeof response.data, response.data, response)
+  if (typeof response.data === 'object') {
+    // TODO: maybe also validate returned structure
+    return response.data // TODO: use this IF at all API calls
+  }
+  return {}
 })
 
 const parseIncomingCart = (data: CartData) => {
+  window.localStorage.setItem(
+    'cartSimple',
+    JSON.stringify(parseSimpleCartList(data.cart)),
+  )
   // TODO: check incoming data format!!!
   return { cartItems: data.cart, cartInfo: data.sum }
 }

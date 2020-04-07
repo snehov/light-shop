@@ -11,17 +11,13 @@ import {
   fromApiAddrToAppAddrForm,
   debounce,
   checkAllFormPartsValid,
-  clearCompanyValues,
   fromFullFormatToSimple,
   hasAllEmptyValues,
-  setAllValuesEmpty,
   removeFormPart,
 } from 'utils/formsFnc'
 import {
   FormPartType,
   FormPartsType,
-  DeliveryInfoType,
-  OrderInfoType,
 } from 'utils/types'
 const isEmpty = require('ramda').isEmpty
 
@@ -32,10 +28,7 @@ const debounceFnc = debounce((launchDebounced: any) => {
 const checkAllFormsValid = (noDeliveryAddress: boolean) => {
   let requiredParts = ['personal', 'invoice']
   !noDeliveryAddress && requiredParts.push('delivery')
-  const CV = checkAllFormPartsValid(requiredParts, formParts)
-  console.log('requiredParts', requiredParts, formParts, CV)
-
-  return CV
+  return checkAllFormPartsValid(requiredParts, formParts)
 }
 
 let formParts: FormPartsType = {}
@@ -66,7 +59,6 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
   const [deliveryMethods] = useGlobal('deliveryMethods')
 
   useEffect(() => {
-    console.log('addresname', addressName)
     // when getting init data from BE find out whether delivery/invoice are different, or copied, then preselect copy option
     if (addressName) {
       const an = addressName
@@ -90,7 +82,6 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
   }, [addressName]) // eslint-disable-line
 
   useEffect(() => {
-    console.log('deliveryMethods', deliveryMethods)
     if (!isEmpty(deliveryMethods)) {
       const methodInfo = deliveryMethods.filter(
         m => m.delivery_id == selectedDelivery, // eslint-disable-line
@@ -178,7 +169,6 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
       ;(validateCompany as any).current.runValidation()
     }
   }
-  console.log('DD', deliveryMethods, selectedDelivery)
   const dm = isEmpty(deliveryMethods)
     ? []
     : deliveryMethods.filter(

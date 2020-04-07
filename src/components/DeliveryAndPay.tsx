@@ -20,8 +20,8 @@ const DeliveryAndPay = ({ disabled }: { disabled?: boolean }) => {
           Košík musí obsahovat zboží
         </div>
       )}
-      <DeliveryMethods /* default={orderInfo.deliveryMethod || 0}  */ />
-      <PaymentMethods /* selectedDelivery={selectedDelivery} */ />
+      <DeliveryMethods />
+      <PaymentMethods />
     </div>
   )
 }

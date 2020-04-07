@@ -39,5 +39,7 @@ function numConversion(expr: any): number {
   return Number(expr)
 }
 function stringConversion(expr: any): string {
-  return expr.toString()
+  expr === undefined &&
+    console.error('Undefined value expr at stringConversion', expr)
+  return expr ? expr.toString() : ''
 }
