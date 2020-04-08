@@ -264,7 +264,7 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
         </div>
       </div>
 
-      {terms.url && (
+      {terms?.url && (
         <a
           href={terms.url}
           className={terms.class}
