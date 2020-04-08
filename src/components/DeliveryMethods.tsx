@@ -9,11 +9,12 @@ const DeliveryMethods = () => {
   const [deliveryMethod, setDeliveryMethod] = useState(0)
   const changeDeliveryMethod = useDispatch('changeDeliveryMethod')
   useEffect(() => {
-    !isEmpty(orderInfo) && setDeliveryMethod(orderInfo.deliveryMethod)
+    orderInfo?.deliveryMethod && setDeliveryMethod(orderInfo.deliveryMethod)
   }, [orderInfo])
 
   const changeMethod = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedValue = Number(e.target.value)
+    console.log("selectedValue", selectedValue)
     setDeliveryMethod(selectedValue)
     changeDeliveryMethod(selectedValue)
   }

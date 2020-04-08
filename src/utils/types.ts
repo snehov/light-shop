@@ -65,6 +65,8 @@ export type termsConditions = {
   rel?: string
   content?: string
   target?: string
+  label?: string
+  clickable?: string
 }
 export type OrderInfoType = {
   paymentMethod: number

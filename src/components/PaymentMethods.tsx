@@ -12,10 +12,7 @@ const PaymentMethods = () => {
   const changePaymentMethod = useDispatch('changePaymentMethod')
 
   useEffect(() => {
-    if (!isEmpty(orderInfo)) {
-      // preselect historicaly chosen option (used with page refresh)
-      setPaymentMethod(orderInfo.paymentMethod)
-    }
+    orderInfo?.paymentMethod && setPaymentMethod(orderInfo.paymentMethod) // preselect historicaly chosen option (used with page refresh)
   }, [orderInfo])
 
   useEffect(() => {
@@ -26,7 +23,7 @@ const PaymentMethods = () => {
     // when delivery methods loaded
     if (paymentMethod !== 0 && deliveryMethods !== []) {
       const allowedPayments = getAllowedPayments()
-      console.log("paymentMethod", paymentMethod)
+      console.log('paymentMethod', paymentMethod)
       // if delivery changes and current payment is not supported by that delivery, change to fist in list of suppored
       if (!allowedPayments.includes(paymentMethod.toString())) {
         allowedPayments.length > 0
@@ -47,7 +44,7 @@ const PaymentMethods = () => {
     const allowedPayements = !selectedDelivery
       ? ''
       : deliveryMethods
-          .filter(d => d.delivery_id == selectedDelivery)[0] //eslint-disable-line eqeqeq
+          .filter((d) => d.delivery_id == selectedDelivery)[0] //eslint-disable-line eqeqeq
           .payments.split(',')
     return allowedPayements
   }

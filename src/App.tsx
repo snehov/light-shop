@@ -20,9 +20,13 @@ const App = () => {
   }, [fetchCart, fetchOrderInfo])
 
   const dapAllowed = cartItems.length > 0
-  const addressAllowed =
-    dapAllowed && selectedDelivery !== 0 && selectedPayment !== 0
-
+  const addressAllowed = dapAllowed && selectedDelivery && selectedPayment
+  console.log(
+    'selectedDelivery',
+    selectedDelivery,
+    'selectedPayment',
+    selectedPayment,
+  )
   return (
     <div className="App">
       NODE_ENV:{process.env.NODE_ENV},{process.env.REACT_APP_MYENV}, Ue:

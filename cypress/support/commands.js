@@ -24,8 +24,12 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 const rootUrl='/?env=test'
-Cypress.Commands.add('clearedOrderWithOneProduct', () => {
+Cypress.Commands.add('resetAll', () => {
   cy.request('https://snowcorp.cz/ls/cart_api/resetAll')
+  cy.clearLocalStorage()
+})
+Cypress.Commands.add('clearedOrderWithOneProduct', () => {
+  cy.resetAll()
   cy.request('https://snowcorp.cz/ls/cart_api/addTestProduct1')
   cy.visit(rootUrl)
 })

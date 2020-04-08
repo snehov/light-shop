@@ -71,12 +71,10 @@ addReducer('fetchOrderInfo', async (global) => {
     'orderInfo',
     () => fetchOrderInfo(),
   )
-  setGlobal({
-    selectedDelivery: data.deliveryMethod,
-    //selectedPayment: data.paymentMethod, //its somehow works even if this line commented
-  })
   return {
     orderInfo: data,
+    selectedDelivery: data.deliveryMethod,
+    //selectedPayment: data.paymentMethod, //somehow works commented as well
   }
 })
 addReducer('saveAddressInfo', async (global, dispatch, forms_data) => {
@@ -90,8 +88,7 @@ addReducer('submitOrder', async (global, dispatch, forms_data) => {
   alert('A tady bude pokračování na stránku oznamující úspěch')
   console.log('response.data', typeof response.data, response.data, response)
   if (typeof response.data === 'object') {
-    // TODO: maybe also validate returned structure
-    return response.data // TODO: use this IF at all API calls
+    return response.data // TODO: maybe also validate returned structure // TODO: use this IF at all API calls
   }
   return {}
 })

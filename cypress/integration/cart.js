@@ -1,7 +1,7 @@
 //Cypress.env('REACT_APP_TT')
 describe('It opens empty cart', function () {
   it('Visits empty cart ', function () {
-    cy.request('https://snowcorp.cz/ls/cart_api/resetAll')
+    cy.resetAll()
     cy.visitRoot()
     cy.get('.cart__header').should('have.class', 'cart__header--empty')
   })
