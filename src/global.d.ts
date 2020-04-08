@@ -63,6 +63,13 @@ declare module 'reactn/default' {
       dispatch: Dispatch,
       forms_data: object,
     ) => null
+
+    changeLang: (
+      global: State,
+      dispatch: Dispatch,
+      lang: string,
+      i18n: i18n
+    ) => null
   }
 
   // necessary to define due to typescript ability to safely read from useGlobal()

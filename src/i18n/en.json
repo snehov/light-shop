@@ -1,0 +1,7 @@
+{
+  "translation": {
+    "welcome": "Welcome to React and react-i18next",
+    "deliveryMethods": "Delivery methods",
+    "paymentMethods": "Payment methods"
+  }
+}

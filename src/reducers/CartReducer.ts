@@ -9,6 +9,7 @@ import {
   changePaymentMethod,
   saveAddressInfo,
   submitOrder,
+  changeLang,
 } from '../api'
 import { CartType, CartItemType } from 'utils/types'
 import { parseSimpleCartList } from 'utils/functions'
@@ -50,10 +51,14 @@ addReducer('getDeliveryAndPay', async (global, dispatch) => {
     'delivPayOpts',
     () => fetchDeliveryPayMethods(),
   )
-  return {
-    deliveryMethods: data.delivery,
-    paymentMethods: data.payments,
+  if (typeof data === 'object') {
+    return {
+      deliveryMethods: data.delivery,
+      paymentMethods: data.payments,
+    }
   }
+  console.error('invalid incoming data format at getDeliveryAndPay')
+  return {}
 })
 addReducer('changeDeliveryMethod', async (global, dispatch, delivery_id) => {
   setGlobal({ selectedDelivery: delivery_id })
@@ -89,6 +94,18 @@ addReducer('submitOrder', async (global, dispatch, forms_data) => {
   console.log('response.data', typeof response.data, response.data, response)
   if (typeof response.data === 'object') {
     return response.data // TODO: maybe also validate returned structure // TODO: use this IF at all API calls
+  }
+  return {}
+})
+addReducer('changeLang', async (global, dispatch, lang, i18n) => {
+  i18n.changeLanguage(lang)
+  let response = await changeLang({ lang })
+  if (typeof response.data === 'object') {
+    return {
+      cartItems: response.data.cartData,
+      deliveryMethods: response.data.delivery,
+      paymentMethods: response.data.payments,
+    }
   }
   return {}
 })

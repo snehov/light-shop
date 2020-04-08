@@ -1,4 +1,5 @@
 import React, { useDispatch, useState, useEffect, useGlobal } from 'reactn'
+import { useTranslation } from 'react-i18next'
 import { DeliveryMethodType } from 'utils/types'
 import { formatPriceOutput } from '../utils/priceOperations'
 const isEmpty = require('ramda').isEmpty
@@ -8,20 +9,25 @@ const DeliveryMethods = () => {
   const [orderInfo] = useGlobal('orderInfo')
   const [deliveryMethod, setDeliveryMethod] = useState(0)
   const changeDeliveryMethod = useDispatch('changeDeliveryMethod')
+  const { t } = useTranslation()
   useEffect(() => {
     orderInfo?.deliveryMethod && setDeliveryMethod(orderInfo.deliveryMethod)
   }, [orderInfo])
 
   const changeMethod = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedValue = Number(e.target.value)
-    console.log("selectedValue", selectedValue)
+    console.log('selectedValue', selectedValue)
     setDeliveryMethod(selectedValue)
     changeDeliveryMethod(selectedValue)
   }
 
   return (
     <div className="deliveryChoice">
-      <h2>způsoby doručení</h2>
+      <h2>
+        {
+          t('deliveryMethods') // eslint-disable-line
+        }
+      </h2>
       {!isEmpty(deliveryMethods) &&
         deliveryMethods.map((method: DeliveryMethodType) => (
           <div key={method.delivery_id}>

@@ -1,0 +1,7 @@
+{
+  "translation": {
+    "welcome": "Vítej do react-i18next",
+    "deliveryMethods": "Způsoby doručení",
+    "paymentMethods": "Způsoby platby"
+  }
+}

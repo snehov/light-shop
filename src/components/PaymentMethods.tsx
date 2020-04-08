@@ -1,4 +1,5 @@
 import React, { useDispatch, useState, useGlobal, useEffect } from 'reactn'
+import { useTranslation } from 'react-i18next'
 import { PaymentMethodType } from 'utils/types'
 import { formatPriceOutput } from '../utils/priceOperations'
 const isEmpty = require('ramda').isEmpty
@@ -10,6 +11,7 @@ const PaymentMethods = () => {
   const [paymentMethod, setPaymentMethod] = useState(0)
   const [selectedDelivery] = useGlobal('selectedDelivery')
   const changePaymentMethod = useDispatch('changePaymentMethod')
+  const { t } = useTranslation()
 
   useEffect(() => {
     orderInfo?.paymentMethod && setPaymentMethod(orderInfo.paymentMethod) // preselect historicaly chosen option (used with page refresh)
@@ -51,7 +53,7 @@ const PaymentMethods = () => {
 
   return (
     <div className="paymentChoice">
-      <h2>způsoby platby</h2>
+      <h2>{t('paymentMethods')}</h2>
       {!isEmpty(paymentsMethods) &&
         paymentsMethods.map((method: PaymentMethodType) => {
           const disabled = isEmpty(getAllowedPayments())
