@@ -59,8 +59,16 @@ export type DeliveryInfoType = {
   invoice?: object
   company?: object
 }
+export type termsConditions = {
+  url?: string
+  class?: string
+  rel?: string
+  content?: string
+  target?: string
+}
 export type OrderInfoType = {
   paymentMethod: number
   deliveryMethod: number
   addressName: DeliveryInfoType
+  terms: termsConditions
 }

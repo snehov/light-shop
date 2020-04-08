@@ -15,10 +15,7 @@ import {
   hasAllEmptyValues,
   removeFormPart,
 } from 'utils/formsFnc'
-import {
-  FormPartType,
-  FormPartsType,
-} from 'utils/types'
+import { FormPartType, FormPartsType } from 'utils/types'
 const isEmpty = require('ramda').isEmpty
 
 const debounceFnc = debounce((launchDebounced: any) => {
@@ -53,10 +50,11 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
   const [allFormsAreValid, setAllFormsAreValid] = useState(false)
   const saveAddressInfo = useDispatch('saveAddressInfo')
   const submitOrderToServer = useDispatch('submitOrder')
-  const [{ addressName }] = useGlobal('orderInfo')
+  const [{ addressName, terms }] = useGlobal('orderInfo')
   const [isSubmittingOrder] = useGlobal('isSubmittingOrder')
   const [selectedDelivery] = useGlobal('selectedDelivery')
   const [deliveryMethods] = useGlobal('deliveryMethods')
+  const [termsAgreed, setTermsAgreed] = useState(false)
 
   useEffect(() => {
     // when getting init data from BE find out whether delivery/invoice are different, or copied, then preselect copy option
@@ -84,7 +82,7 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
   useEffect(() => {
     if (!isEmpty(deliveryMethods)) {
       const methodInfo = deliveryMethods.filter(
-        m => m.delivery_id == selectedDelivery, // eslint-disable-line
+        (m) => m.delivery_id == selectedDelivery, // eslint-disable-line
       )[0]
       if (methodInfo?.personal_pickup) {
         setCopyInvoiceAddr(false)
@@ -172,11 +170,15 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
   const dm = isEmpty(deliveryMethods)
     ? []
     : deliveryMethods.filter(
-        m => m.delivery_id == selectedDelivery, // eslint-disable-line
+        (m) => m.delivery_id == selectedDelivery, // eslint-disable-line
       )
   const pickupLine = dm.length === 0 ? 'adesa...' : dm[0].description // eslint-disable-line
   return (
-    <div className={disabled ? 'deliveryInfoInputs disabledBlock' : 'deliveryInfoInputs'}>
+    <div
+      className={
+        disabled ? 'deliveryInfoInputs disabledBlock' : 'deliveryInfoInputs'
+      }
+    >
       {disabled && (
         <div
           className="disabledBlock__message"
@@ -222,7 +224,7 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
               <input
                 type="checkbox"
                 checked={copyInvoiceAddr}
-                onChange={e => setCopyInvoiceAddr(e.target.checked)}
+                onChange={(e) => setCopyInvoiceAddr(e.target.checked)}
               />
               <span className="checkmark"></span>
             </label>
@@ -247,7 +249,7 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
             <input
               type="checkbox"
               checked={Boolean(companyVisible)}
-              onChange={e => setCompanyVisible(e.target.checked)}
+              onChange={(e) => setCompanyVisible(e.target.checked)}
             />
             <span className="checkmark"></span>
           </label>
@@ -261,6 +263,25 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
           )}
         </div>
       </div>
+
+      {terms.url && (
+        <a
+          href={terms.url}
+          className={terms.class}
+          rel={terms.rel}
+          target={terms.target}
+        >
+          souhlasím s podmínkama
+        </a>
+      )}
+      <label className="inputCont cy-agreeTerms">
+        <input
+          type="checkbox"
+          checked={Boolean(termsAgreed)}
+          onChange={(e) => setTermsAgreed(e.target.checked)}
+        />
+        <span className="checkmark"></span>
+      </label>
 
       {!allFormsAreValid && <div>ještě není vše vyplněno</div>}
       {isSubmittingOrder ? (
@@ -290,10 +311,15 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
         1) <s>submit endpoint</s>, validate FE data and process order, on FE
         redirect to succes screen
         <br />
-        2) from server sent link to terms&amp;conditions to click/redirect
-        (_blank/lightbox) other)
+        2)
+        <s>
+          from server sent link to terms&amp;conditions to click/redirect
+          (_blank/lightbox) other)
+        </s>
         <br />
-        <s>another) prevent session expire by saving basic values to localStorage</s>
+        <s>
+          another) prevent session expire by saving basic values to localStorage
+        </s>
         (make it friendly with previous point)
         <br />
         BE) <s>make work sending proper data types</s>, and on FE try to
