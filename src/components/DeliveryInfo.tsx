@@ -264,7 +264,7 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
         </div>
       </div>
 
-      {terms?.url && (
+      {/* terms?.url && (
         <a
           href={terms.url}
           className={terms.class}
@@ -273,15 +273,15 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
         >
           souhlasím s podmínkama
         </a>
-      )}
-      <label className="inputCont cy-agreeTerms">
+      ) */}
+     {/*  <label className="inputCont cy-agreeTerms">
         <input
           type="checkbox"
           checked={Boolean(termsAgreed)}
           onChange={(e) => setTermsAgreed(e.target.checked)}
         />
         <span className="checkmark"></span>
-      </label>
+      </label> */}
 
       {!allFormsAreValid && <div>ještě není vše vyplněno</div>}
       {isSubmittingOrder ? (
