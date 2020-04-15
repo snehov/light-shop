@@ -1,4 +1,16 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# LightShop
+
+This app is primarily written as a shopping cart (and order completition process) plugin into older PHP websites.
+It consists of this React frontend part and PHP REST API backend (another repo).
+
+## Run app
+
+After instaling all dependencies, `yarn start` should be enough to run it.
+Because this app is written as a component primarily for older PHP websites which uses SESSIONS and backend need to use them to be able to comunicate with the rest of the app, there is action required to make this work properly for development on localhost.
+
+At Chrome set `disabled` flag at [chrome://flags/#same-site-by-default-cookies](chrome://flags/#same-site-by-default-cookies)
+Also in Chrome settings put `localhost:3000` and `http://localhost:3000` to whitelist at Site settings>cookies and site data.
+Now SESSIONS should work well.
 
 ## Available Scripts
 
@@ -6,63 +18,69 @@ In the project directory, you can run:
 
 ### `yarn start`
 
-Runs the app in the development mode.<br />
+Runs the app in the development mode.
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+The page will reload if you make edits.
 
 ### `yarn test`
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Launches the test runner in the interactive watch mode.
+
+### `yarn cypress:run`
+
+Run cypress tests.
+Those are also runned as a pre-commit hook when you pushing to the origin.
 
 ### `yarn build`
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Builds the app for production to the `build` folder.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+## DevStack
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+App is buit on [Create React App](https://github.com/facebook/create-react-app) and it use:
 
-### `yarn eject`
+- React hooks
+- TypeScript
+- ReactN for global state instead of Redux store
+- CSS for styling, because styling is expected to be shared with already existent PHP app and its CSS styling
+- Cypress for e2e tests, Jest for unit tests
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## App features
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+The app contains this logical parts of e-shop:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+- Shopping cart
+- Selecion of delivery and payment methods
+- Forms to enter personal info/delivery and invoice addres/company info
+- Validation of all entered data
+- Checkout order by sending all the data to backend
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+All those logical part are supported by following features
 
-## Learn More
+### Sync data to BE immediately
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Every entered information is directly send to API to save it (2sec debounce).
+So whenever browser is reloaded, it will pre-fill all already entered info.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Locally store cart content
 
-### Code Splitting
+Store product `id` and `amount` in localstorage for case SESSION will expire, so it can easily renew existent shopping cart
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+### Form parts dependencies
 
-### Analyzing the Bundle Size
+Whole app is intentionally designed as one page app without any other screens or routes.
+So user can see all the time same screen and dont need to navigate in it.
+Which makes internal app logic more complicated, but it handle all those challenges like:
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+- Hiding form parts which are not necessary for all users (company info, invoice info)
+- Copying form parts which can be same (delivery info and invoice info)
+- Replace input delivery addres by readonly personal pickup address
+- Permanent form validation indicator (blue/green) send order button
 
-### Making a Progressive Web App
+### Innitial data
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+As the app is intended to be rendered on PHP server, which is not supporting JS SSR, there is at least posibility send with app on fist load all static data inside HTML file in JSON format (delivery/payment methods). Also when app is refreshed, content of the shopping cart can be loaded from this JSON instead of initial API call to those data. When loading JSON from HTML will fail, then it call API. It makes app faster loaded and save some unnecessary initial API calls.
 
-### Advanced Configuration
+## i18N
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+App is using i18n, currently in Czech (primary language) and English
