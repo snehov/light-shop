@@ -70,6 +70,16 @@ declare module 'reactn/default' {
       lang: string,
       i18n: i18n
     ) => null
+
+    clearAllData: (
+      global: State,
+      dispatch: Dispatch,
+    ) => null
+
+    addRandomItem: (
+      global: State,
+      dispatch: Dispatch,
+    ) => null
   }
 
   // necessary to define due to typescript ability to safely read from useGlobal()

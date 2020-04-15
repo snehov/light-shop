@@ -43,4 +43,6 @@ export const changeLang = (lang) => api.post('changeLang', lang)
 
 export const submitOrder = (forms_data) => api.post('submitOrder', forms_data)
 
-//changeDeliveryMethod
+export const addRandomItem = () => api.get('addRandomItem')
+
+export const clearAllData = () => api.get('clearCart')

@@ -1,7 +1,7 @@
 # LightShop
 
 This app is primarily written as a shopping cart (and order completition process) plugin into older PHP websites.
-It consists of this React frontend part and PHP REST API backend (another repo).
+It consists of this React frontend part and PHP REST API backend (another repo). App is still under construction, and its approx 95% done.
 
 ## Run app
 
@@ -11,6 +11,11 @@ Because this app is written as a component primarily for older PHP websites whic
 At Chrome set `disabled` flag at [chrome://flags/#same-site-by-default-cookies](chrome://flags/#same-site-by-default-cookies)
 Also in Chrome settings put `localhost:3000` and `http://localhost:3000` to whitelist at Site settings>cookies and site data.
 Now SESSIONS should work well.
+
+You can compare shopping cart content with data on this endpoins, if it fits and session works
+https://snowcorp.cz/ls/cart_api/addRandomItem
+https://snowcorp.cz/ls/cart_api/getCart
+https://snowcorp.cz/ls/cart_api/clearCart
 
 ## Available Scripts
 

@@ -10,6 +10,8 @@ import {
   saveAddressInfo,
   submitOrder,
   changeLang,
+  addRandomItem,
+  clearAllData
 } from '../api'
 import { CartType, CartItemType } from 'utils/types'
 import { parseSimpleCartList } from 'utils/functions'
@@ -110,6 +112,17 @@ addReducer('changeLang', async (global, dispatch, lang, i18n) => {
       paymentMethods: response.data.payments,
     }
   }
+  return {}
+})
+addReducer('addRandomItem', async () => {
+  await addRandomItem()
+  window.location.reload()
+  return {}
+})
+addReducer('clearAllData', async () => {
+  localStorage.removeItem('cartSimple')
+  await clearAllData()
+  window.location.reload()
   return {}
 })
 
