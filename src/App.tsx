@@ -27,8 +27,12 @@ const App = () => {
 
   return (
     <div className="App">
-      <button onClick={() => changeLang('en', i18n)}>en</button>
-      <button onClick={() => changeLang('cz', i18n)}>cz</button>
+      <button onClick={() => changeLang('en', i18n)} className="langToEn">
+        en
+      </button>
+      <button onClick={() => changeLang('cz', i18n)} className="langToCz">
+        cz
+      </button>
       NODE_ENV:{process.env.NODE_ENV},{process.env.REACT_APP_MYENV}, Ue:
       {getEnv()}
       <Cart />
