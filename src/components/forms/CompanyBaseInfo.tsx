@@ -4,14 +4,16 @@ import React, {
   forwardRef,
   useImperativeHandle,
 } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useForm, useField } from 'react-final-form-hooks'
 import { finalFormValidation, changedByUserInput } from 'utils/formsFnc'
 import { InputFF } from 'components/ui-components'
+import addi18toInputs from 'i18n/addi18toInputs'
 
-const inputsConfig = {
-  name: { required: true, minLength: 5, label: 'Obchodní název' },
-  crn: { required: true, type: 'number', minLength: 5, label: 'IČ' },
-  utr: { minLength: 5, label: 'DIČ' },
+const inputsConf = {
+  name: { required: true, minLength: 5, label: 'company.name' },
+  crn: { required: true, type: 'number', minLength: 5, label: 'company.crn' },
+  utr: { minLength: 5, label: 'company.utr' },
 }
 const CompanyBaseInfo = forwardRef(
   (
@@ -29,6 +31,8 @@ const CompanyBaseInfo = forwardRef(
     ref,
   ) => {
     const [formValid, setFormValid] = useState(false)
+    const { t } = useTranslation()
+    const inputsConfig = addi18toInputs(inputsConf, t)
     let formSource = {}
     const { form, values, handleSubmit } = useForm({
       onSubmit: (values: any) => {},
@@ -64,7 +68,7 @@ const CompanyBaseInfo = forwardRef(
 
     return (
       <div className={`formBlock ${hidden ? 'hidden' : ''}`}>
-        <h3>Informace o firmě</h3>
+        <h3>{t('company.companyInfo')}</h3>
         <InputFF field={name} config={inputsConfig} g={dataName} />
         <InputFF field={crn} config={inputsConfig} g={dataName} />
         <InputFF field={utr} config={inputsConfig} g={dataName} />

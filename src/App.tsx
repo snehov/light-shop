@@ -7,7 +7,6 @@ import Cart from './Cart'
 import DeliveryAndPay from './components/DeliveryAndPay'
 import DeliveryInfo from './components/DeliveryInfo'
 import { getEnv } from 'utils/functions'
-//var { t } = useTranslation()
 const App = () => {
   const fetchCart = useDispatch('getCart')
   const fetchOrderInfo = useDispatch('fetchOrderInfo')
@@ -15,7 +14,7 @@ const App = () => {
   const [selectedDelivery] = useGlobal('selectedDelivery')
   const [selectedPayment] = useGlobal('selectedPayment')
   const changeLang = useDispatch('changeLang')
-  const { t, i18n } = useTranslation()
+  const { i18n } = useTranslation()
 
   useEffect(() => {
     fetchCart()

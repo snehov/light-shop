@@ -5,6 +5,7 @@ import React, {
   useDispatch,
   useGlobal,
 } from 'reactn'
+import { useTranslation } from 'react-i18next'
 import { Address, PersonalInfo, CompanyBaseInfo } from './forms'
 import {
   areObjectsEqual,
@@ -55,6 +56,7 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
   const [selectedDelivery] = useGlobal('selectedDelivery')
   const [deliveryMethods] = useGlobal('deliveryMethods')
   const [termsAgreed, setTermsAgreed] = useState(false)
+  const { t } = useTranslation()
 
   useEffect(() => {
     // when getting init data from BE find out whether delivery/invoice are different, or copied, then preselect copy option
@@ -180,11 +182,8 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
       }
     >
       {disabled && (
-        <div
-          className="disabledBlock__message"
-          title="Dokončete výběr dopravy a platby"
-        >
-          Dokončete výběr dopravy a platby
+        <div className="disabledBlock__message" title={t('orderInfo.choseDaP')}>
+          {t('orderInfo.choseDaP')}
         </div>
       )}
       <div className="elemsToRow">
@@ -199,7 +198,7 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
         <div className="stdPadding">
           {noDeliveryAddress ? (
             <div className="formBlock">
-              <h3>Adresa vyzvednutí</h3>
+              <h3>{t('address.addressPickup')}</h3>
               <p dangerouslySetInnerHTML={{ __html: pickupLine }}>
                 {/* !isEmpty(deliveryMethods) &&
                   deliveryMethods.filter(
@@ -220,7 +219,7 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
         <div className="stdPadding">
           {!noDeliveryAddress && (
             <label className="inputCont cy-invAsDeliv">
-              Fakturační adresa je stejná jako dodací adresa
+              {t('company.invAddrAsDeliv')}
               <input
                 type="checkbox"
                 checked={copyInvoiceAddr}
@@ -233,7 +232,7 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
           {
             <Address
               dataName="invoice"
-              altName="Fakturační údaje"
+              altName={t('company.invoiceInfo')}
               returnValues={setValues}
               prefillData={addressName}
               ref={validateInvoice}
@@ -245,7 +244,7 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
         </div>
         <div className="stdPadding">
           <label className="inputCont cy-fillCompany">
-            Objednávka na firmu
+            {t('company.companyOrder')}
             <input
               type="checkbox"
               checked={Boolean(companyVisible)}
@@ -267,15 +266,15 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
         <label className="inputCont cy-agreeTerms">
           {terms && (
             <>
-            {terms.label}
-            <a
-              href={terms.url}
-              className={terms.class}
-              rel={terms.rel}
-              target={terms.target}
-            >
-              {terms.clickable}
-            </a>
+              {terms.label}
+              <a
+                href={terms.url}
+                className={terms.class}
+                rel={terms.rel}
+                target={terms.target}
+              >
+                {terms.clickable}
+              </a>
             </>
             // TODO: make required to form submit
           )}
@@ -288,21 +287,21 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
         </label>
       </div>
 
-      {!allFormsAreValid && <div>ještě není vše vyplněno</div>}
+      {!allFormsAreValid && <div>{t('orderInfo.missingFields')}</div>}
       {isSubmittingOrder ? (
         <button className="formSubmit formSubmit--submitting" disabled>
-          Odesílá se...
+          {t('isSending')}
         </button>
       ) : allFormsAreValid ? (
         <button className="formSubmit formSubmit--ready" onClick={submitData}>
-          Objednat
+          {t('order')}
         </button>
       ) : (
         <button
           className="formSubmit  formSubmit--notReady"
           onClick={onScreenValidation}
         >
-          Objednat
+          {t('order')}
         </button>
       )}
 

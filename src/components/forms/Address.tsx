@@ -4,29 +4,31 @@ import React, {
   forwardRef,
   useImperativeHandle,
 } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useForm, useField } from 'react-final-form-hooks'
 import { finalFormValidation, changedByUserInput } from 'utils/formsFnc'
 import { InputFF } from 'components/ui-components'
+import addi18toInputs from "i18n/addi18toInputs"
 
-const inputsConfig = {
+const inputsConf = {
   descr: {
-    label: 'Popis místa',
-    placeholder: 'např.: firma/vchod/recepce/patro',
+    label: 'address.place',
+    placeholder: 'address.place_ph',
   },
   street: {
     required: true,
     minLength: 2,
-    label: 'Ulice a č.p.',
-    placeholder: 'např.: Stoupající 983/25',
+    label: 'address.street',
+    placeholder:'address.street_ph',
   },
-  city: { label: 'Město', required: true, placeholder: 'Město' },
+  city: { label: 'address.city', required: true, placeholder: 'address.city' },
   zip: {
-    label: 'PSČ',
+    label: 'address.zip',
     type: 'number',
     minLength: 5,
     maxLength: 5,
     required: true,
-    placeholder: 'např.: 14900',
+    placeholder: 'address.zip_ph',
   },
 }
 const Address = forwardRef(
@@ -51,6 +53,8 @@ const Address = forwardRef(
     ref,
   ) => {
     const [formValid, setFormValid] = useState(false)
+    const { t } = useTranslation()
+    const inputsConfig = addi18toInputs(inputsConf,t)
     let formSource = {}
     const { form, handleSubmit, values } = useForm({
       onSubmit: (values: any) => {},
@@ -95,7 +99,7 @@ const Address = forwardRef(
 
     return (
       <div className={`formBlock ${hidden ? 'hidden' : ''}`}>
-        <h3>{altName || 'Adresa doručení'}</h3>
+        <h3>{altName || t('address.addresDelivery')}</h3>
         <InputFF field={descr} config={inputsConfig} g={dataName} />
         <InputFF field={street} config={inputsConfig} g={dataName} />
         <InputFF field={city} config={inputsConfig} g={dataName} />

@@ -2,6 +2,48 @@
   "translation": {
     "welcome": "Welcome to React and react-i18next",
     "deliveryMethods": "Delivery methods",
-    "paymentMethods": "Payment methods"
+    "paymentMethods": "Payment methods",
+    "cart": "Shopping cart",
+    "cartEmpty": "Shopping cart is empty",
+    "delivery": "delivery",
+    "payment": "payment",
+    "totalPrice": "Total price",
+    "finishDAPchoice": "Select delivery and payment option",
+    "order": "Order",
+    "isSending": "Sending",
+    "personal": {
+      "personalInfo": "Personal info",
+      "nameSurname": "Name and surname",
+      "tel": "Tel",
+      "email": "e-mail",
+      "email_ph": "eg.: john@example.com"
+    },
+    "address": {
+      "addresDelivery": "Delivery address",
+      "addressPickup": "Pickup address",
+      "place": "Place description",
+      "place_ph": "eg.: company/doors/reception/floor",
+      "street": "Street",
+      "city": "City",
+      "zip": "ZIP",
+      "zip_ph": "eg.: 14900"
+    },
+    "company": {
+      "addressInvoice": "Invoice address",
+      "invAddrAsDeliv": "Invoice address same as delivery address",
+      "invoiceInfo": "Invoice details",
+      "companyInfo": "Company info",
+      "companyOrder": "Company order",
+      "name": "Company name",
+      "crn": "CRN",
+      "utr": "UTR"
+    },
+    "orderInfo": {
+      "agree": "Agree ",
+      "termsAndCond": "with terms and conditions",
+      "ofCompany": "of shopping ",
+      "choseDaP": "Finish chosing of delivery and payment",
+      "missingFields": "Still some fields to fill"
+    }
   }
 }

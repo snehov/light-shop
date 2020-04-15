@@ -13,6 +13,7 @@ import {
 } from '../api'
 import { CartType, CartItemType } from 'utils/types'
 import { parseSimpleCartList } from 'utils/functions'
+import { saveLangPrefLocal } from 'utils/functions'
 const isEmpty = require('ramda').isEmpty
 
 setGlobal({ cartItems: [] })
@@ -99,6 +100,8 @@ addReducer('submitOrder', async (global, dispatch, forms_data) => {
 })
 addReducer('changeLang', async (global, dispatch, lang, i18n) => {
   i18n.changeLanguage(lang)
+  saveLangPrefLocal(lang)
+  window.localStorage.setItem('lang', lang)
   let response = await changeLang({ lang })
   if (typeof response.data === 'object') {
     return {

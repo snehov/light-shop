@@ -4,28 +4,30 @@ import React, {
   forwardRef,
   useImperativeHandle,
 } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useForm, useField } from 'react-final-form-hooks'
 import { finalFormValidation, changedByUserInput } from 'utils/formsFnc'
 import { InputFF } from 'components/ui-components'
+import addi18toInputs from "i18n/addi18toInputs"
 
-const inputsConfig = {
+const inputsConf = {
   name: {
     required: true,
     minLength: 2,
-    label: 'Jméno a příjmení',
-    placeholder: 'Jméno Příjmení',
+    label: 'personal.nameSurname',
+    placeholder: 'personal.nameSurname',
   },
   tel: {
     required: true,
     type: 'tel',
     placeholder: '+420',
     default: '+420 ',
-    label: 'Telefon',
+    label: 'personal.tel',
   },
   email: {
     type: 'email',
-    label: 'e-mail',
-    placeholder: 'např.: franta@example.cz',
+    label: 'personal.email',
+    placeholder: 'personal.email_ph',
   },
 }
 const PersonalInfo = forwardRef(
@@ -42,6 +44,8 @@ const PersonalInfo = forwardRef(
     ref,
   ) => {
     const [formValid, setFormValid] = useState(false)
+    const { t } = useTranslation()
+    const inputsConfig = addi18toInputs(inputsConf,t)
     let formSource = {}
     const { form, values, handleSubmit } = useForm({
       onSubmit: (values: any) => {},
@@ -77,7 +81,7 @@ const PersonalInfo = forwardRef(
 
     return (
       <div className="formBlock">
-        <h3>Základní údaje</h3>
+        <h3>{t('personal.personalInfo')}</h3>
         <InputFF field={name} config={inputsConfig} g={dataName} />
         <InputFF field={tel} config={inputsConfig} g={dataName} />
         <InputFF field={email} config={inputsConfig} g={dataName} />

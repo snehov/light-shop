@@ -23,3 +23,11 @@ export const getEnv = () => {
   const env = urlEnv || process.env.NODE_ENV
   return env
 }
+
+export const saveLangPrefLocal = (lang) => {
+  window.localStorage.setItem('lang', lang)
+}
+
+export const getLangPrefLocal = () => {
+  return window.localStorage.getItem('lang')
+}

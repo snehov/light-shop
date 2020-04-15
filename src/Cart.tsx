@@ -1,4 +1,5 @@
 import React, { useGlobal } from 'reactn'
+import { useTranslation } from 'react-i18next'
 import CartItem from './components/CartItem'
 import { CartItemType } from './utils/types'
 import { formatPriceOutput } from 'utils/priceOperations'
@@ -6,12 +7,13 @@ import { formatPriceOutput } from 'utils/priceOperations'
 const Cart = () => {
   const [cartItems] = useGlobal('cartItems') // needs to define at global.d.ts
   const [cartInfo] = useGlobal('cartInfo')
+  const { t } = useTranslation()
 
   return cartItems.length === 0 ? (
-    <div className="cart__header cart__header--empty">Košík je prázdný</div>
+    <div className="cart__header cart__header--empty">{t('cartEmpty')}</div>
   ) : (
     <div className="cart">
-      <div className="cart__header">Košík</div>
+      <div className="cart__header">{t('cart')}</div>
       {cartItems.map((item: CartItemType, index: number) => (
         <CartItem
           index={index}
@@ -27,7 +29,7 @@ const Cart = () => {
         }`}
       >
         <div className="cart-extraItem--name">
-          dprava: {cartInfo.notes.shipping_note}
+          {t('delivery')}: {cartInfo.notes.shipping_note}
         </div>
         <div className="cart-extraItem--price">
           {formatPriceOutput(cartInfo.vatIncl.shipping)}
@@ -41,7 +43,7 @@ const Cart = () => {
         }`}
       >
         <div className="cart-extraItem--name">
-          platba: {cartInfo.notes.paymentFee_note}
+          {t('payment')}: {cartInfo.notes.paymentFee_note}
         </div>
         <div className="cart-extraItem--price">
           {formatPriceOutput(cartInfo.vatIncl.paymentFee)}
@@ -59,10 +61,12 @@ const Cart = () => {
       ) */}
       {cartInfo.vatIncl && (
         <div className="cart-sum">
-          <div className="cart-sum--sumWord">cena celkem</div>
+          <div className="cart-sum--sumWord">{t('totalPrice')}</div>
 
           <div>
-            <b className="cart-sum__TOTAL">{formatPriceOutput(cartInfo.vatIncl.total)}</b>
+            <b className="cart-sum__TOTAL">
+              {formatPriceOutput(cartInfo.vatIncl.total)}
+            </b>
           </div>
         </div>
       )}

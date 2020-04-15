@@ -2,6 +2,49 @@
   "translation": {
     "welcome": "Vítej do react-i18next",
     "deliveryMethods": "Způsoby doručení",
-    "paymentMethods": "Způsoby platby"
+    "paymentMethods": "Způsoby platby",
+    "cart": "Košík",
+    "cartEmpty": "Košík je prázdný",
+    "delivery": "doprava",
+    "payment": "platba",
+    "totalPrice": "Cena celkem",
+    "finishDAPchoice": "Dokončete výběr dopravy a platby",
+    "order": "Objednat",
+    "isSending": "Odesílá se",
+    "personal": {
+      "personalInfo": "Základní údaje",
+      "nameSurname": "Jméno a přijmení",
+      "tel": "Telefon",
+      "email": "e-mail",
+      "email_ph": "např.: franta@example.cz"
+    },
+    "address": {
+      "addresDelivery": "Adresa doručení",
+      "addressPickup": "Adresa vyzvednutí",
+      "place": "Popis místa",
+      "place_ph": "např.: firma/vchod/recepce/patro",
+      "street": "Ulice a č.p.",
+      "street_ph": "např.: Stoupající 983/25",
+      "city": "Město",
+      "zip": "PSČ",
+      "zip_ph": "např.: 14900"
+    },
+    "company": {
+      "addressInvoice": "Fakturační adresa",
+      "invAddrAsDeliv": "Fakturační adresa je stejná jako dodací adresa",
+      "invoiceInfo": "Fakturační údaje",
+      "companyOrder": "Objednávka na firmu",
+      "companyInfo": "Informace o firmě",
+      "name": "Obchodní název",
+      "crn": "IČ",
+      "utr": "DIČ"
+    },
+    "orderInfo": {
+      "agree": "Souhlasím ",
+      "termsAndCond": "s podmínkama",
+      "ofCompany": "naupování ",
+      "choseDaP": "Dokončete výběr dopravy a platby",
+      "missingFields": "Ještě není vše vyplněno"
+    }
   }
 }
