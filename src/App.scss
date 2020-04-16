@@ -254,6 +254,7 @@ $selectedColor: #2196f3;
   position: relative;
   padding-left: 35px;
   margin-bottom: 12px;
+  min-width: 250px;
   cursor: pointer;
   font-size: 17px;
   -webkit-user-select: none;
@@ -380,6 +381,22 @@ $selectedColor: #2196f3;
   border-radius: 50%;
   background: white;
 }
+fieldset {
+  border: 1px solid rgb(223, 223, 223);
+  width: 300px;
+  margin: 0px 0px 0px 5px;
+}
+
+.loginOpts {
+  display: flex;
+  justify-content: space-between;
+  &Cont {
+    padding: 15px;
+
+    border-bottom: 1px solid #e6e6e6;
+    background-color: #f8f8f9;
+  }
+}
 /* -- end inputs styling ----*/
 @media only screen and (max-width: 768px) {
   $lineHeight: 34px;
@@ -424,9 +441,4 @@ $selectedColor: #2196f3;
   .horizontal-sm {
     flex-flow: row;
   }
-}
-fieldset {
-  border: 1px solid rgb(223, 223, 223);
-  width: 300px;
-  margin: 0px 0px 0px 5px;
 }
