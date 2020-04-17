@@ -10,12 +10,13 @@
     "totalPrice": "Cena celkem",
     "finishDAPchoice": "Dokončete výběr dopravy a platby",
     "order": "Objednat",
+    "send": "Odeslat",
     "isSending": "Odesílá se",
     "personal": {
       "personalInfo": "Základní údaje",
       "nameSurname": "Jméno a přijmení",
       "tel": "Telefon",
-      "email": "e-mail",
+      "email": "E-mail",
       "email_ph": "např.: franta@example.cz"
     },
     "address": {
@@ -45,6 +46,22 @@
       "ofCompany": "naupování ",
       "choseDaP": "Dokončete výběr dopravy a platby",
       "missingFields": "Ještě není vše vyplněno"
+    },
+    "login": {
+      "accountChoice": "Volba přihlášení",
+      "noAccount": "Jednorázový nákup bez registrace",
+      "createAccount": "Založit uživatelský účet",
+      "login": "Přihlásit se",
+      "createAcountHeader": "Založení uživatele",
+      "password": "Heslo",
+      "pwdReqirement": "Alespoň 6 znaků",
+      "pwdNotEqual": "Hesla se nesmí lišit",
+      "userLogin": "Přihlášení uživatele",
+      "userRegEmail": "Váš registrovaný e-mail @",
+      "loginFailed": "Přihlášení se nezdařilo",
+      "loggedAsUser": "Přihlášen jako uživatel",
+      "logout": "Odhlásit",
+      "err_username_exists": "Tento přihlašovací email již existuje, vyberte jiný"
     }
   }
 }

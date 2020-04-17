@@ -11,7 +11,7 @@ import {
   submitOrder,
   changeLang,
   addRandomItem,
-  clearAllData
+  clearAllData,
 } from '../api'
 import { CartType, CartItemType } from 'utils/types'
 import { parseSimpleCartList } from 'utils/functions'
@@ -27,6 +27,9 @@ setGlobal({ selectedDelivery: 0 })
 setGlobal({ selectedPayment: 0 })
 setGlobal({ isSubmittingOrder: false })
 
+/* addReducer('isSubmitting', () => {
+  return { isSubmitting: true }
+}) */
 addReducer('getCart', async (global, dispatch) => {
   const cartSimple =
     JSON.stringify(window.localStorage.getItem('cartSimple')) || ''
@@ -82,6 +85,7 @@ addReducer('fetchOrderInfo', async (global) => {
   return {
     orderInfo: data,
     selectedDelivery: data.deliveryMethod,
+    regUser: data.regUser,
     //selectedPayment: data.paymentMethod, //somehow works commented as well
   }
 })

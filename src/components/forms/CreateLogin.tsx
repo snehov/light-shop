@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useDispatch } from 'reactn'
+import React, { useEffect, useState, useDispatch, useGlobal } from 'reactn'
 import { useTranslation } from 'react-i18next'
 import { useForm, useField } from 'react-final-form-hooks'
 import { InputFF } from 'components/ui-components'
@@ -6,7 +6,7 @@ import addi18toInputs from 'i18n/addi18toInputs'
 import { finalFormValidation } from 'utils/formsFnc'
 
 const inputsConf = {
-  name: { required: true, minLength: 4, label: 'Jméno a přijmení' },
+  name: { required: true, minLength: 4, label: 'personal.nameSurname' },
   email: {
     required: true,
     type: 'email',
@@ -17,25 +17,26 @@ const inputsConf = {
     required: true,
     type: 'password',
     minLength: 6,
-    label: 'Heslo',
-    placeholder: 'Alespoň 6 znaků',
+    label: 'login.password',
+    placeholder: 'login.pwdReqirement',
     equalsTo: 'pwd2',
-    equalsToErr: 'hesla se nesmí lišit',
+    equalsToErr: 'login.pwdNotEqual',
   },
   pwd2: {
     required: true,
     type: 'password',
     minLength: 6,
-    label: 'Heslo',
-    placeholder: 'Alespoň 6 znaků',
+    label: 'login.password',
+    placeholder: 'login.pwdReqirement',
     equalsTo: 'pwd',
-    equalsToErr: 'hesla se nesmí lišit',
+    equalsToErr: 'login.pwdNotEqual',
   },
 }
 
 const CreateLogin = () => {
   const [formValid, setFormValid] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitting] = useGlobal('isLoggingIn')
+  const [regUser] = useGlobal('regUser')
   const createLogin = useDispatch('createLogin')
   const dataName = 'register'
 
@@ -54,10 +55,12 @@ const CreateLogin = () => {
   }, [formValid, values]) // eslint-disable-line
 
   const submitData = () => {
-    console.log('submiting,', values)
-    setIsSubmitting(true)
     createLogin(values)
-    setTimeout(() => setIsSubmitting(false), 3000)
+  }
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      submitData()
+    }
   }
   const name = useField('name', form)
   const email = useField('email', form)
@@ -65,25 +68,50 @@ const CreateLogin = () => {
   const pwd2 = useField('pwd2', form)
   return (
     <div>
-      <h3>Založení uživatele</h3>
+      <h3>{t('login.createAcountHeader')}</h3>
       <InputFF field={name} config={inputsConfig} g={dataName} />
-      <InputFF field={email} config={inputsConfig} g={dataName} />
-      <InputFF field={pwd} config={inputsConfig} g={dataName} />
-      <InputFF field={pwd2} config={inputsConfig} g={dataName} />
+      <InputFF
+        field={email}
+        config={inputsConfig}
+        g={dataName}
+        onKeyPress={handleKeyPress}
+      />
+      <InputFF
+        field={pwd}
+        config={inputsConfig}
+        g={dataName}
+        onKeyPress={handleKeyPress}
+      />
+      <InputFF
+        field={pwd2}
+        config={inputsConfig}
+        g={dataName}
+        onKeyPress={handleKeyPress}
+      />
+      {regUser?.res === 'error' ? (
+        <div className="formError cy-createUserErr">
+          {t(`login.err_${regUser.err_code}`)}
+        </div>
+      ) : (
+        ''
+      )}
       {isSubmitting ? (
         <button className="formSubmit formSubmit--submitting" disabled>
           {t('isSending')}
         </button>
       ) : formValid ? (
-        <button className="formSubmit formSubmit--ready" onClick={submitData}>
-          {t('order')}
+        <button
+          className="formSubmit formSubmit--ready cy-submitCreateUser"
+          onClick={submitData}
+        >
+          {t('send')}
         </button>
       ) : (
         <button
           className="formSubmit  formSubmit--notReady"
           onClick={() => handleSubmit()}
         >
-          {t('order')}
+          {t('send')}
         </button>
       )}
     </div>

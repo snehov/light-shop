@@ -5,7 +5,7 @@ const addi18toInputs = (config, t) => {
       [fieldKey]: Object.entries(fieldVal).reduce(
         (accAttr, [attrKey, attrVal]) => {
           let value = attrVal
-          if (['label', 'placeholder'].includes(attrKey)) {
+          if (['label', 'placeholder','equalsToErr'].includes(attrKey)) {
             value = t(attrVal)
           }
           return { ...accAttr, [attrKey]: value }

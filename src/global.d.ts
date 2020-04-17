@@ -6,6 +6,7 @@ import {
   OrderInfoType,
   LoginType,
   CreateLogin,
+  RegUserType,
 } from './utils/types'
 // NOTE: changes here needs SERVER RESTART to apply changes
 
@@ -83,7 +84,8 @@ declare module 'reactn/default' {
       global: State,
       dispatch: Dispatch,
       loginInfo: LoginType,
-    ) => Pick<State>
+    ) => Pick<State, 'orderInfo', 'regUser', 'isLoggingIn'>
+    logout: (global: State, dispatch: Dispatch) => null
   }
 
   // necessary to define due to typescript ability to safely read from useGlobal()
@@ -94,6 +96,7 @@ declare module 'reactn/default' {
     sales: number
     total: number
   }
+
   export interface State {
     cartItems: Array<CartItemType>
     cartInfo: {
@@ -112,5 +115,8 @@ declare module 'reactn/default' {
     selectedDelivery: number
     selectedPayment: number
     isSubmittingOrder: boolean
+    //isSubmitting: boolean
+    isLoggingIn: boolean
+    regUser: RegUserType
   }
 }

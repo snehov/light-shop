@@ -4,10 +4,12 @@ const InputFF = ({
   field,
   config,
   g,
+  onKeyPress
 }: {
   field: any
   config: any
   g?: string
+  onKeyPress?: any
 }) => {
   const name = field.input.name
   const [useId, setUseId] = useState(name)
@@ -42,6 +44,7 @@ const InputFF = ({
         type={type}
         className={showError ? 'input--error input' : 'input'}
         id={useId}
+        onKeyPress={onKeyPress}
       />
       <div className={showError ? 'validation--error' : 'validation--empty'}>
         {showError && field.meta.error}

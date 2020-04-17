@@ -85,3 +85,9 @@ export type CreateLogin = {
   pwd: string
   pwd2: string
 }
+export type RegUserType = {
+  logged: string | boolean
+  name: string
+  res?: string
+  err_code?: string
+}

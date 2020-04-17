@@ -49,3 +49,4 @@ export const clearAllData = () => api.get('clearCart')
 
 export const createLogin = (loginInfo) => api.post('createLogin', loginInfo)
 export const login = (loginInfo) => api.post('login', loginInfo)
+export const logout = () => api.get('logout')

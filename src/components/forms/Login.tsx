@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useDispatch } from 'reactn'
+import React, { useEffect, useState, useDispatch, useGlobal } from 'reactn'
 import { useTranslation } from 'react-i18next'
 import { useForm, useField } from 'react-final-form-hooks'
 import { InputFF } from 'components/ui-components'
@@ -10,19 +10,20 @@ const inputsConf = {
     required: true,
     type: 'email',
     label: 'personal.email',
-    placeholder: 'Váš registrovaný email @',
+    placeholder: 'login.userRegEmail',
   },
   pwd: {
     required: true,
     type: 'password',
-    label: 'Heslo',
+    label: 'login.password',
   },
 }
 
 const Login = () => {
   const [formValid, setFormValid] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const createLogin = useDispatch('login')
+  const [isLoggingIn] = useGlobal('isLoggingIn')
+  const [regUser] = useGlobal('regUser')
+  const sendLogin = useDispatch('login')
   const dataName = 'login'
   const { t } = useTranslation()
   const inputsConfig = addi18toInputs(inputsConf, t)
@@ -34,40 +35,51 @@ const Login = () => {
   })
   formSource = form
 
-  useEffect(() => {
+  /* useEffect(() => {
     console.log('values', values, 'formValid', formValid)
-  }, [formValid, values]) // eslint-disable-line
+  }, [formValid, values]) // eslint-disable-line */
 
   const submitData = () => {
-    console.log('submiting,', values)
-    setIsSubmitting(true)
-    createLogin(values)
-    setTimeout(() => setIsSubmitting(false), 3000)
+    sendLogin(values)
+  }
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      submitData()
+    }
   }
   const email = useField('email', form)
   const pwd = useField('pwd', form)
 
   return (
     <div>
-      <h3>Přihlášení uživatele</h3>
+      <h3>{t('login.userLogin')}</h3>
       <InputFF field={email} config={inputsConfig} g={dataName} />
-      <InputFF field={pwd} config={inputsConfig} g={dataName} />
-      {isSubmitting ? (
+      <InputFF
+        field={pwd}
+        config={inputsConfig}
+        g={dataName}
+        onKeyPress={handleKeyPress}
+      />
+      {isLoggingIn ? (
         <button className="formSubmit formSubmit--submitting" disabled>
           {t('isSending')}
         </button>
       ) : formValid ? (
-        <button className="formSubmit formSubmit--ready submitLogin" onClick={submitData}>
-          {t('order')}
+        <button
+          className="formSubmit formSubmit--ready submitLogin"
+          onClick={submitData}
+        >
+          {t('send')}
         </button>
       ) : (
         <button
           className="formSubmit  formSubmit--notReady"
           onClick={() => handleSubmit()}
         >
-          {t('order')}
+          {t('send')}
         </button>
       )}
+      {regUser?.logged === 'failed' ? <div>{t('login.loginFailed')}</div> : ''}
     </div>
   )
 }
