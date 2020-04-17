@@ -79,7 +79,11 @@ declare module 'reactn/default' {
       loginInfo: CreateLogin,
     ) => null
 
-    login: (global: State, dispatch: Dispatch, loginInfo: LoginType) => null
+    login: (
+      global: State,
+      dispatch: Dispatch,
+      loginInfo: LoginType,
+    ) => Pick<State>
   }
 
   // necessary to define due to typescript ability to safely read from useGlobal()

@@ -23,7 +23,7 @@ const Login = () => {
   const [formValid, setFormValid] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const createLogin = useDispatch('login')
-
+  const dataName = 'login'
   const { t } = useTranslation()
   const inputsConfig = addi18toInputs(inputsConf, t)
   let formSource = {}
@@ -50,14 +50,14 @@ const Login = () => {
   return (
     <div>
       <h3>Přihlášení uživatele</h3>
-      <InputFF field={email} config={inputsConfig} />
-      <InputFF field={pwd} config={inputsConfig} />
+      <InputFF field={email} config={inputsConfig} g={dataName} />
+      <InputFF field={pwd} config={inputsConfig} g={dataName} />
       {isSubmitting ? (
         <button className="formSubmit formSubmit--submitting" disabled>
           {t('isSending')}
         </button>
       ) : formValid ? (
-        <button className="formSubmit formSubmit--ready" onClick={submitData}>
+        <button className="formSubmit formSubmit--ready submitLogin" onClick={submitData}>
           {t('order')}
         </button>
       ) : (

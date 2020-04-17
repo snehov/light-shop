@@ -20,13 +20,13 @@ addReducer('createLogin', async (global, dispatch, loginInfo) => {
 addReducer('login', async (global, dispatch, loginInfo) => {
   let response = await login({ ...loginInfo, pwd: ecryptPwd(loginInfo.pwd) })
   if (typeof response.data === 'object') {
-    return {}
+    return { orderInfo: response.data.orderInfo }
   }
   return {}
 })
 
 const ecryptPwd = (pwd: string) => {
-  console.log("PWD", pwd)
+  console.log('PWD', pwd)
   const salt = 'We5gP'
   return sha1(pwd + salt)
 }

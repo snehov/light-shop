@@ -37,6 +37,7 @@ const CreateLogin = () => {
   const [formValid, setFormValid] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const createLogin = useDispatch('createLogin')
+  const dataName = 'register'
 
   const { t } = useTranslation()
   const inputsConfig = addi18toInputs(inputsConf, t)
@@ -65,10 +66,10 @@ const CreateLogin = () => {
   return (
     <div>
       <h3>Založení uživatele</h3>
-      <InputFF field={name} config={inputsConfig} />
-      <InputFF field={email} config={inputsConfig} />
-      <InputFF field={pwd} config={inputsConfig} />
-      <InputFF field={pwd2} config={inputsConfig} />
+      <InputFF field={name} config={inputsConfig} g={dataName} />
+      <InputFF field={email} config={inputsConfig} g={dataName} />
+      <InputFF field={pwd} config={inputsConfig} g={dataName} />
+      <InputFF field={pwd2} config={inputsConfig} g={dataName} />
       {isSubmitting ? (
         <button className="formSubmit formSubmit--submitting" disabled>
           {t('isSending')}

@@ -44,7 +44,7 @@ const App = () => {
         <button onClick={() => clearAllData()}>Clear cart at BE</button>
       </fieldset>
       <Cart />
-      {/* <UserLogin /> */}
+      <UserLogin />
       {dapAllowed && <DeliveryAndPay disabled={!dapAllowed} />}
       {dapAllowed && <DeliveryInfo disabled={!addressAllowed} />}
     </div>
