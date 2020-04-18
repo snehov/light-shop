@@ -50,7 +50,7 @@ const setFormParts = (
   }
 }
 
-const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
+const InputForms = ({ disabled }: { disabled?: boolean }) => {
   const [copyInvoiceAddr, setCopyInvoiceAddr] = useState(true)
   const [noDeliveryAddress, setNoDeliveryAddress] = useState(false)
   const [companyVisible, setCompanyVisible] = useState<boolean | undefined>(
@@ -70,18 +70,18 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
     console.log('allValidButAgree se zmenilo', allValidButAgree)
   }, [allValidButAgree])
   useEffect(() => {
-    // when getting init data from BE find out whether delivery/invoice are different, or copied, then preselect copy option
+    //# when getting init data from BE find out whether delivery/invoice are different, or copied, then preselect copy option
     if (addressName) {
       const an = addressName
       if (an.invoice && an.delivery) {
         const cr = areObjectsEqual(an?.invoice, an?.delivery)
         !cr && setCopyInvoiceAddr(false)
       }
-      // show company info when preselected data exists
+      //# show company info when preselected data exists
       if (an.company && !isEmpty(an.company)) {
         //setCompanyVisible(true)
       }
-      //first time set up form data from BE to local (if exists)
+      //# first time set up form data from BE to local (if exists)
       if (isEmpty(formParts) && !isEmpty(addressName)) {
         setFormParts(
           fromApiAddrToAppAddrForm(addressName),
@@ -131,7 +131,6 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
       if (formParts.company) {
         let withoutCompany = { ...formParts }
         delete withoutCompany.company
-        console.log('empty company', withoutCompany)
         setFormParts(
           withoutCompany,
           setAllFormsAreValid,
@@ -141,7 +140,7 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
         saveDataToServer()
       }
     }
-  }, [companyVisible /* , addressName */]) // eslint-disable-line
+  }, [companyVisible]) // eslint-disable-line
 
   const setValues = (values: FormPartType, sendToServer: boolean = false) => {
     const from = values.name
@@ -189,7 +188,8 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
     : deliveryMethods.filter(
         (m) => m.delivery_id == selectedDelivery, // eslint-disable-line
       )
-  const pickupLine = dm.length === 0 ? 'adesa...' : dm[0].description // eslint-disable-line
+  const pickupLine = dm.length === 0 ? 'defaultni adresa...' : dm[0].description // eslint-disable-line
+
   return (
     <div
       className={
@@ -215,12 +215,7 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
           {noDeliveryAddress ? (
             <div className="formBlock">
               <h3>{t('address.addressPickup')}</h3>
-              <p dangerouslySetInnerHTML={{ __html: pickupLine }}>
-                {/* !isEmpty(deliveryMethods) &&
-                  deliveryMethods.filter(
-                    m => m.delivery_id == selectedDelivery, // eslint-disable-line
-                  )[0].description */}
-              </p>
+              <p dangerouslySetInnerHTML={{ __html: pickupLine }}></p>
             </div>
           ) : (
             <Address
@@ -309,4 +304,4 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
     </div>
   )
 }
-export default DeliveryInfo
+export default InputForms

@@ -12,6 +12,7 @@
     "order": "Order",
     "send": "Send",
     "isSending": "Sending",
+    "cartNeedItems": "Shopping cart needs to contain any item",
     "personal": {
       "personalInfo": "Personal info",
       "nameSurname": "Name and surname",
@@ -45,7 +46,9 @@
       "ofCompany": "of shopping ",
       "choseDaP": "Finish chosing of delivery and payment",
       "missingFields": "Still some fields to fill",
-      "justAgreeLeft": "Just agree with terms and condtitions left"
+      "justAgreeLeft": "Just agree with terms and condtitions left",
+      "agreeMarketing": "Agree with receiving special offers emails",
+      "sendWithSum":"Send order with value of"
     },
     "login": {
       "accountChoice": "Login type",

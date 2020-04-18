@@ -126,6 +126,8 @@ describe('Test agree with terms and conditions behaviour', () => {
   })
   it('Set whole form positively validated', () => {
     cy.get('#terms_agree_checkmark').click()
-    cy.get('.formSubmit__fieldsLeft').should('be.empty')
+    cy.get('.formSubmit__fieldsLeft').contains(
+      cz.translation.orderInfo.sendWithSum,
+    )
   })
 })

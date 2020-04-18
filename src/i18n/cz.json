@@ -12,6 +12,7 @@
     "order": "Objednat",
     "send": "Odeslat",
     "isSending": "Odesílá se",
+    "cartNeedItems": "Košík musí obsahovat zboží",
     "personal": {
       "personalInfo": "Základní údaje",
       "nameSurname": "Jméno a přijmení",
@@ -46,7 +47,9 @@
       "ofCompany": "naupování ",
       "choseDaP": "Dokončete výběr dopravy a platby",
       "missingFields": "Ještě není vše vyplněno",
-      "justAgreeLeft": "Už zbývá jen souhlasit s podmínkama"
+      "justAgreeLeft": "Už zbývá jen souhlasit s podmínkama",
+      "agreeMarketing": "Souhlasím se zasíláním spamu",
+      "sendWithSum":"Odeslat objednávku v hodnotě "
     },
     "login": {
       "accountChoice": "Volba přihlášení",

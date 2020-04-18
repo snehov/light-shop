@@ -14,7 +14,7 @@ const PaymentMethods = () => {
   const { t } = useTranslation()
 
   useEffect(() => {
-    orderInfo?.paymentMethod && setPaymentMethod(orderInfo.paymentMethod) // preselect historicaly chosen option (used with page refresh)
+    orderInfo?.paymentMethod && setPaymentMethod(orderInfo.paymentMethod) //# preselect historicaly chosen option (used with page refresh)
   }, [orderInfo])
 
   useEffect(() => {
@@ -22,11 +22,11 @@ const PaymentMethods = () => {
   }, [paymentMethod]) // eslint-disable-line
 
   useEffect(() => {
-    // when delivery methods loaded
+    //# when delivery methods loaded
     if (paymentMethod !== 0 && deliveryMethods !== []) {
       const allowedPayments = getAllowedPayments()
       console.log('paymentMethod', paymentMethod)
-      // if delivery changes and current payment is not supported by that delivery, change to fist in list of suppored
+      //# if delivery changes and current payment is not supported by that delivery, change to fist in list of suppored
       if (!allowedPayments.includes(paymentMethod.toString())) {
         allowedPayments.length > 0
           ? setPaymentMethod(Number(allowedPayments[0]))

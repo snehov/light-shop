@@ -15,12 +15,11 @@ const inputsConf = {
   terms: {
     required: true,
     type: 'checkbox',
-    label: 'Souhlasím spodmínkama',
   },
   mktg: {
     required: false,
     type: 'checkbox',
-    label: 'Souhlasím se zasíláním spamu',
+    label: 'orderInfo.agreeMarketing',
   },
 }
 const AgreeChecks = forwardRef(

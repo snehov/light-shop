@@ -5,7 +5,7 @@ import './App.scss'
 import './reducers'
 import Cart from './Cart'
 import DeliveryAndPay from './components/DeliveryAndPay'
-import DeliveryInfo from './components/DeliveryInfo'
+import InputForms from './components/InputForms'
 import UserLogin from './components/UserLogin'
 import { getEnv } from 'utils/functions'
 const App = () => {
@@ -46,7 +46,7 @@ const App = () => {
       <Cart />
       <UserLogin />
       {dapAllowed && <DeliveryAndPay disabled={!dapAllowed} />}
-      {dapAllowed && <DeliveryInfo disabled={!addressAllowed} />}
+      {dapAllowed && <InputForms disabled={!addressAllowed} />}
     </div>
   )
 }

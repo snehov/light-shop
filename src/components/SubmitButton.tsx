@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useGlobal } from 'reactn'
 import { useTranslation } from 'react-i18next'
+import { formatPriceOutput } from 'utils/priceOperations'
 
 const SubmitButton = ({
   allFormsAreValid,
@@ -14,14 +15,20 @@ const SubmitButton = ({
   submitData: () => void
   onScreenValidation: () => void
 }) => {
+  const [cartInfo] = useGlobal('cartInfo')
   const { t } = useTranslation()
+  let submitInfo
+  if (allValidButAgree && !allFormsAreValid) {
+    submitInfo = t('orderInfo.justAgreeLeft')
+  } else if (!allFormsAreValid && !allValidButAgree) {
+    submitInfo = t('orderInfo.missingFields')
+  } else {
+    submitInfo = `${t('orderInfo.sendWithSum')} ${formatPriceOutput(cartInfo?.vatIncl?.total)} [TESTOVACÍ REŽIM]`
+  }
 
   return (
     <div>
-      <div className="formSubmit__fieldsLeft">
-        {allValidButAgree && !allFormsAreValid && t('orderInfo.justAgreeLeft')}
-        {!allFormsAreValid && !allValidButAgree && t('orderInfo.missingFields')}
-      </div>
+      <div className="formSubmit__fieldsLeft">{submitInfo}</div>
       {isSubmittingOrder ? (
         <button className="formSubmit formSubmit--submitting" disabled>
           {t('isSending')}

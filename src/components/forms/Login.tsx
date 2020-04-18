@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useDispatch, useGlobal } from 'reactn'
+import React, { useState, useDispatch, useGlobal } from 'reactn'
 import { useTranslation } from 'react-i18next'
 import { useForm, useField } from 'react-final-form-hooks'
 import { InputFF } from 'components/ui-components'
@@ -34,10 +34,6 @@ const Login = () => {
       finalFormValidation(values, setFormValid, formSource, inputsConfig),
   })
   formSource = form
-
-  /* useEffect(() => {
-    console.log('values', values, 'formValid', formValid)
-  }, [formValid, values]) // eslint-disable-line */
 
   const submitData = () => {
     sendLogin(values)

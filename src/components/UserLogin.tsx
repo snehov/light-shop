@@ -1,4 +1,4 @@
-import React, { useDispatch, useState, useEffect, useGlobal } from 'reactn'
+import React, { useDispatch, useState, useGlobal } from 'reactn'
 import { useTranslation } from 'react-i18next'
 import CreateLogin from './forms/CreateLogin'
 import Login from './forms/Login'
@@ -11,7 +11,6 @@ const UserLogin = () => {
 
   const changeMethod = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedValue = String(e.target.value)
-    console.log('selectedValue', selectedValue)
     setUserAccOpt(selectedValue)
   }
 
