@@ -86,9 +86,14 @@ export const finalFormValidation = (
 // form is assembled from form parts, this check if exists and its inputs are valid
 export const checkAllFormPartsValid = (
   requiredParts: Array<string>,
-  formParts: FormPartsType,
+  formPartsIn: FormPartsType,
+  skipParts?: Array<string>,
 ) => {
   let passed = true
+  const formParts = skipParts
+    ? removeFormParts(formPartsIn, skipParts)
+    : formPartsIn
+
   const currentParts = Object.values(formParts).reduce((acc: any, curr) => {
     return [...acc, curr?.name]
   }, [])
@@ -205,6 +210,18 @@ export const clearCompanyValues = (formParts: FormPartsType) => {
     }
   }
 }
+
+export const removeFormParts = (
+  formParts: FormPartsType,
+  removeParts: Array<string>,
+) => {
+  let without = { ...formParts }
+  removeParts.forEach((rp) => {
+    without = removeFormPart(formParts, rp)
+  })
+  return without
+}
+
 export const removeFormPart = (
   formParts: FormPartsType,
   removePart: string,

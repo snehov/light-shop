@@ -17,27 +17,36 @@ import {
   removeFormPart,
 } from 'utils/formsFnc'
 import { FormPartType, FormPartsType } from 'utils/types'
+import SubmitButton from './SubmitButton'
+import AgreeChecks from './AgreeChecks'
 const isEmpty = require('ramda').isEmpty
 
 const debounceFnc = debounce((launchDebounced: any) => {
   launchDebounced()
 }, 1000)
 
-const checkAllFormsValid = (noDeliveryAddress: boolean) => {
+const checkAllFormsValid = (
+  noDeliveryAddress: boolean,
+  skipParts?: Array<string>,
+) => {
   let requiredParts = ['personal', 'invoice']
   !noDeliveryAddress && requiredParts.push('delivery')
-  return checkAllFormPartsValid(requiredParts, formParts)
+  return skipParts
+    ? checkAllFormPartsValid(requiredParts, formParts, skipParts)
+    : checkAllFormPartsValid(requiredParts, formParts)
 }
 
 let formParts: FormPartsType = {}
 const setFormParts = (
   newVersion: FormPartsType,
   updateValidStatus: any,
+  setAllValidButAgree: any,
   noDeliveryAddress: boolean,
 ) => {
   formParts = newVersion
   if (updateValidStatus) {
     updateValidStatus(checkAllFormsValid(noDeliveryAddress))
+    setAllValidButAgree(checkAllFormsValid(noDeliveryAddress, ['agree']))
   }
 }
 
@@ -49,15 +58,17 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
   )
   //const [formParts, setFormParts] = useState({}) // unreliable as state, moved to variable
   const [allFormsAreValid, setAllFormsAreValid] = useState(false)
+  const [allValidButAgree, setAllValidButAgree] = useState(false)
   const saveAddressInfo = useDispatch('saveAddressInfo')
   const submitOrderToServer = useDispatch('submitOrder')
-  const [{ addressName, terms }] = useGlobal('orderInfo')
+  const [{ addressName }] = useGlobal('orderInfo')
   const [isSubmittingOrder] = useGlobal('isSubmittingOrder')
   const [selectedDelivery] = useGlobal('selectedDelivery')
   const [deliveryMethods] = useGlobal('deliveryMethods')
-  const [termsAgreed, setTermsAgreed] = useState(false)
   const { t } = useTranslation()
-
+  useEffect(() => {
+    console.log('allValidButAgree se zmenilo', allValidButAgree)
+  }, [allValidButAgree])
   useEffect(() => {
     // when getting init data from BE find out whether delivery/invoice are different, or copied, then preselect copy option
     if (addressName) {
@@ -75,6 +86,7 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
         setFormParts(
           fromApiAddrToAppAddrForm(addressName),
           setAllFormsAreValid,
+          setAllValidButAgree,
           noDeliveryAddress,
         )
       }
@@ -92,13 +104,12 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
         setFormParts(
           removeFormPart(formParts, 'delivery'),
           setAllFormsAreValid,
+          setAllValidButAgree,
           true,
         )
-        // setAllFormsAreValid(checkAllFormsValid(true))
       } else {
         setNoDeliveryAddress(false)
-        setFormParts(formParts, setAllFormsAreValid, false)
-        // setAllFormsAreValid(checkAllFormsValid(false))
+        setFormParts(formParts, setAllFormsAreValid, setAllValidButAgree, false)
       }
     }
   }, [selectedDelivery, deliveryMethods]) // eslint-disable-line
@@ -118,15 +129,15 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
         setCompanyVisible(!hasAllEmptyValues(addressName.company))
     } else if (companyVisible === false) {
       if (formParts.company) {
-        /* const emptyCompany = {
-          ...(formParts as any)?.company,
-          data: setAllValuesEmpty((formParts as any)?.company?.data),
-        } */
         let withoutCompany = { ...formParts }
         delete withoutCompany.company
         console.log('empty company', withoutCompany)
-        //setValues(emptyCompany, true)
-        setFormParts(withoutCompany, setAllFormsAreValid, noDeliveryAddress)
+        setFormParts(
+          withoutCompany,
+          setAllFormsAreValid,
+          setAllValidButAgree,
+          noDeliveryAddress,
+        )
         saveDataToServer()
       }
     }
@@ -141,7 +152,12 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
     } else {
       saveData = { ...formParts, [values.name]: values }
     }
-    setFormParts(saveData, setAllFormsAreValid, noDeliveryAddress)
+    setFormParts(
+      saveData,
+      setAllFormsAreValid,
+      setAllValidButAgree,
+      noDeliveryAddress,
+    )
     if (sendToServer) {
       saveDataToServer()
     }
@@ -149,7 +165,6 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
 
   const submitData = () => {
     const dataSend = fromFullFormatToSimple(formParts)
-    console.log('SUBMIT form', dataSend)
     submitOrderToServer(dataSend)
   }
 
@@ -157,6 +172,7 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
   const validateDelivery = useRef()
   const validateInvoice = useRef()
   const validateCompany = useRef()
+  const validateAgrees = useRef()
   const onScreenValidation = () => {
     ;(validatePersonal as any).current.runValidation()
     if (!noDeliveryAddress) {
@@ -164,10 +180,9 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
     }
     ;(validateInvoice as any).current.runValidation()
     if ((validateCompany as any).current /* && companyVisible */) {
-      console.log('validate company on screen')
-      //&& (formParts as any).company)
       ;(validateCompany as any).current.runValidation()
     }
+    ;(validateAgrees as any).current.runValidation()
   }
   const dm = isEmpty(deliveryMethods)
     ? []
@@ -186,6 +201,7 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
           {t('orderInfo.choseDaP')}
         </div>
       )}
+
       <div className="elemsToRow">
         <div className="stdPadding">
           <PersonalInfo
@@ -262,49 +278,22 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
           )}
         </div>
       </div>
-      <div>
-        <label className="inputCont cy-agreeTerms">
-          {terms && (
-            <>
-              {terms.label}
-              <a
-                href={terms.url}
-                className={terms.class}
-                rel={terms.rel}
-                target={terms.target}
-              >
-                {terms.clickable}
-              </a>
-            </>
-            // TODO: make required to form submit
-          )}
-          <input
-            type="checkbox"
-            checked={Boolean(termsAgreed)}
-            onChange={(e) => setTermsAgreed(e.target.checked)}
-          />
-          <span className="checkmark"></span>
-        </label>
+      <div className="stdPadding">
+        <AgreeChecks
+          dataName="agree"
+          returnValues={setValues}
+          ref={validateAgrees}
+        />
       </div>
-
-      {!allFormsAreValid && <div>{t('orderInfo.missingFields')}</div>}
-      {isSubmittingOrder ? (
-        <button className="formSubmit formSubmit--submitting" disabled>
-          {t('isSending')}
-        </button>
-      ) : allFormsAreValid ? (
-        <button className="formSubmit formSubmit--ready" onClick={submitData}>
-          {t('order')}
-        </button>
-      ) : (
-        <button
-          className="formSubmit  formSubmit--notReady"
-          onClick={onScreenValidation}
-        >
-          {t('order')}
-        </button>
-      )}
-
+      <div className="stdPadding">
+        <SubmitButton
+          allFormsAreValid={allFormsAreValid}
+          allValidButAgree={allValidButAgree}
+          isSubmittingOrder={isSubmittingOrder}
+          submitData={submitData}
+          onScreenValidation={onScreenValidation}
+        />
+      </div>
       <br />
       <br />
       <b style={{ color: 'red' }}>...</b>
@@ -315,20 +304,6 @@ const DeliveryInfo = ({ disabled }: { disabled?: boolean }) => {
         1) <s>submit endpoint</s>, validate FE data and process order, on FE
         redirect to succes screen
         <br />
-        2)
-        <s>
-          from server sent link to terms&amp;conditions to click/redirect
-          (_blank/lightbox) other)
-        </s>
-        <br />
-        <s>
-          another) prevent session expire by saving basic values to localStorage
-        </s>
-        (make it friendly with previous point)
-        <br />
-        BE) <s>make work sending proper data types</s>, and on FE try to
-        forcheck and event. stop app notice wrong data and prevent app from
-        failing
       </cite>
       <br />
     </div>

@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, FunctionComponent } from 'react'
 
-const InputFF = ({
-  field,
-  config,
-  g,
-  onKeyPress
-}: {
+type InputFFprops = {
   field: any
   config: any
   g?: string
   onKeyPress?: any
+  children?: any
+}
+const InputFF: FunctionComponent<InputFFprops> = ({
+  field,
+  config,
+  g,
+  onKeyPress,
+  children,
 }) => {
   const name = field.input.name
   const [useId, setUseId] = useState(name)
@@ -23,9 +26,9 @@ const InputFF = ({
       setUseId(`${name}_${g}`)
     } else {
       const elements = [...(document.querySelectorAll('[id]') as any)]
-      const ids = elements.map(el => el.id)
+      const ids = elements.map((el) => el.id)
       const dups = elements.filter(
-        el => ids.filter(id => id === el.id).length > 1,
+        (el) => ids.filter((id) => id === el.id).length > 1,
       )
       if (dups.length > 0) {
         setUseId(`${name}_${Math.floor(Math.random() * 100)}`)
@@ -34,21 +37,42 @@ const InputFF = ({
   }, []) // eslint-disable-line
   return (
     <div className="inputLine">
-      <label className="labelToInput" htmlFor={useId}>
-        {config[name].label}
-        {required && <span title="povinné pole">*</span>}
-      </label>
-      <input
-        {...field.input}
-        placeholder={config[name].placeholder}
-        type={type}
-        className={showError ? 'input--error input' : 'input'}
-        id={useId}
-        onKeyPress={onKeyPress}
-      />
-      <div className={showError ? 'validation--error' : 'validation--empty'}>
-        {showError && field.meta.error}
-      </div>
+      {type === 'checkbox' && (
+        <>
+          <label className=" inputCont">
+            {children || config[name].label}
+            {required && <span title="povinné pole">*</span>}
+            <input type="checkbox" {...field.input} id={useId} />
+            <span className="checkmark" id={`${useId}_checkmark`}></span>
+          </label>
+          <div
+            className={showError ? 'validation--error' : 'validation--empty'}
+          >
+            {showError && field.meta.error}
+          </div>
+        </>
+      )}
+      {type !== 'checkbox' && (
+        <>
+          <label className="labelToInput" htmlFor={useId}>
+            {children || config[name].label}
+            {required && <span title="povinné pole">*</span>}
+          </label>
+          <input
+            {...field.input}
+            placeholder={config[name].placeholder}
+            type={type}
+            className={showError ? 'input--error input' : 'input'}
+            id={useId}
+            onKeyPress={onKeyPress}
+          />
+          <div
+            className={showError ? 'validation--error' : 'validation--empty'}
+          >
+            {showError && field.meta.error}
+          </div>
+        </>
+      )}
     </div>
   )
 }

@@ -45,7 +45,8 @@
       "termsAndCond": "s podmínkama",
       "ofCompany": "naupování ",
       "choseDaP": "Dokončete výběr dopravy a platby",
-      "missingFields": "Ještě není vše vyplněno"
+      "missingFields": "Ještě není vše vyplněno",
+      "justAgreeLeft": "Už zbývá jen souhlasit s podmínkama"
     },
     "login": {
       "accountChoice": "Volba přihlášení",

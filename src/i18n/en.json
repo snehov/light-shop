@@ -44,7 +44,8 @@
       "termsAndCond": "with terms and conditions",
       "ofCompany": "of shopping ",
       "choseDaP": "Finish chosing of delivery and payment",
-      "missingFields": "Still some fields to fill"
+      "missingFields": "Still some fields to fill",
+      "justAgreeLeft": "Just agree with terms and condtitions left"
     },
     "login": {
       "accountChoice": "Login type",
