@@ -10,12 +10,13 @@
     "totalPrice": "Total price",
     "finishDAPchoice": "Select delivery and payment option",
     "order": "Order",
+    "send": "Send",
     "isSending": "Sending",
     "personal": {
       "personalInfo": "Personal info",
       "nameSurname": "Name and surname",
       "tel": "Tel",
-      "email": "e-mail",
+      "email": "E-mail",
       "email_ph": "eg.: john@example.com"
     },
     "address": {
@@ -43,7 +44,24 @@
       "termsAndCond": "with terms and conditions",
       "ofCompany": "of shopping ",
       "choseDaP": "Finish chosing of delivery and payment",
-      "missingFields": "Still some fields to fill"
+      "missingFields": "Still some fields to fill",
+      "justAgreeLeft": "Just agree with terms and condtitions left"
+    },
+    "login": {
+      "accountChoice": "Login type",
+      "noAccount": "One time shopping, without registration",
+      "createAccount": "Create user account",
+      "login": "Log-in",
+      "createAcountHeader": "Create user account",
+      "password": "Password",
+      "pwdReqirement": "At least 6 characters",
+      "pwdNotEqual": "Passwords must not differ",
+      "userLogin": "User log-in",
+      "userRegEmail": "Your registered e-mail @",
+      "loginFailed": "Log-in failed",
+      "loggedAsUser": "Logged as user",
+      "logout": "Logout",
+      "err_username_exists": "This email is somebody using for login, chose another one"
     }
   }
 }

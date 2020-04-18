@@ -24,6 +24,7 @@ export const fieldValidation = (
   formSettings: object,
   name: string,
   value: any,
+  fieldsVal?: object,
 ) => {
   let err = ''
   let tmpVal = value.toString().trim()
@@ -43,6 +44,9 @@ export const fieldValidation = (
         err = 'neplatny email'
       }
     }
+    if (nameKey.equalsTo && tmpVal !== (fieldsVal as any)[nameKey.equalsTo]) {
+      err = nameKey.equalsToErr
+    }
   }
   if (required && ['', null].includes(value)) {
     err = 'vyžadováno'
@@ -55,7 +59,7 @@ export const validateAllFields = (formSettings: object, fieldsVal: object) => {
   let errors = {}
   Object.entries(formSettings).forEach(([name, item]) => {
     const currentValue = (fieldsVal as any)[name] || ''
-    const err = fieldValidation(formSettings, name, currentValue)
+    const err = fieldValidation(formSettings, name, currentValue, fieldsVal)
     if (err !== '') {
       passed = false
       errors = { ...errors, [name]: err }
@@ -82,20 +86,25 @@ export const finalFormValidation = (
 // form is assembled from form parts, this check if exists and its inputs are valid
 export const checkAllFormPartsValid = (
   requiredParts: Array<string>,
-  formParts: FormPartsType,
+  formPartsIn: FormPartsType,
+  skipParts?: Array<string>,
 ) => {
   let passed = true
+  const formParts = skipParts
+    ? removeFormParts(formPartsIn, skipParts)
+    : formPartsIn
+
   const currentParts = Object.values(formParts).reduce((acc: any, curr) => {
     return [...acc, curr?.name]
   }, [])
   //all required form parts are present
-  requiredParts.forEach(part => {
+  requiredParts.forEach((part) => {
     if (!(currentParts as any).includes(part)) {
       passed = false
     }
   })
   // all available form parts are valid
-  if (!Object.values(formParts).every(item => (item as any).dataValid)) {
+  if (!Object.values(formParts).every((item) => (item as any).dataValid)) {
     passed = false
   }
   return passed
@@ -104,7 +113,7 @@ export const checkAllFormPartsValid = (
 // dont save input to BE, after input recceived prefilled values
 export const changedByUserInput = (form: FormApi, values: object) => {
   let save = false
-  Object.keys(values).forEach(item => {
+  Object.keys(values).forEach((item) => {
     if (form.getFieldState(item)?.dirty === true) {
       save = true
     }
@@ -132,7 +141,7 @@ export const areObjectsEqual = (a: any, b: any) => {
   let s = (o: any) =>
     Object.entries(o)
       .sort()
-      .map(i => {
+      .map((i) => {
         if (i[1] instanceof Object) i[1] = s(i[1])
         return i
       })
@@ -147,7 +156,7 @@ export const debounce = <F extends (...args: any[]) => any>(
   let timeout: ReturnType<typeof setTimeout>
 
   return (...args: Parameters<F>): Promise<ReturnType<F>> =>
-    new Promise(resolve => {
+    new Promise((resolve) => {
       if (timeout) {
         clearTimeout(timeout)
       }
@@ -201,6 +210,18 @@ export const clearCompanyValues = (formParts: FormPartsType) => {
     }
   }
 }
+
+export const removeFormParts = (
+  formParts: FormPartsType,
+  removeParts: Array<string>,
+) => {
+  let without = { ...formParts }
+  removeParts.forEach((rp) => {
+    without = removeFormPart(formParts, rp)
+  })
+  return without
+}
+
 export const removeFormPart = (
   formParts: FormPartsType,
   removePart: string,
@@ -210,5 +231,5 @@ export const removeFormPart = (
   return without
 }
 export const hasAllEmptyValues = (object: object) => {
-  return Object.values(object).every(value => value === '' || isNil(value))
+  return Object.values(object).every((value) => value === '' || isNil(value))
 }

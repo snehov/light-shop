@@ -22,6 +22,7 @@
     "react-i18next": "^11.3.4",
     "react-scripts": "3.4.0",
     "reactn": "^2.2.6",
+    "sha1": "^1.1.1",
     "typescript": "^3.8.3"
   },
   "scripts": {

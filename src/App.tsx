@@ -6,6 +6,7 @@ import './reducers'
 import Cart from './Cart'
 import DeliveryAndPay from './components/DeliveryAndPay'
 import DeliveryInfo from './components/DeliveryInfo'
+import UserLogin from './components/UserLogin'
 import { getEnv } from 'utils/functions'
 const App = () => {
   const fetchCart = useDispatch('getCart')
@@ -43,6 +44,7 @@ const App = () => {
         <button onClick={() => clearAllData()}>Clear cart at BE</button>
       </fieldset>
       <Cart />
+      <UserLogin />
       {dapAllowed && <DeliveryAndPay disabled={!dapAllowed} />}
       {dapAllowed && <DeliveryInfo disabled={!addressAllowed} />}
     </div>

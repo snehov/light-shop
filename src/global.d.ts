@@ -3,7 +3,10 @@ import {
   CartItemType,
   DeliveryMethodType,
   PaymentMethodType,
-  OrderInfoType
+  OrderInfoType,
+  LoginType,
+  CreateLogin,
+  RegUserType,
 } from './utils/types'
 // NOTE: changes here needs SERVER RESTART to apply changes
 
@@ -29,7 +32,7 @@ declare module 'reactn/default' {
       index: number,
     ) => Pick<State> //, 'cartInfo'
 
-    getCart: (global: State, dispatch: Dispatch) => Pick<State>// 'cartItems'
+    getCart: (global: State, dispatch: Dispatch) => Pick<State> // 'cartItems'
     getDeliveryAndPay: (
       global: State,
       dispatch: Dispatch,
@@ -58,28 +61,31 @@ declare module 'reactn/default' {
       forms_data: object,
     ) => null
 
-    submitOrder: (
-      global: State,
-      dispatch: Dispatch,
-      forms_data: object,
-    ) => null
+    submitOrder: (global: State, dispatch: Dispatch, forms_data: object) => null
 
     changeLang: (
       global: State,
       dispatch: Dispatch,
       lang: string,
-      i18n: i18n
+      i18n: i18n,
     ) => null
 
-    clearAllData: (
+    clearAllData: (global: State, dispatch: Dispatch) => null
+
+    addRandomItem: (global: State, dispatch: Dispatch) => null
+
+    createLogin: (
       global: State,
       dispatch: Dispatch,
+      loginInfo: CreateLogin,
     ) => null
 
-    addRandomItem: (
+    login: (
       global: State,
       dispatch: Dispatch,
-    ) => null
+      loginInfo: LoginType,
+    ) => Pick<State, 'orderInfo', 'regUser', 'isLoggingIn'>
+    logout: (global: State, dispatch: Dispatch) => null
   }
 
   // necessary to define due to typescript ability to safely read from useGlobal()
@@ -90,6 +96,7 @@ declare module 'reactn/default' {
     sales: number
     total: number
   }
+
   export interface State {
     cartItems: Array<CartItemType>
     cartInfo: {
@@ -108,5 +115,8 @@ declare module 'reactn/default' {
     selectedDelivery: number
     selectedPayment: number
     isSubmittingOrder: boolean
+    //isSubmitting: boolean
+    isLoggingIn: boolean
+    regUser: RegUserType
   }
 }

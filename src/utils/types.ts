@@ -74,3 +74,20 @@ export type OrderInfoType = {
   addressName: DeliveryInfoType
   terms: termsConditions
 }
+
+export type LoginType = {
+  email: string
+  pwd: string
+}
+export type CreateLogin = {
+  name: string
+  email: string
+  pwd: string
+  pwd2: string
+}
+export type RegUserType = {
+  logged: string | boolean
+  name: string
+  res?: string
+  err_code?: string
+}

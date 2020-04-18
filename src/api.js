@@ -46,3 +46,7 @@ export const submitOrder = (forms_data) => api.post('submitOrder', forms_data)
 export const addRandomItem = () => api.get('addRandomItem')
 
 export const clearAllData = () => api.get('clearCart')
+
+export const createLogin = (loginInfo) => api.post('createLogin', loginInfo)
+export const login = (loginInfo) => api.post('login', loginInfo)
+export const logout = () => api.get('logout')

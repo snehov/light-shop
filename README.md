@@ -59,6 +59,7 @@ The app contains this logical parts of e-shop:
 - Forms to enter personal info/delivery and invoice addres/company info
 - Validation of all entered data
 - Checkout order by sending all the data to backend
+- Register user, login user
 
 All those logical part are supported by following features
 
@@ -89,3 +90,7 @@ As the app is intended to be rendered on PHP server, which is not supporting JS 
 ## i18N
 
 App is using i18n, currently in Czech (primary language) and English
+
+## Register/Login
+
+User can create his account, and after login, input fields will be filled with known user information (personal info, address...)

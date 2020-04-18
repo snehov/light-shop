@@ -1,3 +1,5 @@
+import cz from '../../src/i18n/cz.json'
+
 const name = 'jarmil'
 const deliverDescr = 'Delivery 2nd place'
 const delivStreet = 'Wilkinson 2nd'
@@ -23,17 +25,13 @@ describe('Play with input form fields', () => {
   })
   it('Test email validation', () => {
     cy.get('#tel_personal').type('abc')
-    cy.get('#email_personal')
-      .type('abc')
-      .blur()
+    cy.get('#email_personal').type('abc').blur()
     cy.get('label[for=email_personal]')
       .parent()
       .within(() => {
         cy.get('.validation--error')
       })
-    cy.get('#email_personal')
-      .type('name@domain.com')
-      .blur()
+    cy.get('#email_personal').type('name@domain.com').blur()
     cy.get('label[for=email_personal]')
       .parent()
       .within(() => {
@@ -45,6 +43,7 @@ describe('Play with input form fields', () => {
     cy.get('#street_delivery').type(delivStreet)
     cy.get('#city_delivery').type(delivCity)
     cy.get('#zip_delivery').type(zip)
+    cy.get('#terms_agree_checkmark').click()
     cy.formIsValid()
   })
   it('Uncheck invoice addr which shoul be now same as delivery', () => {
@@ -57,12 +56,8 @@ describe('Play with input form fields', () => {
     cy.formIsValid()
   })
   it('Write different delivery addres, uncheck and check copy invoice addr', () => {
-    cy.get('#descr_delivery')
-      .clear()
-      .type(deliverDescr)
-    cy.get('#descr_invoice')
-      .clear()
-      .type('Invoice descr')
+    cy.get('#descr_delivery').clear().type(deliverDescr)
+    cy.get('#descr_invoice').clear().type('Invoice descr')
     cy.get('.cy-invAsDeliv').click()
     cy.get('#descr_invoice').should('not.be.visible')
     cy.get('.cy-invAsDeliv').click()
@@ -110,6 +105,27 @@ describe('Check personal pickup behaviour', () => {
     cy.get('#street_delivery').should('not.be.visible')
     cy.selectPaidDelivery()
     cy.get('#street_delivery').should('be.visible')
+    cy.get('#terms_agree_checkmark').click()
     cy.formIsValid()
+  })
+})
+
+describe('Test agree with terms and conditions behaviour', () => {
+  it('Evoke notice that some field is missing to fill', () => {
+    cy.get('#terms_agree_checkmark').click()
+    cy.get('#name_personal').clear()
+    cy.get('.formSubmit__fieldsLeft').contains(
+      cz.translation.orderInfo.missingFields,
+    )
+  })
+  it('Evoke notice that some only Agree is missing to check', () => {
+    cy.get('#name_personal').type(name)
+    cy.get('.formSubmit__fieldsLeft').contains(
+      cz.translation.orderInfo.justAgreeLeft,
+    )
+  })
+  it('Set whole form positively validated', () => {
+    cy.get('#terms_agree_checkmark').click()
+    cy.get('.formSubmit__fieldsLeft').should('be.empty')
   })
 })
