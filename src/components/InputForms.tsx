@@ -49,6 +49,7 @@ const setFormParts = (
   noInputs?: boolean,
 ) => {
   formParts = newVersion
+  console.log('newVersion', newVersion)
   if (updateValidStatus) {
     updateValidStatus(checkAllFormsValid(noDeliveryAddress, [], noInputs))
     setAllValidButAgree(
@@ -126,6 +127,18 @@ const InputForms = ({ disabled }: { disabled?: boolean }) => {
       }
     }
   }, [selectedDelivery, deliveryMethods]) // eslint-disable-line
+  useEffect(() => {
+    if (onlyOnlineItems) {
+      //console.log("formparts", formParts,{ agree: formParts?.agree })
+      setFormParts(
+        { agree: formParts?.agree },
+        setAllFormsAreValid,
+        setAllValidButAgree,
+        true,
+        onlyOnlineItems,
+      )
+    }
+  }, [onlyOnlineItems]) // eslint-disable-line
 
   const saveDataToServer = () => {
     !isEmpty(formParts) &&

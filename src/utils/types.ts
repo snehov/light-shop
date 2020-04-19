@@ -54,6 +54,7 @@ export type FormPartsType = {
   delivery?: FormPartType
   invoice?: FormPartType
   company?: FormPartType
+  agree?: FormPartType
 }
 
 export type DeliveryInfoType = {

@@ -83,4 +83,14 @@ describe('Test online products', () => {
       cz.translation.orderInfo.sendWithSum,
     )
   })
+  it('Add non-online product, remove, and test if form still behave correctly', () => {
+    cy.request_addTestProduct1()
+    cy.get('.formSubmit__fieldsLeft').contains(
+      cz.translation.orderInfo.missingFields,
+    )
+    cy.get('.cart-item--del__button').last().click()
+    cy.get('.formSubmit__fieldsLeft').contains(
+      cz.translation.orderInfo.justAgreeLeft,
+    )
+  })
 })
