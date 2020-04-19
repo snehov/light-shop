@@ -16,6 +16,7 @@ const App = () => {
   const [selectedPayment] = useGlobal('selectedPayment')
   const changeLang = useDispatch('changeLang')
   const addRandomItem = useDispatch('addRandomItem')
+  const clearCartData = useDispatch('clearCartData')
   const clearAllData = useDispatch('clearAllData')
   const { i18n } = useTranslation()
 
@@ -41,7 +42,8 @@ const App = () => {
         {/* NODE_ENV:{process.env.NODE_ENV},{process.env.REACT_APP_MYENV}, Ue: */}
         {/* getEnv() */}
         <button onClick={() => addRandomItem()}>Add random item</button>
-        <button onClick={() => clearAllData()}>Clear cart at BE</button>
+        <button onClick={() => clearCartData()}>Clear cart at BE</button>
+        <button onClick={() => clearAllData()}>Reset All</button>
       </fieldset>
       <Cart />
       <UserLogin />

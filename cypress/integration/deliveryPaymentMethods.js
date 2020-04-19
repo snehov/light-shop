@@ -1,3 +1,4 @@
+import cz from '../../src/i18n/cz.json'
 describe('Tests selecting delivery and payment methods', () => {
   it('Load cart item', () => {
     cy.clearedOrderWithOneProduct()
@@ -49,5 +50,37 @@ describe('Test refresh and pre-filling already selected values', () => {
     cy.reload()
     cy.get('#delivery_3').should('be.checked')
     cy.get('#payment_2').should('be.checked')
+  })
+})
+describe('Test online products', () => {
+  it('Reset cart, add online item ', () => {
+    cy.resetAll()
+    cy.request_addOnlineItem()
+    cy.get('.cart-item')
+  })
+  it('Check disabled deliveries', () => {
+    cy.get('#delivery_1').should('be.disabled')
+    cy.get('#delivery_2').should('be.disabled')
+    cy.get('#delivery_3').should('be.disabled')
+    cy.onlineDeliveryCheckBox().should('be.enabled')
+  })
+  it('Select online delivery', () => {
+    cy.selectOnlineDelivery()
+  })
+  it('Check disabled payments', () => {
+    cy.get('#payment_1').should('be.disabled')
+    cy.get('#payment_2').should('be.enabled')
+  })
+  it('Select online payment', () => {
+    cy.selectFreePayment()
+    cy.get('.formSubmit__fieldsLeft').contains(
+      cz.translation.orderInfo.justAgreeLeft,
+    )
+  })
+  it('After checking agree, form shoud be valid to submit', () => {
+    cy.get('#terms_agree_checkmark').click()
+    cy.get('.formSubmit__fieldsLeft').contains(
+      cz.translation.orderInfo.sendWithSum,
+    )
   })
 })

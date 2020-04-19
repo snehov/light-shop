@@ -5,6 +5,8 @@ export const CartItemTypeObj = {
   name: 'a',
   amount: 1,
   price: 1,
+  is_online: true,
+  is_one_piece: true,
 }
 export type CartItemType = typeof CartItemTypeObj
 
@@ -24,6 +26,7 @@ export const DeliveryMethod = {
   price: 1,
   personal_pickup: 'a',
   description: 'a',
+  is_online: true,
 }
 //export type DeliveryMethodTypeIncl = typeof DeliveryMethod
 //type EE = { payments: Array<number> }

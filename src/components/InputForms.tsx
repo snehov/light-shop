@@ -28,9 +28,13 @@ const debounceFnc = debounce((launchDebounced: any) => {
 const checkAllFormsValid = (
   noDeliveryAddress: boolean,
   skipParts?: Array<string>,
+  noInputs?: boolean,
 ) => {
-  let requiredParts = ['personal', 'invoice']
-  !noDeliveryAddress && requiredParts.push('delivery')
+  let requiredParts = ['agree']
+  if (!noInputs) {
+    requiredParts = ['personal', 'invoice']
+    !noDeliveryAddress && requiredParts.push('delivery')
+  }
   return skipParts
     ? checkAllFormPartsValid(requiredParts, formParts, skipParts)
     : checkAllFormPartsValid(requiredParts, formParts)
@@ -42,11 +46,14 @@ const setFormParts = (
   updateValidStatus: any,
   setAllValidButAgree: any,
   noDeliveryAddress: boolean,
+  noInputs?: boolean,
 ) => {
   formParts = newVersion
   if (updateValidStatus) {
-    updateValidStatus(checkAllFormsValid(noDeliveryAddress))
-    setAllValidButAgree(checkAllFormsValid(noDeliveryAddress, ['agree']))
+    updateValidStatus(checkAllFormsValid(noDeliveryAddress, [], noInputs))
+    setAllValidButAgree(
+      checkAllFormsValid(noDeliveryAddress, ['agree'], noInputs),
+    )
   }
 }
 
@@ -65,10 +72,8 @@ const InputForms = ({ disabled }: { disabled?: boolean }) => {
   const [isSubmittingOrder] = useGlobal('isSubmittingOrder')
   const [selectedDelivery] = useGlobal('selectedDelivery')
   const [deliveryMethods] = useGlobal('deliveryMethods')
+  const [onlyOnlineItems] = useGlobal('onlyOnlineItems')
   const { t } = useTranslation()
-  useEffect(() => {
-    console.log('allValidButAgree se zmenilo', allValidButAgree)
-  }, [allValidButAgree])
   useEffect(() => {
     //# when getting init data from BE find out whether delivery/invoice are different, or copied, then preselect copy option
     if (addressName) {
@@ -88,6 +93,7 @@ const InputForms = ({ disabled }: { disabled?: boolean }) => {
           setAllFormsAreValid,
           setAllValidButAgree,
           noDeliveryAddress,
+          onlyOnlineItems,
         )
       }
     }
@@ -106,10 +112,17 @@ const InputForms = ({ disabled }: { disabled?: boolean }) => {
           setAllFormsAreValid,
           setAllValidButAgree,
           true,
+          onlyOnlineItems,
         )
       } else {
         setNoDeliveryAddress(false)
-        setFormParts(formParts, setAllFormsAreValid, setAllValidButAgree, false)
+        setFormParts(
+          formParts,
+          setAllFormsAreValid,
+          setAllValidButAgree,
+          false,
+          onlyOnlineItems,
+        )
       }
     }
   }, [selectedDelivery, deliveryMethods]) // eslint-disable-line
@@ -136,6 +149,7 @@ const InputForms = ({ disabled }: { disabled?: boolean }) => {
           setAllFormsAreValid,
           setAllValidButAgree,
           noDeliveryAddress,
+          onlyOnlineItems,
         )
         saveDataToServer()
       }
@@ -173,13 +187,15 @@ const InputForms = ({ disabled }: { disabled?: boolean }) => {
   const validateCompany = useRef()
   const validateAgrees = useRef()
   const onScreenValidation = () => {
-    ;(validatePersonal as any).current.runValidation()
-    if (!noDeliveryAddress) {
-      ;(validateDelivery as any).current.runValidation()
-    }
-    ;(validateInvoice as any).current.runValidation()
-    if ((validateCompany as any).current /* && companyVisible */) {
-      ;(validateCompany as any).current.runValidation()
+    if (!onlyOnlineItems) {
+      ;(validatePersonal as any).current.runValidation()
+      if (!noDeliveryAddress) {
+        ;(validateDelivery as any).current.runValidation()
+      }
+      ;(validateInvoice as any).current.runValidation()
+      if ((validateCompany as any).current /* && companyVisible */) {
+        ;(validateCompany as any).current.runValidation()
+      }
     }
     ;(validateAgrees as any).current.runValidation()
   }
@@ -202,77 +218,80 @@ const InputForms = ({ disabled }: { disabled?: boolean }) => {
         </div>
       )}
 
-      <div className="elemsToRow">
-        <div className="stdPadding">
-          <PersonalInfo
-            dataName="personal"
-            returnValues={setValues}
-            prefillData={addressName}
-            ref={validatePersonal}
-          />
-        </div>
-        <div className="stdPadding">
-          {noDeliveryAddress ? (
-            <div className="formBlock">
-              <h3>{t('address.addressPickup')}</h3>
-              <p dangerouslySetInnerHTML={{ __html: pickupLine }}></p>
-            </div>
-          ) : (
-            <Address
-              dataName="delivery"
+      {!onlyOnlineItems && (
+        <div className="elemsToRow">
+          <div className="stdPadding">
+            <PersonalInfo
+              dataName="personal"
               returnValues={setValues}
               prefillData={addressName}
-              ref={validateDelivery}
+              ref={validatePersonal}
             />
-          )}
-        </div>
+          </div>
+          <div className="stdPadding">
+            {noDeliveryAddress ? (
+              <div className="formBlock">
+                <h3>{t('address.addressPickup')}</h3>
+                <p dangerouslySetInnerHTML={{ __html: pickupLine }}></p>
+              </div>
+            ) : (
+              <Address
+                dataName="delivery"
+                returnValues={setValues}
+                prefillData={addressName}
+                ref={validateDelivery}
+              />
+            )}
+          </div>
 
-        <div className="stdPadding">
-          {!noDeliveryAddress && (
-            <label className="inputCont cy-invAsDeliv">
-              {t('company.invAddrAsDeliv')}
+          <div className="stdPadding">
+            {!noDeliveryAddress && (
+              <label className="inputCont cy-invAsDeliv">
+                {t('company.invAddrAsDeliv')}
+                <input
+                  type="checkbox"
+                  checked={copyInvoiceAddr}
+                  onChange={(e) => setCopyInvoiceAddr(e.target.checked)}
+                />
+                <span className="checkmark"></span>
+              </label>
+            )}
+
+            {
+              <Address
+                dataName="invoice"
+                altName={t('company.invoiceInfo')}
+                returnValues={setValues}
+                prefillData={addressName}
+                ref={validateInvoice}
+                copyValues={copyInvoiceAddr}
+                hidden={copyInvoiceAddr}
+                copyContent={(formParts as any).delivery}
+              />
+            }
+          </div>
+          <div className="stdPadding">
+            <label className="inputCont cy-fillCompany">
+              {t('company.companyOrder')}
               <input
                 type="checkbox"
-                checked={copyInvoiceAddr}
-                onChange={(e) => setCopyInvoiceAddr(e.target.checked)}
+                checked={Boolean(companyVisible)}
+                onChange={(e) => setCompanyVisible(e.target.checked)}
               />
               <span className="checkmark"></span>
             </label>
-          )}
+            {companyVisible && (
+              <CompanyBaseInfo
+                dataName="company"
+                returnValues={setValues}
+                prefillData={addressName}
+                ref={validateCompany}
+              />
+            )}
+          </div>
+        </div>
+      )}
 
-          {
-            <Address
-              dataName="invoice"
-              altName={t('company.invoiceInfo')}
-              returnValues={setValues}
-              prefillData={addressName}
-              ref={validateInvoice}
-              copyValues={copyInvoiceAddr}
-              hidden={copyInvoiceAddr}
-              copyContent={(formParts as any).delivery}
-            />
-          }
-        </div>
-        <div className="stdPadding">
-          <label className="inputCont cy-fillCompany">
-            {t('company.companyOrder')}
-            <input
-              type="checkbox"
-              checked={Boolean(companyVisible)}
-              onChange={(e) => setCompanyVisible(e.target.checked)}
-            />
-            <span className="checkmark"></span>
-          </label>
-          {companyVisible && (
-            <CompanyBaseInfo
-              dataName="company"
-              returnValues={setValues}
-              prefillData={addressName}
-              ref={validateCompany}
-            />
-          )}
-        </div>
-      </div>
       <div className="stdPadding">
         <AgreeChecks
           dataName="agree"
