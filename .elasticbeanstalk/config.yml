@@ -1,0 +1,11 @@
+branch-defaults:
+  master:
+    environment: Snowslightshop-env
+  circleci-project-setup:
+    environment: Snowslightshop-env
+global:
+  application_name: SnowsLightshop
+  default_ec2_keyname: e-wmejenyati
+  default_platform: Node.js 10 running on 64bit Amazon Linux 2/5.0.1
+  default_region: eu-central-1
+  sc: git
