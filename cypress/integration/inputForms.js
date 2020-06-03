@@ -84,6 +84,7 @@ describe('Play with input form fields', () => {
     cy.get('#crn_company').type('783259')
     cy.get('#utr_company').type('CZ783259')
     cy.formIsValid()
+    cy.waitForDebounceSaveData()
   })
 })
 
@@ -91,6 +92,7 @@ describe('Test refresh and pre-filling already filled values', () => {
   it('After refresh it should have still same input values', () => {
     cy.wait(2000) // eslint-disable-line
     cy.reload()
+    cy.visitRoot()
     cy.get('#name_personal').should('have.value', name)
     cy.get('#descr_delivery').should('have.value', deliverDescr)
     cy.get('#street_delivery').should('have.value', delivStreet)

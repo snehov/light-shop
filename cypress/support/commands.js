@@ -81,6 +81,9 @@ Cypress.Commands.add('totalSum', () => {
   cy.get('.cart-sum__TOTAL')
 })
 // Delivery and Payment methods
+Cypress.Commands.add('waitForDebounceSaveData', () => {
+  cy.wait(2000) // eslint-disable-line
+})
 Cypress.Commands.add('deliveryInfoInputsDisabled', () => {
   cy.get('.deliveryInfoInputs').should('have.class', 'disabledBlock')
 })

@@ -14,6 +14,7 @@ const App = () => {
   const [cartItems] = useGlobal('cartItems')
   const [selectedDelivery] = useGlobal('selectedDelivery')
   const [selectedPayment] = useGlobal('selectedPayment')
+  const [testVar] = useGlobal('testVar')
   const changeLang = useDispatch('changeLang')
   const addRandomItem = useDispatch('addRandomItem')
   const clearCartData = useDispatch('clearCartData')
@@ -49,6 +50,9 @@ const App = () => {
       <UserLogin />
       {dapAllowed && <DeliveryAndPay disabled={!dapAllowed} />}
       {dapAllowed && <InputForms disabled={!addressAllowed} />}
+      <div>ls:{localStorage.getItem('cartSimple')}</div>
+      <div>GS:{JSON.stringify(cartItems)}</div>
+      <div>test:{JSON.stringify(testVar)}</div>
     </div>
   )
 }

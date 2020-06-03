@@ -45,7 +45,6 @@ describe('Try some item changes', () => {
 })
 describe('After reload cart loads already changed values', () => {
   it('After refresh it should have same items counts', () => {
-    cy.wait(2000) // eslint-disable-line
     cy.reload()
     cy.get('.cart-item--price__sum').contains('600 Kč')
     cy.get('.cart-sum__TOTAL').contains('600 Kč')
@@ -66,6 +65,9 @@ describe('Test session expiration and reloading of previous cart items', () => {
     cy.visitRoot()
     cy.get('.cart-item')
     cy.request_resetSession()
+  })
+  it('Should send localstored items to BE, which will renew cart from it', () => {
+    cy.reload()
     cy.get('.cart-item')
   })
 })

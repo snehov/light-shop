@@ -120,5 +120,6 @@ declare module 'reactn/default' {
     isLoggingIn: boolean
     regUser: RegUserType
     onlyOnlineItems: boolean
+    testVar:{}
   }
 }

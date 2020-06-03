@@ -12,7 +12,7 @@ import {
   changeLang,
   addRandomItem,
   clearAllData,
-  clearCartData
+  clearCartData,
 } from '../api'
 import { CartType, CartItemType } from 'utils/types'
 import {
@@ -31,6 +31,7 @@ setGlobal({ selectedDelivery: 0 })
 setGlobal({ selectedPayment: 0 })
 setGlobal({ isSubmittingOrder: false })
 setGlobal({ onlyOnlineItems: false })
+setGlobal({ testVar: {} })
 
 /* addReducer('isSubmitting', () => {
   return { isSubmitting: true }
@@ -129,13 +130,13 @@ addReducer('addRandomItem', async () => {
   return {}
 })
 addReducer('clearCartData', async () => {
-  localStorage.removeItem('cartSimple')
+  //localStorage.removeItem('cartSimple')
   await clearCartData()
   window.location.reload()
   return {}
 })
 addReducer('clearAllData', async () => {
-  localStorage.clear();
+  localStorage.clear()
   await clearAllData()
   window.location.reload()
   return {}
@@ -150,6 +151,7 @@ const parseIncomingCart = (data: CartData) => {
 
   const onlyOnlineItems = hasOnlyOnlineItems(data.cart)
   //if(onlyOnlineItems){}
+  setGlobal({ testVar: data.cart })
   return {
     cartItems: data.cart,
     cartInfo: data.sum,
