@@ -23,7 +23,7 @@ jobs:
           command: ls -ll
       - run:
           name: Installing deployment dependencies
-          working_directory: /
+          working_directory: src/
           command: |
             sudo apt-get -y -qq update
             sudo apt-get install python-pip python-dev build-essential
@@ -43,3 +43,4 @@ workflows:
           branches:
             only:
               - master
+              - circleci-project-setup
