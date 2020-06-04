@@ -10,40 +10,36 @@ jobs:
       - node/with-cache:
           steps:
             - run: npm install
-            - run: ls -ll
-            # - run: npm test
+
   deploy:
-    # Install npm dependencies 🙂
-    # - run: npm install
-    # !!! This installs AWS Elastic Beanstalk CLI 'awsebcli' !!!
     executor:
       name: node/default
     steps:
       - checkout
+      # Install npm dependencies 🙂
+      # !!! This installs AWS Elastic Beanstalk CLI 'awsebcli' !!!
       - run:
-          name: list current folder
+          name: "echo dir"
           command: ls -ll
-          #name: Installing deployment dependencies
-          #command: |
-          #  sudo apt-get -y -qq update
-          #  sudo apt-get install python-pip python-dev build-essential
-          #  sudo pip install --upgrade setuptools
-           # sudo pip install awsebcli --upgrade
+      - run:
+          name: Installing deployment dependencies
+          working_directory: /
+          command: |
+            sudo apt-get -y -qq update
+            sudo apt-get install python-pip python-dev build-essential
+            sudo pip install awsebcli --upgrade
       # !!! This runs a deployment
-     # - run:
-       #   name: Deploying
-      #    command: |
-       #     eb init --platform 'Node.js 10 running on 64bit Amazon Linux 2/5.0.1' --region eu-central-1 SnowsLightshop
-        #    eb deploy Snowslightshop-env
-          # eb init --platform <platform-name> --region <region-name> <application-name>
+      - run:
+          name: Deploying
+          #command: eb init --platform 'Node.js' --region eu-central-1 SnowsLightshop
+          command: eb deploy Snowslightshop-env
 
 workflows:
   build-and-test:
     jobs:
       - build-and-test
       - deploy:
-          filters:
-            branches:
-              only:
-                - master
-                - circleci-project-setup
+        filters:
+          branches:
+            only:
+              - master
