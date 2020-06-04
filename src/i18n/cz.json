@@ -1,0 +1,71 @@
+{
+  "translation": {
+    "welcome": "Vítej do react-i18next",
+    "deliveryMethods": "Způsoby doručení",
+    "paymentMethods": "Způsoby platby",
+    "cart": "Košík",
+    "cartEmpty": "Košík je prázdný",
+    "delivery": "doprava",
+    "payment": "platba",
+    "totalPrice": "Cena celkem",
+    "finishDAPchoice": "Dokončete výběr dopravy a platby",
+    "order": "Objednat",
+    "send": "Odeslat",
+    "isSending": "Odesílá se",
+    "cartNeedItems": "Košík musí obsahovat zboží",
+    "personal": {
+      "personalInfo": "Základní údaje",
+      "nameSurname": "Jméno a přijmení",
+      "tel": "Telefon",
+      "email": "E-mail",
+      "email_ph": "např.: franta@example.cz"
+    },
+    "address": {
+      "addresDelivery": "Adresa doručení",
+      "addressPickup": "Adresa vyzvednutí",
+      "place": "Popis místa",
+      "place_ph": "např.: firma/vchod/recepce/patro",
+      "street": "Ulice a č.p.",
+      "street_ph": "např.: Stoupající 983/25",
+      "city": "Město",
+      "zip": "PSČ",
+      "zip_ph": "např.: 14900"
+    },
+    "company": {
+      "addressInvoice": "Fakturační adresa",
+      "invAddrAsDeliv": "Fakturační adresa je stejná jako dodací adresa",
+      "invoiceInfo": "Fakturační údaje",
+      "companyOrder": "Objednávka na firmu",
+      "companyInfo": "Informace o firmě",
+      "name": "Obchodní název",
+      "crn": "IČ",
+      "utr": "DIČ"
+    },
+    "orderInfo": {
+      "agree": "Souhlasím ",
+      "termsAndCond": "s podmínkama",
+      "ofCompany": "naupování ",
+      "choseDaP": "Dokončete výběr dopravy a platby",
+      "missingFields": "Ještě není vše vyplněno",
+      "justAgreeLeft": "Už zbývá jen souhlasit s podmínkama",
+      "agreeMarketing": "Souhlasím se zasíláním spamu",
+      "sendWithSum":"Odeslat objednávku v hodnotě "
+    },
+    "login": {
+      "accountChoice": "Volba přihlášení",
+      "noAccount": "Jednorázový nákup bez registrace",
+      "createAccount": "Založit uživatelský účet",
+      "login": "Přihlásit se",
+      "createAcountHeader": "Založení uživatele",
+      "password": "Heslo",
+      "pwdReqirement": "Alespoň 6 znaků",
+      "pwdNotEqual": "Hesla se nesmí lišit",
+      "userLogin": "Přihlášení uživatele",
+      "userRegEmail": "Váš registrovaný e-mail @",
+      "loginFailed": "Přihlášení se nezdařilo",
+      "loggedAsUser": "Přihlášen jako uživatel",
+      "logout": "Odhlásit",
+      "err_username_exists": "Tento přihlašovací email již existuje, vyberte jiný"
+    }
+  }
+}

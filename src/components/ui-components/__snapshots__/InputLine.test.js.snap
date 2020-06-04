@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test input line 1`] = `
+<div
+  className="inputLine"
+>
+  <label
+    htmlFor="testInput"
+  >
+    testing
+  </label>
+  <span>
+    <input
+      className=""
+      id="testInput"
+      name="testInput"
+      onBlur={[Function]}
+      onChange={[Function]}
+      type="text"
+    />
+  </span>
+</div>
+`;
+
+exports[`Test input line: 
+  <div
+    className="inputLine"
+  >
+    <label
+      htmlFor="testInput"
+    >
+      testing
+    </label>
+    <span>
+      <input
+        className=""
+        id="testInput"
+        name="testInput"
+        onBlur={[Function]}
+        onChange={[Function]}
+        type="text"
+      />
+    </span>
+  </div>
+   1`] = `
+<div
+  className="inputLine"
+>
+  <label
+    htmlFor="testInput"
+  >
+    testing
+  </label>
+  <span>
+    <input
+      className=""
+      id="testInput"
+      name="testInput"
+      onBlur={[Function]}
+      onChange={[Function]}
+      type="text"
+    />
+  </span>
+</div>
+`;
