@@ -1,0 +1,46 @@
+version: 2.1
+orbs:
+  node: circleci/node@1.1.6
+jobs:
+  build-and-test:
+    executor:
+      name: node/default
+    steps:
+      - checkout
+      - node/with-cache:
+          steps:
+            - run: npm install
+
+  deploy:
+    executor:
+      name: node/default
+    steps:
+      - checkout
+      # Install npm dependencies 🙂
+      # !!! This installs AWS Elastic Beanstalk CLI 'awsebcli' !!!
+      - run:
+          name: "echo dir"
+          command: ls -ll
+      - run:
+          name: Installing deployment dependencies
+          working_directory: /
+          command: |
+            sudo apt-get -y -qq update
+            sudo apt-get install python-pip python-dev build-essential
+            sudo pip install awsebcli --upgrade
+      # !!! This runs a deployment
+      - run:
+          name: Deploying
+          #command: eb init --platform 'Node.js' --region eu-central-1 SnowsLightshop
+          command: eb deploy Snowslightshop-env
+
+workflows:
+  build-and-test:
+    jobs:
+      - build-and-test
+      - deploy:
+        filters:
+          branches:
+            only:
+              - master
+              - circleci-project-setup
