@@ -32,7 +32,7 @@ const App = () => {
 
   return (
     <div className="App">
-      <fieldset>
+      {/* <fieldset>
         <legend>External app buttons</legend>
         <button onClick={() => changeLang('en', i18n)} className="langToEn">
           en
@@ -40,19 +40,20 @@ const App = () => {
         <button onClick={() => changeLang('cz', i18n)} className="langToCz">
           cz
         </button>
-        {/* NODE_ENV:{process.env.NODE_ENV},{process.env.REACT_APP_MYENV}, Ue: */}
-        {/* getEnv() */}
+        
         <button onClick={() => addRandomItem()}>Add random item</button>
         <button onClick={() => clearCartData()}>Clear cart at BE</button>
         <button onClick={() => clearAllData()}>Reset All</button>
-      </fieldset>
+      </fieldset> */}
+      {/* NODE_ENV:{process.env.NODE_ENV},{process.env.REACT_APP_MYENV}, Ue: */}
+      {/* getEnv() */}
       <Cart />
       <UserLogin />
       {dapAllowed && <DeliveryAndPay disabled={!dapAllowed} />}
       {dapAllowed && <InputForms disabled={!addressAllowed} />}
-      <div>ls:{localStorage.getItem('cartSimple')}</div>
+      {/* <div>ls:{localStorage.getItem('cartSimple')}</div>
       <div>GS:{JSON.stringify(cartItems)}</div>
-      <div>test:{JSON.stringify(testVar)}</div>
+      <div>test:{JSON.stringify(testVar)}</div> */}
     </div>
   )
 }

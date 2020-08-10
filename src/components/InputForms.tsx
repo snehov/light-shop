@@ -321,17 +321,17 @@ const InputForms = ({ disabled }: { disabled?: boolean }) => {
           onScreenValidation={onScreenValidation}
         />
       </div>
-      <br />
+      {/*<br />
       <br />
       <b style={{ color: 'red' }}>...</b>
       <br />
-      <cite>
+       <cite>
         Next steps:
         <br />
         1) <s>submit endpoint</s>, validate FE data and process order, on FE
         redirect to succes screen
         <br />
-      </cite>
+      </cite> */}
       <br />
     </div>
   )
