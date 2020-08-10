@@ -8,7 +8,7 @@ describe('It opens empty cart', function () {
 })
 describe('Open cart with some item in it', () => {
   it('Check present items in cart', () => {
-    cy.request('https://snowcorp.cz/ls/cart_api/addTestProduct1')
+    cy.request_addTestProduct1()
     cy.visitRoot()
     cy.get('.cart')
     cy.get('.cart-item')
@@ -45,27 +45,28 @@ describe('Try some item changes', () => {
 })
 describe('After reload cart loads already changed values', () => {
   it('After refresh it should have same items counts', () => {
-    cy.wait(2000) // eslint-disable-line
     cy.reload()
     cy.get('.cart-item--price__sum').contains('600 Kč')
     cy.get('.cart-sum__TOTAL').contains('600 Kč')
   })
 })
 describe('Test session expiration and reloading of previous cart items', () => {
-  it('Set empty localStorage, empty session, load (empty) cart', () => {
-    cy.request('https://snowcorp.cz/ls/cart_api/resetAll')
-    cy.visitRoot()
+  it('Clear cart and expect to visit empty cart', () => {
+    cy.request_resetSession()
     cy.get('.cart__header').should('have.class', 'cart__header--empty')
-
-    cy.clearLocalStorage('cartSimple')
-    expect(localStorage.getItem('cartSimple')).to.be.null // eslint-disable-line
   })
-  it('add item to cart, empty session, load cart from locastorage', () => {
+  it('Clear localStorage and check its really cleared and cart is empty', () => {
+    cy.resetAll()
+    cy.reload()
     cy.get('.cart__header').should('have.class', 'cart__header--empty')
-    cy.request('https://snowcorp.cz/ls/cart_api/addTestProduct1')
+  })
+  it('add item to cart, reset session, load cart from locastorage', () => {
+    cy.request_addTestProduct1()
     cy.visitRoot()
     cy.get('.cart-item')
-    cy.request('https://snowcorp.cz/ls/cart_api/resetAll')
+    cy.request_resetSession()
+  })
+  it('Should send localstored items to BE, which will renew cart from it', () => {
     cy.reload()
     cy.get('.cart-item')
   })

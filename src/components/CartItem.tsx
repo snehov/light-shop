@@ -36,30 +36,37 @@ const CartItem = (params: CartItemComponentType) => {
         {item.name}(id:{item.product_id})
       </div>
       <div className="cart-item--amount">
-        <input
-          className="cart-item--amount__input"
-          type="number"
-          value={amount}
-          onChange={inputAmountChange}
-        />
+        {!item.is_one_piece && (
+          <input
+            className="cart-item--amount__input"
+            type="number"
+            value={amount}
+            onChange={inputAmountChange}
+          />
+        )}
         <div className="vertical horizontal-sm">
-          <button
-            className="cart-item--amount__plus cart-item--amount__button"
-            onClick={() => changeAmountSafe(index, Number(item.amount) + 1)}
-          >
-            +
-          </button>
-          <button
-            className="cart-item--amount__minus  cart-item--amount__button"
-            onClick={() => changeAmountSafe(index, Number(item.amount) - 1)}
-          >
-            -
-          </button>
+          {!item.is_one_piece && (
+            <>
+              <button
+                className="cart-item--amount__plus cart-item--amount__button"
+                onClick={() => changeAmountSafe(index, Number(item.amount) + 1)}
+              >
+                +
+              </button>
+              <button
+                className="cart-item--amount__minus  cart-item--amount__button"
+                onClick={() => changeAmountSafe(index, Number(item.amount) - 1)}
+              >
+                -
+              </button>
+            </>
+          )}
         </div>
       </div>
       <div className="cart-item--price"></div>
       <div className="cart-item--price__piece">
-        {formatPriceOutput(item.price)}/ks
+        {formatPriceOutput(item.price)}
+        {!item.is_one_piece && '/ks'}
       </div>
       <div className="cart-item--price__sum"> {formatPriceOutput(sum)}</div>
       <div className="cart-item--del">

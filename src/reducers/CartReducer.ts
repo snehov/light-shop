@@ -12,10 +12,14 @@ import {
   changeLang,
   addRandomItem,
   clearAllData,
+  clearCartData,
 } from '../api'
 import { CartType, CartItemType } from 'utils/types'
-import { parseSimpleCartList } from 'utils/functions'
-import { saveLangPrefLocal } from 'utils/functions'
+import {
+  parseSimpleCartList,
+  saveLangPrefLocal,
+  hasOnlyOnlineItems,
+} from 'utils/functions'
 const isEmpty = require('ramda').isEmpty
 
 setGlobal({ cartItems: [] })
@@ -26,6 +30,8 @@ setGlobal({ paymentMethods: {} })
 setGlobal({ selectedDelivery: 0 })
 setGlobal({ selectedPayment: 0 })
 setGlobal({ isSubmittingOrder: false })
+setGlobal({ onlyOnlineItems: false })
+setGlobal({ testVar: {} })
 
 /* addReducer('isSubmitting', () => {
   return { isSubmitting: true }
@@ -123,8 +129,14 @@ addReducer('addRandomItem', async () => {
   window.location.reload()
   return {}
 })
+addReducer('clearCartData', async () => {
+  //localStorage.removeItem('cartSimple')
+  await clearCartData()
+  window.location.reload()
+  return {}
+})
 addReducer('clearAllData', async () => {
-  localStorage.removeItem('cartSimple')
+  localStorage.clear()
   await clearAllData()
   window.location.reload()
   return {}
@@ -136,7 +148,15 @@ const parseIncomingCart = (data: CartData) => {
     JSON.stringify(parseSimpleCartList(data.cart)),
   )
   // TODO: check incoming data format!!!
-  return { cartItems: data.cart, cartInfo: data.sum }
+
+  const onlyOnlineItems = hasOnlyOnlineItems(data.cart)
+  //if(onlyOnlineItems){}
+  setGlobal({ testVar: data.cart })
+  return {
+    cartItems: data.cart,
+    cartInfo: data.sum,
+    onlyOnlineItems,
+  }
 }
 
 // posibility of loading static BE data primary from

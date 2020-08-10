@@ -70,6 +70,7 @@ declare module 'reactn/default' {
       i18n: i18n,
     ) => null
 
+    clearCartData: (global: State, dispatch: Dispatch) => null
     clearAllData: (global: State, dispatch: Dispatch) => null
 
     addRandomItem: (global: State, dispatch: Dispatch) => null
@@ -118,5 +119,7 @@ declare module 'reactn/default' {
     //isSubmitting: boolean
     isLoggingIn: boolean
     regUser: RegUserType
+    onlyOnlineItems: boolean
+    testVar:{}
   }
 }

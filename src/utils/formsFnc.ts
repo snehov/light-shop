@@ -98,11 +98,12 @@ export const checkAllFormPartsValid = (
     return [...acc, curr?.name]
   }, [])
   //all required form parts are present
-  requiredParts.forEach((part) => {
-    if (!(currentParts as any).includes(part)) {
-      passed = false
-    }
-  })
+  requiredParts[0] === '' &&
+    requiredParts.forEach((part) => {
+      if (!(currentParts as any).includes(part)) {
+        passed = false
+      }
+    })
   // all available form parts are valid
   if (!Object.values(formParts).every((item) => (item as any).dataValid)) {
     passed = false

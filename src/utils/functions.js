@@ -31,3 +31,7 @@ export const saveLangPrefLocal = (lang) => {
 export const getLangPrefLocal = () => {
   return window.localStorage.getItem('lang')
 }
+
+export const hasOnlyOnlineItems = (cart) => {
+  return cart.every(i=>i.is_online)
+}
