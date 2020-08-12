@@ -25,6 +25,7 @@ const inputsConf = {
     label: 'personal.tel',
   },
   email: {
+    required: true,
     type: 'email',
     label: 'personal.email',
     placeholder: 'personal.email_ph',

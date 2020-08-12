@@ -43,7 +43,7 @@ addReducer('getCart', async (global, dispatch) => {
   const data: any = await dataFromHtmlOrApi_firstTimeOnly(
     global.cartItems,
     'cartItems',
-    () => fetchCart(cartSimple),
+    () => fetchCart(cartSimple)
   )
   return parseIncomingCart(data)
 })
@@ -52,7 +52,7 @@ addReducer(
   async (global, dispatch, index, newAmount) => {
     let response = await changeCartItemAmount(index, newAmount)
     return parseIncomingCart(response.data)
-  },
+  }
 )
 addReducer('removeFromCart', async (global, dispatch, index) => {
   let response = await removeFromCart(index)
@@ -61,7 +61,7 @@ addReducer('removeFromCart', async (global, dispatch, index) => {
 addReducer('getDeliveryAndPay', async (global, dispatch) => {
   const data: DeliveryAndPaymentsType = await dataFromHtmlOrApi(
     'delivPayOpts',
-    () => fetchDeliveryPayMethods(),
+    () => fetchDeliveryPayMethods()
   )
   if (typeof data === 'object') {
     return {
@@ -82,11 +82,11 @@ addReducer('changePaymentMethod', async (global, dispatch, payment_id) => {
   let response = await changePaymentMethod(payment_id)
   return parseIncomingCart(response.data)
 })
-addReducer('fetchOrderInfo', async (global) => {
+addReducer('fetchOrderInfo', async global => {
   const data: any = await dataFromHtmlOrApi_firstTimeOnly(
     global.orderInfo,
     'orderInfo',
-    () => fetchOrderInfo(),
+    () => fetchOrderInfo()
   )
   return {
     orderInfo: data,
@@ -103,13 +103,32 @@ addReducer('submitOrder', async (global, dispatch, forms_data) => {
   setGlobal({ isSubmittingOrder: true })
   let response = await submitOrder(forms_data)
   setGlobal({ isSubmittingOrder: false })
-  alert('A tady bude pokračování na stránku oznamující úspěch')
   console.log('response.data', typeof response.data, response.data, response)
+
+  dispatch.orderProcessedScreen(response.data)
+
   if (typeof response.data === 'object') {
     return response.data // TODO: maybe also validate returned structure // TODO: use this IF at all API calls
   }
+
+  //dispatch.orderProcessedScreen(response.data)
   return {}
 })
+addReducer('orderProcessedScreen', async (global, dispatch, submitOrderRes) => {
+  console.log('orderProcessedScreen', submitOrderRes?.res?.status)
+  if (submitOrderRes?.res?.status === 'orderCreated') {
+    const payment = global.paymentMethods.filter(
+      f => f.payment_id === global.selectedPayment
+    )[0]
+    if (payment.online_pay && global.orderInfo.onlinePayURL) {
+      console.log('jdu to redirectnout', global.orderInfo.onlinePayURL)
+      window.location.href = global.orderInfo.onlinePayURL
+    } else {
+      alert('A tady bude pokračování na stránku oznamující úspěch')
+    }
+  }
+})
+
 addReducer('changeLang', async (global, dispatch, lang, i18n) => {
   i18n.changeLanguage(lang)
   saveLangPrefLocal(lang)
@@ -145,7 +164,7 @@ addReducer('clearAllData', async () => {
 const parseIncomingCart = (data: CartData) => {
   window.localStorage.setItem(
     'cartSimple',
-    JSON.stringify(parseSimpleCartList(data.cart)),
+    JSON.stringify(parseSimpleCartList(data.cart))
   )
   // TODO: check incoming data format!!!
 
@@ -180,7 +199,7 @@ const dataFromHtmlOrApi = async (domVar: string, apiCall: any) => {
 const dataFromHtmlOrApi_firstTimeOnly = async (
   globVar: any,
   domVar: string,
-  apiCall: any,
+  apiCall: any
 ) => {
   let data: any
   if (isEmpty(globVar)) {
