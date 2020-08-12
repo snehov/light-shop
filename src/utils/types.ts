@@ -27,6 +27,7 @@ export const DeliveryMethod = {
   personal_pickup: 'a',
   description: 'a',
   is_online: true,
+  enabled: true,
 }
 //export type DeliveryMethodTypeIncl = typeof DeliveryMethod
 //type EE = { payments: Array<number> }
@@ -37,6 +38,8 @@ export const PaymentMethod = {
   payment_id: 1,
   name: 'a',
   price: 1,
+  online_pay: true,
+  enabled: true,
   //description
   //bank_transfer
   //pay_before
@@ -77,6 +80,7 @@ export type OrderInfoType = {
   deliveryMethod: number
   addressName: DeliveryInfoType
   terms: termsConditions
+  onlinePayURL: string
 }
 
 export type LoginType = {

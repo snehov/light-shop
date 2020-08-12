@@ -46,7 +46,7 @@ const PaymentMethods = () => {
     const allowedPayements = !selectedDelivery
       ? ''
       : deliveryMethods
-          .filter((d) => d.delivery_id == selectedDelivery)[0] //eslint-disable-line eqeqeq
+          .filter(d => d.delivery_id == selectedDelivery)[0] //eslint-disable-line eqeqeq
           .payments.split(',')
     return allowedPayements
   }
@@ -58,6 +58,8 @@ const PaymentMethods = () => {
         paymentsMethods.map((method: PaymentMethodType) => {
           const disabled = isEmpty(getAllowedPayments())
             ? false
+            : !method.enabled
+            ? true
             : !getAllowedPayments().includes(method.payment_id.toString())
           return (
             <div key={method.payment_id}>

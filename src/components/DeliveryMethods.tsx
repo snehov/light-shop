@@ -1,9 +1,4 @@
-import React, {
-  useDispatch,
-  useState,
-  useEffect,
-  useGlobal,
-} from 'reactn'
+import React, { useDispatch, useState, useEffect, useGlobal } from 'reactn'
 import { useTranslation } from 'react-i18next'
 import { DeliveryMethodType } from 'utils/types'
 import { formatPriceOutput } from '../utils/priceOperations'
@@ -44,8 +39,8 @@ const DeliveryMethods = () => {
       return false
     }
     const allowedDeliveries = onlyOnlineItems
-      ? deliveryMethods.filter((d) => d.is_online)
-      : deliveryMethods.filter((d) => !d.is_online)
+      ? deliveryMethods.filter(d => d.is_online)
+      : deliveryMethods.filter(d => !d.is_online)
     return allowedDeliveries.reduce((acc: Array<number>, cur) => {
       return [...acc, cur.delivery_id]
     }, [])
@@ -61,8 +56,9 @@ const DeliveryMethods = () => {
       {!isEmpty(deliveryMethods) &&
         deliveryMethods.map((method: DeliveryMethodType) => {
           const allowedDelivery = getAllowedDelivery()
-          const disabled =
-            allowedDelivery && !allowedDelivery.includes(method.delivery_id)
+          const disabled = !method.enabled
+            ? true
+            : allowedDelivery && !allowedDelivery.includes(method.delivery_id)
           return (
             <div key={method.delivery_id}>
               <label
