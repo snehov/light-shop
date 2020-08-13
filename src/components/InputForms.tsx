@@ -129,9 +129,9 @@ const InputForms = ({ disabled }: { disabled?: boolean }) => {
   }, [selectedDelivery, deliveryMethods]) // eslint-disable-line
   useEffect(() => {
     if (onlyOnlineItems) {
-      //console.log("formparts", formParts,{ agree: formParts?.agree })
+      //console.log('formparts', formParts, { agree: formParts?.agree })
       setFormParts(
-        { agree: formParts?.agree },
+        { agree: formParts?.agree, personal: formParts?.personal },
         setAllFormsAreValid,
         setAllValidButAgree,
         true,
@@ -212,7 +212,6 @@ const InputForms = ({ disabled }: { disabled?: boolean }) => {
     }
     ;(validateAgrees as any).current.runValidation()
     ;(validatePersonal as any).current.runValidation()
-    
   }
   const dm = isEmpty(deliveryMethods)
     ? []
