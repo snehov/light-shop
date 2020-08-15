@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { PaymentMethodType } from 'utils/types'
 import { formatPriceOutput } from '../utils/priceOperations'
 const isEmpty = require('ramda').isEmpty
+const intersection = require('ramda').intersection
 
 const PaymentMethods = () => {
   const [paymentsMethods] = useGlobal('paymentMethods')
@@ -27,6 +28,12 @@ const PaymentMethods = () => {
       const allowedPayments = getAllowedPayments()
       console.log('paymentMethod', paymentMethod)
       //# if delivery changes and current payment is not supported by that delivery, change to fist in list of suppored
+      console.log(
+        'allowedPayments',
+        allowedPayments,
+        'deliveryMethods',
+        deliveryMethods
+      )
       if (!allowedPayments.includes(paymentMethod.toString())) {
         allowedPayments.length > 0
           ? setPaymentMethod(Number(allowedPayments[0]))
@@ -48,7 +55,13 @@ const PaymentMethods = () => {
       : deliveryMethods
           .filter(d => d.delivery_id == selectedDelivery)[0] //eslint-disable-line eqeqeq
           .payments.split(',')
-    return allowedPayements
+
+    const currentPayments = paymentsMethods.reduce((acc: any, cur) => {
+      return [...acc, cur.payment_id.toString()] // TODO: I dont like this "toSting()", make allowedPayements result as integers
+    }, [])
+
+    const allowedPresent = intersection(allowedPayements, currentPayments)
+    return allowedPresent
   }
 
   return (
