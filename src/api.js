@@ -3,6 +3,7 @@ import { getEnv } from 'utils/functions'
 
 const api = axios.create({
   baseURL: 'https://inwash.cz/shop/cart_api/',
+  //baseURL: 'https://snowcorp.cz/ls/cart_api/',
   //trailingSlash: true,
   withCredentials: true, // allows to sending sessionID
   headers: {

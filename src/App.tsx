@@ -32,21 +32,22 @@ const App = () => {
 
   return (
     <div className="App">
-      {/* <fieldset>
-        <legend>External app buttons</legend>
-        <button onClick={() => changeLang('en', i18n)} className="langToEn">
-          en
-        </button>
-        <button onClick={() => changeLang('cz', i18n)} className="langToCz">
-          cz
-        </button>
-        
-        <button onClick={() => addRandomItem()}>Add random item</button>
-        <button onClick={() => clearCartData()}>Clear cart at BE</button>
-        <button onClick={() => clearAllData()}>Reset All</button>
-      </fieldset> */}
-      {/* NODE_ENV:{process.env.NODE_ENV},{process.env.REACT_APP_MYENV}, Ue: */}
-      {/* getEnv() */}
+      {['development', 'test'].includes(getEnv()) && (
+        <fieldset>
+          <legend>External app buttons</legend>
+          <button onClick={() => changeLang('en', i18n)} className="langToEn">
+            en
+          </button>
+          <button onClick={() => changeLang('cz', i18n)} className="langToCz">
+            cz
+          </button>
+
+          <button onClick={() => addRandomItem()}>Add random item</button>
+          <button onClick={() => clearCartData()}>Clear cart at BE</button>
+          <button onClick={() => clearAllData()}>Reset All</button>
+        </fieldset>
+      )}
+      {getEnv()}
       <Cart />
       <UserLogin />
       {dapAllowed && <DeliveryAndPay disabled={!dapAllowed} />}

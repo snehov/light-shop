@@ -46,13 +46,16 @@ $selectedColor: #2196f3;
       width: 15%;
       &__input {
         font-size: 17px;
-        height: 20px;
+        /* height: 28px; */
         width: 53px;
         padding: 5px;
         text-align: center;
       }
       &__button {
         background-color: $normalColor;
+        border: 1px solid gray;
+        border-radius: 2px;
+        /* height: 21px; */
       }
       &__button:hover {
         background-color: $hoverColor;

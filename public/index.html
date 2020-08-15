@@ -12,6 +12,8 @@
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
+  <link rel='stylesheet' type='text/css' href='../pluginy/fancybox/jquery.fancybox.compressed.css?v=2.1.5' media='none'
+    onload="this.media='all';" />
   <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
   <!--
       Notice the use of %PUBLIC_URL% in the tags above.
@@ -45,6 +47,22 @@
       delivPayOpts_: '{"delivery":[{"delivery_id":"1","name":"PPL","payments":"1,2,3","require_address":"1","description":"","price":"120","personal_pickup":"1","free_shipping_from":"1000","delivery_time":"3","to_country":"cz","delivery_company_id":"0","payment_methods":"1,2,3"},{"delivery_id":"2","name":"Poštou - balík (možná) do ruky","payments":"1,2,3","require_address":"1","description":"","price":"150","personal_pickup":"0","free_shipping_from":"900","delivery_time":"125","to_country":"cz","delivery_company_id":"0","payment_methods":"1,2,3"},{"delivery_id":"3","name":"Osobní odběr","payments":"2,3,4","require_address":"0","description":"vyzvednete si u nás na adrese......","price":"0","personal_pickup":"1","free_shipping_from":"0","delivery_time":"0","to_country":"cz","delivery_company_id":"0","payment_methods":"2,3,4"},{"delivery_id":"4","name":"doprava bez plateb","payments":"","require_address":"0","description":"","price":"0","personal_pickup":"0","free_shipping_from":"0","delivery_time":"0","to_country":"cz","delivery_company_id":"0","payment_methods":""}],"payments":[{"payment_id":"1","name":"při převzetí od spediční firmy","description":"dfas","bank_transfer":"0","pay_before":"0","price":"17"},{"payment_id":"2","name":"Převodem","description":"","bank_transfer":"1","pay_before":"0","price":"0"},{"payment_id":"3","name":"Online platba","description":"","bank_transfer":"0","pay_before":"0","price":"0"},{"payment_id":"4","name":"Hotově při osobním převzetí u nás","description":"","bank_transfer":"0","pay_before":"0","price":"0"}]}',
       cartItems_: '{"cart":[{"product_id":"7","amount":"3","variant_attr1":"","variant_attr2":"","measure":"ks","price":"230.00","vat":null,"name":"jeste novejsi","link":"jeste-novejsi-592/sekceeeee/","pic":"","category":"čepice","supplier_id":"0","code":""},{"product_id":"4","amount":"2","variant_attr1":"","variant_attr2":"","measure":"ks","price":"123.00","vat":null,"name":"testovací kus","link":"testovaci-kus-879/sekceeeee/","pic":"","category":"čepice","supplier_id":"0","code":""},{"product_id":"9","amount":"2","variant_attr1":"","variant_attr2":"","measure":"ks","price":"16.00","vat":null,"name":"ted bych mel preskocit","link":"ted-bych-mel-preskocit/podsekcee-zb/","pic":"","category":"podsekcee ale zbozi","supplier_id":"0","code":""}],"sum":{"noVat":{"shipping":150,"paymentFee":17,"goodsSum":968,"sales":0,"total":1135},"vatIncl":{"shipping":"150","paymentFee":"17","goodsSum":968,"sales":0,"total":1135},"vat":[{"vat":0.21,"value":37,"name":"základní sazba"}],"notes":{"shipping_note":"Poštou - balík (možná) do ruky","paymentFee_note":"při převzetí od spediční firmy","sales_note":""}}}',
       orderInfo_: '{"paymentMethod":2,"deliveryMethod":2,"addressName":{"personal":{"name":"ds","tel":"ds"},"delivery":{"descr":"dfsd","street":"dfsd","city":"dsdf","zip":"32423"},"invoice":{"descr":"RER","street":"dfsd","city":"dsdf","zip":"32423"},"company":{"name":"dsfdf"}}}'
+    }
+  </script>
+  <% if (process.env.NODE_ENV != "development"){ %>
+  <script src="../pluginy/jquery-1.10.2.min.js"></script>
+  <script src="../pluginy/fancybox/jquery.fancybox.compressed.js"></script>
+  <% } %>
+  <script>
+    console.log("%NODE_ENV%")
+    window.onload = function () {
+      if (window.jQuery) {
+        $('.fancyIframe').fancybox({
+          width: '800px',
+          height: '80%',
+          type: 'iframe',
+        })
+      }
     }
   </script>
 </body>
