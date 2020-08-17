@@ -47,7 +47,6 @@ const App = () => {
           <button onClick={() => clearAllData()}>Reset All</button>
         </fieldset>
       )}
-      {getEnv()}
       <Cart />
       <UserLogin />
       {dapAllowed && <DeliveryAndPay disabled={!dapAllowed} />}
