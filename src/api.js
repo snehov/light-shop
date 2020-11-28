@@ -1,9 +1,9 @@
 import axios from 'axios'
 import { getEnv } from 'utils/functions'
 
+export const baseURL= 'https://pohadkovarezervace.cz/shop/cart_api/'
 const api = axios.create({
-  baseURL: 'https://inwash.cz/shop/cart_api/',
-  //baseURL: 'https://snowcorp.cz/ls/cart_api/',
+  baseURL: baseURL,
   //trailingSlash: true,
   withCredentials: true, // allows to sending sessionID
   headers: {
@@ -45,6 +45,8 @@ export const changeLang = lang => api.post('changeLang', lang)
 export const submitOrder = forms_data => api.post('submitOrder', forms_data)
 
 export const addRandomItem = () => api.get('addRandomItem')
+export const addPhysicalItem = () => api.get('addPhysicalItem')
+export const addOnlineItem = () => api.get('addOnlineItem')
 
 export const clearCartData = () => api.get('clearCart')
 export const clearAllData = () => api.get('resetAll')
