@@ -34,7 +34,7 @@ const App = () => {
 
   return (
     <div className="App">
-      {['development', 'test'].includes(getEnv()) && (
+      {['development', 'test', 'production'].includes(getEnv()) && (
         <fieldset>
           <legend>External app buttons</legend>
           <button onClick={() => changeLang('en', i18n)} className="langToEn">
