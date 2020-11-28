@@ -14,9 +14,11 @@ const App = () => {
   const [cartItems] = useGlobal('cartItems')
   const [selectedDelivery] = useGlobal('selectedDelivery')
   const [selectedPayment] = useGlobal('selectedPayment')
-  const [testVar] = useGlobal('testVar')
+  //const [testVar] = useGlobal('testVar')
   const changeLang = useDispatch('changeLang')
   const addRandomItem = useDispatch('addRandomItem')
+  const addPhysicalItem = useDispatch('addPhysicalItem')
+  const addOnlineItem = useDispatch('addOnlineItem')
   const clearCartData = useDispatch('clearCartData')
   const clearAllData = useDispatch('clearAllData')
   const { i18n } = useTranslation()
@@ -43,6 +45,8 @@ const App = () => {
           </button>
 
           <button onClick={() => addRandomItem()}>Add random item</button>
+          <button onClick={() => addPhysicalItem()}>Add physical item</button>
+          <button onClick={() => addOnlineItem()}>Add online item</button>
           <button onClick={() => clearCartData()}>Clear cart at BE</button>
           <button onClick={() => clearAllData()}>Reset All</button>
         </fieldset>

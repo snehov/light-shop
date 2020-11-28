@@ -11,6 +11,8 @@ import {
   submitOrder,
   changeLang,
   addRandomItem,
+  addPhysicalItem,
+  addOnlineItem,
   clearAllData,
   clearCartData,
 } from '../api'
@@ -143,8 +145,19 @@ addReducer('changeLang', async (global, dispatch, lang, i18n) => {
   }
   return {}
 })
+
 addReducer('addRandomItem', async () => {
   await addRandomItem()
+  window.location.reload()
+  return {}
+})
+addReducer('addPhysicalItem', async () => {
+  await addPhysicalItem()
+  window.location.reload()
+  return {}
+})
+addReducer('addOnlineItem', async () => {
+  await addOnlineItem()
   window.location.reload()
   return {}
 })

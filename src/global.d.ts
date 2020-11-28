@@ -74,6 +74,8 @@ declare module 'reactn/default' {
     clearAllData: (global: State, dispatch: Dispatch) => null
 
     addRandomItem: (global: State, dispatch: Dispatch) => null
+    addOnlineItem: (global: State, dispatch: Dispatch) => null
+    addPhysicalItem: (global: State, dispatch: Dispatch) => null
 
     createLogin: (
       global: State,
