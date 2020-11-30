@@ -23,7 +23,9 @@ const SubmitButton = ({
   } else if (!allFormsAreValid && !allValidButAgree) {
     submitInfo = t('orderInfo.missingFields')
   } else {
-    submitInfo = `${t('orderInfo.sendWithSum')} ${formatPriceOutput(cartInfo?.vatIncl?.total)} [TESTOVACÍ REŽIM]`
+    submitInfo = `${t('orderInfo.sendWithSum')} ${formatPriceOutput(
+      cartInfo?.vatIncl?.total
+    )} ` //[TESTOVACÍ REŽIM]
   }
 
   return (

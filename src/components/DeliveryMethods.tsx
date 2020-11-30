@@ -65,8 +65,8 @@ const DeliveryMethods = () => {
                 htmlFor={`delivery_${method.delivery_id}`}
                 className={`inputCont ${disabled ? 'inputCont--disabled' : ''}`}
               >
-                {method.name} <b>{formatPriceOutput(method.price)}</b> (id:
-                {method.delivery_id})
+                {method.name} <b>{formatPriceOutput(method.price)}</b> 
+                {/* (id:{method.delivery_id}) */}
                 <input
                   type="radio"
                   name="delivery"
