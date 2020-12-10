@@ -21,6 +21,12 @@ const inputsConf = {
     type: 'checkbox',
     label: 'orderInfo.agreeMarketing',
   },
+  comment: {
+    required: false,
+    type: 'textarea',
+    label: 'orderInfo.comment',
+    rows: 2,
+  },
 }
 const AgreeChecks = forwardRef(
   (
@@ -70,11 +76,28 @@ const AgreeChecks = forwardRef(
 
     const termsConditions = useField('terms', form)
     const mktg = useField('mktg', form)
+    const comment = useField('comment', form)
 
     return (
       <div className="formBlock">
-        <InputFF field={mktg} config={inputsConfig} g={dataName} />
-        <InputFF field={termsConditions} config={inputsConfig} g={dataName}>
+        <InputFF
+          field={comment}
+          config={inputsConfig}
+          g={dataName}
+          style={{width:"100%", maxWidth: 'initial' }}
+        />
+        <InputFF
+          field={mktg}
+          config={inputsConfig}
+          g={dataName}
+          style={{ maxWidth: 'initial' }}
+        />
+        <InputFF
+          field={termsConditions}
+          config={inputsConfig}
+          g={dataName}
+          style={{ maxWidth: 'initial' }}
+        >
           {terms && (
             <>
               {terms.label}

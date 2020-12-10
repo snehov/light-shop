@@ -19,6 +19,7 @@ import {
 import { FormPartType, FormPartsType } from 'utils/types'
 import SubmitButton from './SubmitButton'
 import AgreeChecks from './AgreeChecks'
+import Textarea from './ui-components/Textarea'
 const isEmpty = require('ramda').isEmpty
 
 const debounceFnc = debounce((launchDebounced: any) => {
@@ -335,7 +336,6 @@ const InputForms = ({ disabled }: { disabled?: boolean }) => {
           </div>
         </div>
       )}
-
       <div className="stdPadding">
         <AgreeChecks
           dataName="agree"

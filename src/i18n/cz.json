@@ -49,7 +49,8 @@
       "missingFields": "Ještě není vše vyplněno",
       "justAgreeLeft": "Už zbývá jen souhlasit s podmínkama",
       "agreeMarketing": "Souhlasím se zasíláním newsletteru",
-      "sendWithSum": "Odeslat objednávku v hodnotě "
+      "sendWithSum": "Odeslat objednávku v hodnotě ",
+      "comment": "Máte nějaké extra přání? Či důležitou informaci pro nás? Například keramickou ochranu na autě, folie? Či si třeba přejete vůz neparkovat do garáže? Zde nám můžete Váš požadavek napsat: "
     },
     "login": {
       "accountChoice": "Volba přihlášení",

@@ -48,7 +48,8 @@
       "missingFields": "Still some fields to fill",
       "justAgreeLeft": "Just agree with terms and condtitions left",
       "agreeMarketing": "Agree with receiving special offers emails",
-      "sendWithSum":"Send order with value of"
+      "sendWithSum": "Send order with value of",
+      "comment": "Your comment to the order"
     },
     "login": {
       "accountChoice": "Login type",
