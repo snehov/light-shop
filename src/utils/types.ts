@@ -118,3 +118,9 @@ export type SubmittedOrderData = {
     doruc_adr_json: { street: string; city: string; zip: string },
   }
 }
+export enum ApiCallStatus {
+  Nothing,
+  Pending,
+  Fetched,
+  Error,
+}

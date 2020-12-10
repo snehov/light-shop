@@ -1,16 +1,21 @@
 import React, { useGlobal } from 'reactn'
 import { useTranslation } from 'react-i18next'
 import CartItem from './components/CartItem'
-import { CartItemType } from './utils/types'
+import { CartItemType, ApiCallStatus } from './utils/types'
 import { formatPriceOutput } from 'utils/priceOperations'
 
 const Cart = () => {
   const [cartItems] = useGlobal('cartItems') // needs to define at global.d.ts
   const [cartInfo] = useGlobal('cartInfo')
+  const [cartItemsCall] = useGlobal('cartItemsCall')
   const { t } = useTranslation()
 
   return cartItems.length === 0 ? (
-    <div className="cart__header cart__header--empty">{t('cartEmpty')}</div>
+    <div className="cart__header cart__header--empty">
+      {cartItemsCall !== ApiCallStatus.Fetched
+        ? t('cartLoading')
+        : t('cartEmpty')}
+    </div>
   ) : (
     <div className="cart">
       <div className="cart__header">{t('cart')}</div>

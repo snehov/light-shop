@@ -4,6 +4,7 @@
     "deliveryMethods": "Delivery methods",
     "paymentMethods": "Payment methods",
     "cart": "Shopping cart",
+    "cartLoading": "Loading cart...",
     "cartEmpty": "Shopping cart is empty",
     "delivery": "delivery",
     "payment": "payment",

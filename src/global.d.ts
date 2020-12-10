@@ -8,7 +8,8 @@ import {
   CreateLogin,
   RegUserType,
   OrderCompletedScreen,
-  SubmittedOrderData
+  SubmittedOrderData,
+  ApiCallStatus
 } from './utils/types'
 // NOTE: changes here needs SERVER RESTART to apply changes
 
@@ -136,7 +137,8 @@ declare module 'reactn/default' {
     onlyOnlineItems: boolean
     showOrderCompletedScreen: boolean
     orderCompletedScreenType: OrderCompletedScreen
-    submittedOrderData: SubmittedOrderData 
+    submittedOrderData: SubmittedOrderData
+    cartItemsCall: ApiCallStatus
     testVar: {}
   }
 }

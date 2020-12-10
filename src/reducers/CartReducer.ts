@@ -16,7 +16,12 @@ import {
   clearAllData,
   clearCartData,
 } from '../api'
-import { CartType, CartItemType, OrderCompletedScreen } from 'utils/types'
+import {
+  CartType,
+  CartItemType,
+  OrderCompletedScreen,
+  ApiCallStatus,
+} from 'utils/types'
 import {
   parseSimpleCartList,
   saveLangPrefLocal,
@@ -25,6 +30,7 @@ import {
 const isEmpty = require('ramda').isEmpty
 
 setGlobal({ cartItems: [] })
+setGlobal({ cartItemsCall: ApiCallStatus.Nothing })
 setGlobal({ cartInfo: {} })
 setGlobal({ orderInfo: {} })
 setGlobal({ deliveryMethods: {} })
@@ -36,10 +42,8 @@ setGlobal({ onlyOnlineItems: false })
 setGlobal({ testVar: {} })
 setGlobal({ submittedOrderData: {} })
 
-/* addReducer('isSubmitting', () => {
-  return { isSubmitting: true }
-}) */
 addReducer('getCart', async (global, dispatch) => {
+  setGlobal({ cartItemsCall: ApiCallStatus.Pending })
   const cartSimple =
     JSON.stringify(window.localStorage.getItem('cartSimple')) || ''
 
@@ -48,6 +52,7 @@ addReducer('getCart', async (global, dispatch) => {
     'cartItems',
     () => fetchCart(cartSimple)
   )
+  setGlobal({ cartItemsCall: ApiCallStatus.Fetched })
   return parseIncomingCart(data)
 })
 addReducer(
@@ -126,18 +131,20 @@ addReducer('orderProcessedScreen', async (global, dispatch, submitOrderRes) => {
     if (payment.online_pay && global.orderInfo.onlinePayURL) {
       console.log('jdu to redirectnout', global.orderInfo.onlinePayURL)
       window.location.href = global.orderInfo.onlinePayURL
-    }else if(submitOrderRes?.res?.postOrderInstructions){
+    } else if (submitOrderRes?.res?.postOrderInstructions) {
       dispatch.showCompletedScreen(OrderCompletedScreen.SuccessScreen)
     }
-   /*  } else if (payment.bank_transfer) {
+    /*  } else if (payment.bank_transfer) {
       dispatch.showCompletedScreen(OrderCompletedScreen.BankTransfer)
     } else if (payment.pay_at_takeover) {
       dispatch.showCompletedScreen(OrderCompletedScreen.PersonalPay)
     } else {
       alert('A tady bude pokračování na stránku oznamující úspěch')
     } */
-  }else{
-    alert("Objednávka se nezdařila, zkuste to znovu nebo  nás kontatujte prosím")
+  } else {
+    alert(
+      'Objednávka se nezdařila, zkuste to znovu nebo  nás kontatujte prosím'
+    )
   }
 })
 

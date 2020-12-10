@@ -4,6 +4,7 @@
     "deliveryMethods": "Způsoby doručení",
     "paymentMethods": "Způsoby platby",
     "cart": "Košík",
+    "cartLoading": "Načítám košík...",
     "cartEmpty": "Košík je prázdný",
     "delivery": "doprava",
     "payment": "platba",
@@ -49,7 +50,7 @@
       "missingFields": "Ještě není vše vyplněno",
       "justAgreeLeft": "Už zbývá jen souhlasit s podmínkama",
       "agreeMarketing": "Souhlasím se zasíláním newsletteru",
-      "sendWithSum":"Odeslat objednávku v hodnotě "
+      "sendWithSum": "Odeslat objednávku v hodnotě "
     },
     "login": {
       "accountChoice": "Volba přihlášení",
