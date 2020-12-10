@@ -16,7 +16,7 @@ import {
   clearAllData,
   clearCartData,
 } from '../api'
-import { CartType, CartItemType } from 'utils/types'
+import { CartType, CartItemType, OrderCompletedScreen } from 'utils/types'
 import {
   parseSimpleCartList,
   saveLangPrefLocal,
@@ -34,6 +34,7 @@ setGlobal({ selectedPayment: 0 })
 setGlobal({ isSubmittingOrder: false })
 setGlobal({ onlyOnlineItems: false })
 setGlobal({ testVar: {} })
+setGlobal({ submittedOrderData: {} })
 
 /* addReducer('isSubmitting', () => {
   return { isSubmitting: true }
@@ -107,14 +108,14 @@ addReducer('submitOrder', async (global, dispatch, forms_data) => {
   setGlobal({ isSubmittingOrder: false })
   console.log('response.data', typeof response.data, response.data, response)
 
+  if (typeof response.data === 'object') {
+    setGlobal({ submittedOrderData: response.data?.res })
+    //return { submittedOrderData: response.data?.res } // TODO: maybe also validate returned structure // TODO: use this IF at all API calls
+  }
   dispatch.orderProcessedScreen(response.data)
 
-  if (typeof response.data === 'object') {
-    return response.data // TODO: maybe also validate returned structure // TODO: use this IF at all API calls
-  }
-
   //dispatch.orderProcessedScreen(response.data)
-  return {}
+  //return { fail: true, res: response }
 })
 addReducer('orderProcessedScreen', async (global, dispatch, submitOrderRes) => {
   console.log('orderProcessedScreen', submitOrderRes?.res?.status)
@@ -125,9 +126,18 @@ addReducer('orderProcessedScreen', async (global, dispatch, submitOrderRes) => {
     if (payment.online_pay && global.orderInfo.onlinePayURL) {
       console.log('jdu to redirectnout', global.orderInfo.onlinePayURL)
       window.location.href = global.orderInfo.onlinePayURL
+    }else if(submitOrderRes?.res?.postOrderInstructions){
+      dispatch.showCompletedScreen(OrderCompletedScreen.SuccessScreen)
+    }
+   /*  } else if (payment.bank_transfer) {
+      dispatch.showCompletedScreen(OrderCompletedScreen.BankTransfer)
+    } else if (payment.pay_at_takeover) {
+      dispatch.showCompletedScreen(OrderCompletedScreen.PersonalPay)
     } else {
       alert('A tady bude pokračování na stránku oznamující úspěch')
-    }
+    } */
+  }else{
+    alert("Objednávka se nezdařila, zkuste to znovu nebo  nás kontatujte prosím")
   }
 })
 
@@ -180,6 +190,11 @@ const parseIncomingCart = (data: CartData) => {
     JSON.stringify(parseSimpleCartList(data.cart))
   )
   // TODO: check incoming data format!!!
+
+  try {
+    // @ts-ignore
+    redrawBasketIcon(data)
+  } catch (e) {}
 
   const onlyOnlineItems = hasOnlyOnlineItems(data.cart)
   //if(onlyOnlineItems){}

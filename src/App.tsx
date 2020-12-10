@@ -7,6 +7,7 @@ import Cart from './Cart'
 import DeliveryAndPay from './components/DeliveryAndPay'
 import InputForms from './components/InputForms'
 import UserLogin from './components/UserLogin'
+import OrderCompletedScreen from './components/OrderCompletedScreen'
 import { getEnv } from 'utils/functions'
 const App = () => {
   const fetchCart = useDispatch('getCart')
@@ -14,6 +15,7 @@ const App = () => {
   const [cartItems] = useGlobal('cartItems')
   const [selectedDelivery] = useGlobal('selectedDelivery')
   const [selectedPayment] = useGlobal('selectedPayment')
+  const [showOrderCompletedScreen] = useGlobal('showOrderCompletedScreen')
   //const [testVar] = useGlobal('testVar')
   const changeLang = useDispatch('changeLang')
   const addRandomItem = useDispatch('addRandomItem')
@@ -34,7 +36,7 @@ const App = () => {
 
   return (
     <div className="App">
-      {['development', 'test', 'production'].includes(getEnv()) && (
+      {['development', 'test'].includes(getEnv()) && (
         <fieldset>
           <legend>External app buttons</legend>
           <button onClick={() => changeLang('en', i18n)} className="langToEn">
@@ -51,13 +53,20 @@ const App = () => {
           <button onClick={() => clearAllData()}>Reset All</button>
         </fieldset>
       )}
-      <Cart />
-      <UserLogin />
-      {dapAllowed && <DeliveryAndPay disabled={!dapAllowed} />}
-      {dapAllowed && <InputForms disabled={!addressAllowed} />}
-      {/* <div>ls:{localStorage.getItem('cartSimple')}</div>
-      <div>GS:{JSON.stringify(cartItems)}</div>
-      <div>test:{JSON.stringify(testVar)}</div> */}
+      {showOrderCompletedScreen ? (
+        <OrderCompletedScreen />
+      ) : (
+        <>
+          <Cart />
+          {/* <UserLogin /> */}
+          {dapAllowed && <DeliveryAndPay disabled={!dapAllowed} />}
+          {dapAllowed && <InputForms disabled={!addressAllowed} />}
+          {/* <div>ls:{localStorage.getItem('cartSimple')}</div>
+          <div>GS:{JSON.stringify(cartItems)}</div>
+          <div>test:{JSON.stringify(testVar)}</div> 
+          */}
+        </>
+      )}
     </div>
   )
 }
