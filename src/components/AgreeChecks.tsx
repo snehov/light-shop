@@ -33,7 +33,7 @@ const AgreeChecks = forwardRef(
       returnValues: Function
       prefillData?: any
     },
-    ref,
+    ref
   ) => {
     const [formValid, setFormValid] = useState(false)
     const [{ terms }] = useGlobal('orderInfo')
@@ -64,7 +64,7 @@ const AgreeChecks = forwardRef(
           name: dataName,
           dataValid: formValid,
         },
-        changedByUserInput(form, values) ? true : false,
+        changedByUserInput(form, values) ? true : false
       )
     }, [formValid, values]) // eslint-disable-line
 
@@ -73,8 +73,18 @@ const AgreeChecks = forwardRef(
 
     return (
       <div className="formBlock">
-        <InputFF field={mktg} config={inputsConfig} g={dataName} />
-        <InputFF field={termsConditions} config={inputsConfig} g={dataName}>
+        <InputFF
+          field={mktg}
+          config={inputsConfig}
+          g={dataName}
+          style={{ maxWidth: 'initial' }}
+        />
+        <InputFF
+          field={termsConditions}
+          config={inputsConfig}
+          g={dataName}
+          style={{ maxWidth: 'initial' }}
+        >
           {terms && (
             <>
               {terms.label}
@@ -91,7 +101,7 @@ const AgreeChecks = forwardRef(
         </InputFF>
       </div>
     )
-  },
+  }
 )
 
 export default AgreeChecks

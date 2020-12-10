@@ -33,7 +33,7 @@ const CartItem = (params: CartItemComponentType) => {
   return (
     <div className="cart-item">
       <div className="cart-item--name">
-        {item.name}(id:{item.product_id})
+        {item.name}{/* (id:{item.product_id}) */}
       </div>
       <div className="cart-item--amount">
         {!item.is_one_piece && (

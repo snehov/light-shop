@@ -6,6 +6,7 @@ type InputFFprops = {
   g?: string
   onKeyPress?: any
   children?: any
+  style?:object
 }
 const InputFF: FunctionComponent<InputFFprops> = ({
   field,
@@ -13,6 +14,7 @@ const InputFF: FunctionComponent<InputFFprops> = ({
   g,
   onKeyPress,
   children,
+  style
 }) => {
   const name = field.input.name
   const [useId, setUseId] = useState(name)
@@ -36,7 +38,7 @@ const InputFF: FunctionComponent<InputFFprops> = ({
     }
   }, []) // eslint-disable-line
   return (
-    <div className="inputLine">
+    <div className="inputLine" style={style}>
       {type === 'checkbox' && (
         <>
           <label className=" inputCont">

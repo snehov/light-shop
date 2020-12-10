@@ -29,7 +29,7 @@ export const saveLangPrefLocal = (lang) => {
 }
 
 export const getLangPrefLocal = () => {
-  return window.localStorage.getItem('lang')
+  return window.setAppLng || window.localStorage.getItem('lang')
 }
 
 export const hasOnlyOnlineItems = (cart) => {

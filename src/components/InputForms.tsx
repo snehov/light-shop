@@ -284,7 +284,7 @@ const InputForms = ({ disabled }: { disabled?: boolean }) => {
               />
             }
           </div>
-          <div className="stdPadding">
+          {/* <div className="stdPadding">
             <label className="inputCont cy-fillCompany">
               {t('company.companyOrder')}
               <input
@@ -302,7 +302,7 @@ const InputForms = ({ disabled }: { disabled?: boolean }) => {
                 ref={validateCompany}
               />
             )}
-          </div>
+          </div> */}
         </div>
       ) : (
         // online products only
