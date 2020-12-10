@@ -40,8 +40,10 @@ export const PaymentMethod = {
   price: 1,
   online_pay: true,
   enabled: true,
+  bank_transfer: true,
+  account: 1,
+  pay_at_takeover: true,
   //description
-  //bank_transfer
   //pay_before
 }
 export type PaymentMethodType = typeof PaymentMethod
@@ -98,4 +100,21 @@ export type RegUserType = {
   name: string
   res?: string
   err_code?: string
+}
+export enum OrderCompletedScreen {
+  //BankTransfer,
+  //PersonalPay,
+  SuccessScreen,
+  OnlinePaySucces,
+  OnlinePayFail,
+}
+export type SubmittedOrderData = {
+  status: string
+  newOrderId: number
+  newOrderNumber: string
+  postOrderInstructions: any
+  orderData: {
+    cena_objednavky: number
+    doruc_adr_json: { street: string; city: string; zip: string },
+  }
 }
