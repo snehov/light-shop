@@ -38,6 +38,13 @@ $selectedColor: #2196f3;
     &--name {
       min-width: 250px;
       width: 45%;
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
     }
     &--amount {
       display: flex;

@@ -19,7 +19,6 @@ import {
 import { FormPartType, FormPartsType } from 'utils/types'
 import SubmitButton from './SubmitButton'
 import AgreeChecks from './AgreeChecks'
-import Textarea from './ui-components/Textarea'
 const isEmpty = require('ramda').isEmpty
 
 const debounceFnc = debounce((launchDebounced: any) => {
@@ -318,6 +317,7 @@ const InputForms = ({ disabled }: { disabled?: boolean }) => {
           </div>
         </div>
       )}
+
       <div className="stdPadding">
         <AgreeChecks
           dataName="agree"
@@ -334,17 +334,6 @@ const InputForms = ({ disabled }: { disabled?: boolean }) => {
           onScreenValidation={onScreenValidation}
         />
       </div>
-      {/*<br />
-      <br />
-      <b style={{ color: 'red' }}>...</b>
-      <br />
-       <cite>
-        Next steps:
-        <br />
-        1) <s>submit endpoint</s>, validate FE data and process order, on FE
-        redirect to succes screen
-        <br />
-      </cite> */}
       <br />
     </div>
   )
