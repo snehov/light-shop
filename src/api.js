@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { getEnv } from 'utils/functions'
+import { getEnv } from './utils/functions'
 
 export const baseURL= 'https://pohadkovarezervace.cz/shop/cart_api/'
 const api = axios.create({

@@ -49,7 +49,7 @@
     ]
   },
   "devDependencies": {
-    "cypress": "^4.3.0",
+    "cypress": "^4.12.1",
     "eslint-plugin-cypress": "^2.10.3",
     "pre-git": "^3.17.1",
     "react-test-renderer": "^16.13.1",
