@@ -50,7 +50,8 @@
       "missingFields": "Ještě není vše vyplněno",
       "justAgreeLeft": "Už zbývá jen souhlasit s podmínkama",
       "agreeMarketing": "Souhlasím se zasíláním newsletteru",
-      "sendWithSum": "Odeslat objednávku v hodnotě "
+      "sendWithSum": "Odeslat objednávku v hodnotě ",
+      "comment": "Komentář k objednávce"
     },
     "login": {
       "accountChoice": "Volba přihlášení",

@@ -6,7 +6,7 @@ type InputFFprops = {
   g?: string
   onKeyPress?: any
   children?: any
-  style?:object
+  style?: object
 }
 const InputFF: FunctionComponent<InputFFprops> = ({
   field,
@@ -14,7 +14,7 @@ const InputFF: FunctionComponent<InputFFprops> = ({
   g,
   onKeyPress,
   children,
-  style
+  style,
 }) => {
   const name = field.input.name
   const [useId, setUseId] = useState(name)
@@ -28,9 +28,9 @@ const InputFF: FunctionComponent<InputFFprops> = ({
       setUseId(`${name}_${g}`)
     } else {
       const elements = [...(document.querySelectorAll('[id]') as any)]
-      const ids = elements.map((el) => el.id)
+      const ids = elements.map(el => el.id)
       const dups = elements.filter(
-        (el) => ids.filter((id) => id === el.id).length > 1,
+        el => ids.filter(id => id === el.id).length > 1
       )
       if (dups.length > 0) {
         setUseId(`${name}_${Math.floor(Math.random() * 100)}`)
@@ -54,7 +54,28 @@ const InputFF: FunctionComponent<InputFFprops> = ({
           </div>
         </>
       )}
-      {type !== 'checkbox' && (
+      {type === 'textarea' && (
+        <>
+          <label className="labelToInput" htmlFor={useId}>
+            {children || config[name].label}
+            {required && <span title="povinné pole">*</span>}
+          </label>
+          <textarea
+            {...field.input}
+            placeholder={config[name].placeholder}
+            className={showError ? 'input--error input' : 'input'}
+            id={useId}
+            rows={config[name].rows || 3}
+            onKeyPress={onKeyPress}
+          />
+          <div
+            className={showError ? 'validation--error' : 'validation--empty'}
+          >
+            {showError && field.meta.error}
+          </div>
+        </>
+      )}
+      {!['textarea', 'checkbox'].includes(type) && (
         <>
           <label className="labelToInput" htmlFor={useId}>
             {children || config[name].label}
