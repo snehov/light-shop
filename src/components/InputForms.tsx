@@ -32,7 +32,7 @@ const checkAllFormsValid = (
 ) => {
   let requiredParts = ['agree']
   if (!noInputs) {
-    requiredParts = ['personal', 'invoice']
+    requiredParts = ['personal']//, 'invoice'
     !noDeliveryAddress && requiredParts.push('delivery')
   }
   return skipParts
@@ -57,9 +57,17 @@ const setFormParts = (
     )
   }
 }
+// NOTE: to ALLOW INVOICE data
+// # add/uncomment requiredParts 'invoice' appox. line 35
+// # change default copyInvoiceAddr to TRUE
+// # uncomment const validateInvoice = useRef() at approx. 203
+// # uncomment component dataName="invoice"
 
+// to allow comany info 
+// # uncomment const validateCompany = useRef()
+// # uncomment component  dataName="company"
 const InputForms = ({ disabled }: { disabled?: boolean }) => {
-  const [copyInvoiceAddr, setCopyInvoiceAddr] = useState(true)
+  const [copyInvoiceAddr, setCopyInvoiceAddr] = useState(false)//true
   const [noDeliveryAddress, setNoDeliveryAddress] = useState(false)
   const [companyVisible, setCompanyVisible] = useState<boolean | undefined>(
     undefined
@@ -196,8 +204,8 @@ const InputForms = ({ disabled }: { disabled?: boolean }) => {
 
   const validatePersonal = useRef()
   const validateDelivery = useRef()
-  const validateInvoice = useRef()
-  const validateCompany = useRef()
+  // const validateInvoice = useRef()
+  // const validateCompany = useRef()
   const validateAgrees = useRef()
   const onScreenValidation = () => {
     if (!onlyOnlineItems) {
@@ -205,10 +213,10 @@ const InputForms = ({ disabled }: { disabled?: boolean }) => {
       if (!noDeliveryAddress) {
         ;(validateDelivery as any).current.runValidation()
       }
-      ;(validateInvoice as any).current.runValidation()
-      if ((validateCompany as any).current /* && companyVisible */) {
+      /* ;(validateInvoice as any).current.runValidation()
+      if ((validateCompany as any).current) {
         ;(validateCompany as any).current.runValidation()
-      }
+      } */
     }
     ;(validateAgrees as any).current.runValidation()
     ;(validatePersonal as any).current.runValidation()
@@ -258,7 +266,7 @@ const InputForms = ({ disabled }: { disabled?: boolean }) => {
             )}
           </div>
 
-          <div className="stdPadding">
+          {/* <div className="stdPadding">
             {!noDeliveryAddress && (
               <label className="inputCont cy-invAsDeliv">
                 {t('company.invAddrAsDeliv')}
@@ -283,7 +291,7 @@ const InputForms = ({ disabled }: { disabled?: boolean }) => {
                 copyContent={(formParts as any).delivery}
               />
             }
-          </div>
+          </div> */}
           {/* <div className="stdPadding">
             <label className="inputCont cy-fillCompany">
               {t('company.companyOrder')}
