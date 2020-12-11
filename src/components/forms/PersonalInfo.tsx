@@ -15,14 +15,14 @@ const inputsConf = {
     required: true,
     minLength: 2,
     label: 'personal.nameSurname',
-    placeholder: 'personal.nameSurname',
+    placeholder: 'personal.nameSurname_ph',
   },
   tel: {
     required: true,
     type: 'tel',
-    placeholder: '+420',
     default: '+420 ',
     label: 'personal.tel',
+    placeholder: 'personal.tel_ph',
   },
   email: {
     required: true,

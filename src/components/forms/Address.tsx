@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next'
 import { useForm, useField } from 'react-final-form-hooks'
 import { finalFormValidation, changedByUserInput } from 'utils/formsFnc'
 import { InputFF } from 'components/ui-components'
-import addi18toInputs from "i18n/addi18toInputs"
+import addi18toInputs from 'i18n/addi18toInputs'
 
 const inputsConf = {
   descr: {
@@ -19,9 +19,13 @@ const inputsConf = {
     required: true,
     minLength: 2,
     label: 'address.street',
-    placeholder:'address.street_ph',
+    placeholder: 'address.street_ph',
   },
-  city: { label: 'address.city', required: true, placeholder: 'address.city' },
+  city: {
+    label: 'address.city',
+    required: true,
+    placeholder: 'address.city_ph',
+  },
   zip: {
     label: 'address.zip',
     type: 'number',
@@ -50,11 +54,11 @@ const Address = forwardRef(
       altName?: string
       prefillData?: any
     },
-    ref,
+    ref
   ) => {
     const [formValid, setFormValid] = useState(false)
     const { t } = useTranslation()
-    const inputsConfig = addi18toInputs(inputsConf,t)
+    const inputsConfig = addi18toInputs(inputsConf, t)
     let formSource = {}
     const { form, handleSubmit, values } = useForm({
       onSubmit: (values: any) => {},
@@ -80,7 +84,7 @@ const Address = forwardRef(
           name: dataName,
           dataValid: formValid,
         },
-        changedByUserInput(form, values) ? true : false,
+        changedByUserInput(form, values) ? true : false
       )
     }, [formValid, values]) // eslint-disable-line
 
@@ -106,7 +110,7 @@ const Address = forwardRef(
         <InputFF field={zip} config={inputsConfig} g={dataName} />
       </div>
     )
-  },
+  }
 )
 
 export default Address

@@ -16,21 +16,24 @@
     "cartNeedItems": "Košík musí obsahovat zboží",
     "personal": {
       "personalInfo": "Základní údaje",
-      "nameSurname": "Jméno a přijmení",
+      "nameSurname": "Jméno a příjmení",
+      "nameSurname_ph": "např.: Rostislav Kozela",
       "tel": "Telefon",
+      "tel_ph": "např.: +420 606 572 439",
       "email": "E-mail",
-      "email_ph": "např.: franta@example.cz"
+      "email_ph": "např.: vexlák@seznam.cz"
     },
     "address": {
       "addresDelivery": "Adresa doručení",
       "addressPickup": "Adresa vyzvednutí",
       "place": "Popis místa",
-      "place_ph": "např.: firma/vchod/recepce/patro",
+      "place_ph": "např.: třetí strom vpravo",
       "street": "Ulice a č.p.",
-      "street_ph": "např.: Stoupající 983/25",
+      "street_ph": "např.: Na Stínadlech 2796",
       "city": "Město",
+      "city_ph": "např.: Teplice",
       "zip": "PSČ",
-      "zip_ph": "např.: 14900"
+      "zip_ph": "např.: 41501"
     },
     "company": {
       "addressInvoice": "Fakturační adresa",
@@ -49,7 +52,7 @@
       "choseDaP": "Dokončete výběr dopravy a platby",
       "missingFields": "Ještě není vše vyplněno",
       "justAgreeLeft": "Už zbývá jen souhlasit s podmínkama",
-      "agreeMarketing": "Souhlasím se zasíláním newsletteru",
+      "agreeMarketing": "Zašlete mi občas žhavý drb z Pohádkové rezervace",
       "sendWithSum": "Odeslat objednávku v hodnotě ",
       "comment": "Komentář k objednávce"
     },
