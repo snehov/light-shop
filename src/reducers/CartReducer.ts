@@ -44,16 +44,23 @@ setGlobal({ submittedOrderData: {} })
 
 addReducer('getCart', async (global, dispatch) => {
   setGlobal({ cartItemsCall: ApiCallStatus.Pending })
-  const cartSimple =
-    JSON.stringify(window.localStorage.getItem('cartSimple')) || ''
+  let cart
+  try {
+    const cartSimple =
+      JSON.stringify(window.localStorage.getItem('cartSimple')) || ''
 
-  const data: any = await dataFromHtmlOrApi_firstTimeOnly(
-    global.cartItems,
-    'cartItems',
-    () => fetchCart(cartSimple)
-  )
-  setGlobal({ cartItemsCall: ApiCallStatus.Fetched })
-  return parseIncomingCart(data)
+    const data = await dataFromHtmlOrApi_firstTimeOnly(
+      global.cartItems,
+      'cartItems',
+      () => fetchCart(cartSimple)
+    )
+    setGlobal({ cartItemsCall: ApiCallStatus.Fetched })
+    cart = parseIncomingCart(data)
+  } catch (err) {
+    setGlobal({ cartItemsCall: ApiCallStatus.Error })
+    cart = { cartItems: [] }
+  }
+  return cart
 })
 addReducer(
   'changeCartItemAmount',

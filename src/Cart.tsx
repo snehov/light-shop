@@ -15,6 +15,7 @@ const Cart = () => {
       {cartItemsCall !== ApiCallStatus.Fetched
         ? t('cartLoading')
         : t('cartEmpty')}
+      {cartItemsCall === ApiCallStatus.Error && 'Chyba košíku'}
     </div>
   ) : (
     <div className="cart">
