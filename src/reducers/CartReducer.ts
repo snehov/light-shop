@@ -46,17 +46,19 @@ addReducer('getCart', async (global, dispatch) => {
   setGlobal({ cartItemsCall: ApiCallStatus.Pending })
   let cart
   try {
-    const cartSimple =
-      JSON.stringify(window.localStorage.getItem('cartSimple')) || ''
-
+    const cartSimple = window.localStorage.getItem('cartSimple')
+      ? JSON.stringify(window.localStorage.getItem('cartSimple'))
+      : ''
     const data = await dataFromHtmlOrApi_firstTimeOnly(
       global.cartItems,
       'cartItems',
-      () => fetchCart(cartSimple)
+      () => fetchCart(cartSimple),
+      cartSimple ? JSON.parse(cartSimple) : null
     )
     setGlobal({ cartItemsCall: ApiCallStatus.Fetched })
     cart = parseIncomingCart(data)
   } catch (err) {
+    console.log('BROKEN init cartItems, catch, load empty', err)
     setGlobal({ cartItemsCall: ApiCallStatus.Error })
     cart = { cartItems: [] }
   }
@@ -224,31 +226,51 @@ const parseIncomingCart = (data: CartData) => {
 //  1) HTML DOCUMENT where values rendered by server there,
 // if not found then fallback to
 //  2) use API call
-const dataFromHtmlOrApi = async (domVar: string, apiCall: any) => {
+const dataFromHtmlOrApi = async (
+  domVar: string,
+  apiCall: any,
+  localSimpleCopy?: object
+) => {
   let data
   if ((window as any)['APP_DATA'] && (window as any)['APP_DATA'][domVar]) {
     data = JSON.parse((window as any)['APP_DATA'][domVar])
     console.log('data z html', domVar, data)
   }
+  if (domVar === 'cartItems' && data?.cart) {
+    if (data.cart.length === 0 && localSimpleCopy) {
+      console.log(
+        'init data empty, localstorage has items=> renew from local through API'
+      )
+      // NOTE: situation when=>
+      // # server send empty cart data in HTML, but in localstorage we have cached items
+      // # it means SESSION has ended (empty data send in init HTML), but we want to renew localstorage data
+      // # in other words, dont trust data in HTML more than those in localstorage
+      // # it may cause LOOP?
+      data = false
+    }
+  }
   if (!data) {
     let response = await apiCall()
     data = response.data
-    console.log('data z API', domVar, data)
+    console.log('data z API', domVar, domVar.length, data)
   }
   return data
 }
 // operate previous fnc (dataFromHtmlOrApi), but first call time only, oherwise API call
 const dataFromHtmlOrApi_firstTimeOnly = async (
-  globVar: any,
-  domVar: string,
-  apiCall: any
+  globVar: any, //redux
+  domVar: string, //string name of html input var
+  apiCall: any, //prepared api call (curry)
+  localSimpleCopy?: any //localstorage content
 ) => {
   let data: any
+  // Nemám nic v reduxu
   if (isEmpty(globVar)) {
     console.log('first time', domVar)
     // on first app init try to reach in html server rendered cartItems Data
-    data = await dataFromHtmlOrApi(domVar, apiCall)
+    data = await dataFromHtmlOrApi(domVar, apiCall, localSimpleCopy)
   } else {
+    // REDUX mám, chci nová data
     // on every other time, ask ONLY to server to actual data
     console.log('any other time DIRECT API', domVar)
     const response = await apiCall()
