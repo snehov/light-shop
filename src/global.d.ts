@@ -122,6 +122,10 @@ declare module 'reactn/default' {
     isLoggingIn: boolean
     regUser: RegUserType
     onlyOnlineItems: boolean
-    testVar:{}
+    showOrderCompletedScreen: boolean
+    orderCompletedScreenType: OrderCompletedScreen
+    submittedOrderData: SubmittedOrderData
+    cartItemsCall: ApiCallStatus
+    testVar: {}
   }
 }

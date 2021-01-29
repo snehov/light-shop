@@ -99,3 +99,26 @@ export type RegUserType = {
   res?: string
   err_code?: string
 }
+export enum OrderCompletedScreen {
+  //BankTransfer,
+  //PersonalPay,
+  SuccessScreen,
+  OnlinePaySucces,
+  OnlinePayFail,
+}
+export type SubmittedOrderData = {
+  status: string
+  newOrderId: number
+  newOrderNumber: string
+  postOrderInstructions: any
+  orderData: {
+    cena_objednavky: number
+    doruc_adr_json: { street: string; city: string; zip: string },
+  }
+}
+export enum ApiCallStatus {
+  Nothing,
+  Pending,
+  Fetched,
+  Error,
+}

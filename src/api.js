@@ -45,6 +45,8 @@ export const changeLang = lang => api.post('changeLang', lang)
 export const submitOrder = forms_data => api.post('submitOrder', forms_data)
 
 export const addRandomItem = () => api.get('addRandomItem')
+export const addPhysicalItem = () => api.get('addPhysicalItem')
+export const addOnlineItem = () => api.get('addOnlineItem')
 
 export const clearCartData = () => api.get('clearCart')
 export const clearAllData = () => api.get('resetAll')

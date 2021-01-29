@@ -16,7 +16,7 @@ import {
   clearAllData,
   clearCartData,
 } from '../api'
-import { CartType, CartItemType } from 'utils/types'
+import { CartType, CartItemType, OrderCompletedScreen } from 'utils/types'
 import {
   parseSimpleCartList,
   saveLangPrefLocal,
@@ -34,6 +34,7 @@ setGlobal({ selectedPayment: 0 })
 setGlobal({ isSubmittingOrder: false })
 setGlobal({ onlyOnlineItems: false })
 setGlobal({ testVar: {} })
+setGlobal({ submittedOrderData: {} })
 
 /* addReducer('isSubmitting', () => {
   return { isSubmitting: true }
@@ -107,13 +108,11 @@ addReducer('submitOrder', async (global, dispatch, forms_data) => {
   setGlobal({ isSubmittingOrder: false })
   console.log('response.data', typeof response.data, response.data, response)
 
-  dispatch.orderProcessedScreen(response.data)
-
   if (typeof response.data === 'object') {
-    return response.data // TODO: maybe also validate returned structure // TODO: use this IF at all API calls
+    setGlobal({ submittedOrderData: response.data?.res })
+    //return response.data // TODO: maybe also validate returned structure // TODO: use this IF at all API calls
   }
-
-  //dispatch.orderProcessedScreen(response.data)
+  dispatch.orderProcessedScreen(response.data)
   return {}
 })
 addReducer('orderProcessedScreen', async (global, dispatch, submitOrderRes) => {
@@ -125,9 +124,17 @@ addReducer('orderProcessedScreen', async (global, dispatch, submitOrderRes) => {
     if (payment.online_pay && global.orderInfo.onlinePayURL) {
       console.log('jdu to redirectnout', global.orderInfo.onlinePayURL)
       window.location.href = global.orderInfo.onlinePayURL
+    } else if (submitOrderRes?.res?.postOrderInstructions) {
+      dispatch.showCompletedScreen(OrderCompletedScreen.SuccessScreen)
     } else {
-      alert('A tady bude pokračování na stránku oznamující úspěch')
+      alert(
+        'Objednávka se nezdařila, zkuste to znovu nebo  nás kontatujte prosím'
+      )
     }
+  } else {
+    alert(
+      'Objednávka se nezdařila, zkuste to znovu nebo  nás kontatujte prosím'
+    )
   }
 })
 
