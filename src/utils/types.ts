@@ -28,6 +28,8 @@ export const DeliveryMethod = {
   description: 'a',
   is_online: true,
   enabled: true,
+  require_specification: true,
+  specification_type: 'a',
 }
 //export type DeliveryMethodTypeIncl = typeof DeliveryMethod
 //type EE = { payments: Array<number> }
@@ -115,7 +117,7 @@ export type SubmittedOrderData = {
   postOrderInstructions: any
   orderData: {
     cena_objednavky: number
-    doruc_adr_json: { street: string; city: string; zip: string },
+    doruc_adr_json: { street: string; city: string; zip: string }
   }
 }
 export enum ApiCallStatus {
@@ -123,4 +125,26 @@ export enum ApiCallStatus {
   Pending,
   Fetched,
   Error,
+}
+export type ZasilkovnaSearchRes = {
+  id: number
+  name: string
+  special: string
+  place: string
+  street: string
+  city: string
+  psc: string
+  zip: string
+  country: string
+  url: string
+  lat: string
+  lon: string
+  opening: string
+  directions: string
+}
+export type PickupPlaceDetailType = ZasilkovnaSearchRes
+
+export type DeliverySpecs = {
+  label: string
+  data: string
 }

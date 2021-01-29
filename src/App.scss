@@ -458,3 +458,86 @@ fieldset {
     flex-flow: row;
   }
 }
+
+.modal {
+  &--overlay {
+    display: block; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 10; /* Sit on top */
+    padding-top: 5vh; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    max-height: 90vh;
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+  }
+  &--window {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+  }
+  &--close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  &--close:hover,
+  &--close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
+}
+.pickupPlace {
+  &--header {
+    border-bottom: 1px solid $borderColor;
+    padding-bottom: 15px;
+  }
+  &--name {
+    margin: 0px;
+  }
+  &--search {
+    width: 300px;
+    max-width: 100%;
+    margin: 10px 0;
+  }
+  &--searchInstruction {
+    font-size: 20px;
+    font-weight: bold;
+  }
+  &--resItem {
+    height: 20px;
+    padding: 6px 8px;
+    cursor: pointer;
+  }
+  &--resItem:hover {
+    background-color: $normalColor;
+  }
+  &--change {
+    text-decoration: underline;
+  }
+  &--detail {
+    border-bottom: 1px solid $borderColor;
+    padding: 0px 20px 20px;
+    margin-bottom: 20px;
+    &Body {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: normal;
+    }
+  }
+  &--leftHalf {
+    max-width: 890px;
+  }
+  &--rightHalf {
+    padding: 30px 0 0 15px;
+    max-width: 350px;
+  }
+}

@@ -1,23 +1,43 @@
 import React, { useDispatch, useState, useEffect, useGlobal } from 'reactn'
 import { useTranslation } from 'react-i18next'
-import { DeliveryMethodType } from 'utils/types'
+import { DeliveryMethodType, DeliverySpecs } from 'utils/types'
 import { formatPriceOutput } from '../utils/priceOperations'
+import ModalZasilkovna from './modals/ModalZasilkovna'
 const isEmpty = require('ramda').isEmpty
+const isNil = require('ramda').isNil
 
 const DeliveryMethods = () => {
   const [deliveryMethods] = useGlobal('deliveryMethods')
   const [orderInfo] = useGlobal('orderInfo')
   const [onlyOnlineItems] = useGlobal('onlyOnlineItems')
   const [deliveryMethod, setDeliveryMethod] = useState(0)
+  const [zasilkovnaVisible, setZasilkovnaVisible] = useState(false)
   const changeDeliveryMethod = useDispatch('changeDeliveryMethod')
+  const [deliverySpecification, setDeliverySpecification] = useState<
+    DeliverySpecs | undefined
+  >()
+  const [selectedZasilkovnaPlace] = useGlobal('selectedZasilkovnaPlace')
+
+  //# used generally for initial render (prefilled value from server), then for every change as well
+  useEffect(() => {
+    if (!isNil(selectedZasilkovnaPlace)) {
+      const label = `${selectedZasilkovnaPlace.city}, ${selectedZasilkovnaPlace.place}` // note: should be equal with confirmModal() at ModalZasilkovna.tsx
+      const placeId = String(selectedZasilkovnaPlace.id)
+      setDeliverySpecification({ label, data: placeId })
+    }
+  }, [selectedZasilkovnaPlace])
+
   const { t } = useTranslation()
   useEffect(() => {
     orderInfo?.deliveryMethod && setDeliveryMethod(orderInfo.deliveryMethod)
   }, [orderInfo])
 
+  //# dispatch change to API
   useEffect(() => {
-    changeDeliveryMethod(deliveryMethod)
-  }, [deliveryMethod]) // eslint-disable-line
+    deliverySpecification
+      ? changeDeliveryMethod(deliveryMethod, deliverySpecification.data)
+      : changeDeliveryMethod(deliveryMethod)
+  }, [deliveryMethod, deliverySpecification]) // eslint-disable-line
 
   //# autochange selected delivery when list of allowed changes and is selected currently unsupported choice
   useEffect(() => {
@@ -31,7 +51,32 @@ const DeliveryMethods = () => {
 
   const changeMethod = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedValue = Number(e.target.value)
-    setDeliveryMethod(selectedValue)
+    const methodDetail = deliveryMethods.filter(
+      m => m.delivery_id === selectedValue
+    )[0]
+    if (methodDetail.require_specification) {
+      if (methodDetail.specification_type === 'zasilkovna') {
+        setZasilkovnaVisible(true)
+      }
+      // potential another extra delivery option/providers
+    } else {
+      setDeliverySpecification(undefined) // need to reset delivery specification
+      changeMethodConfirm(selectedValue)
+    }
+  }
+
+  const changeMethodConfirm = (selectedValue: number) => {
+    selectedValue !== 0 && setDeliveryMethod(selectedValue)
+  }
+
+  const confirmZasilkovnaChoice = (specs: DeliverySpecs) => {
+    const zasilkovnaDeliveryId = !isEmpty(deliveryMethods)
+      ? deliveryMethods.filter(d => d.specification_type === 'zasilkovna')[0]
+          .delivery_id
+      : 0
+
+    setDeliverySpecification(specs)
+    changeMethodConfirm(zasilkovnaDeliveryId)
   }
 
   const getAllowedDelivery = () => {
@@ -48,6 +93,13 @@ const DeliveryMethods = () => {
 
   return (
     <div className="deliveryChoice">
+      {zasilkovnaVisible && (
+        <ModalZasilkovna
+          selected={deliverySpecification && deliverySpecification.data}
+          close={() => setZasilkovnaVisible(!zasilkovnaVisible)}
+          confirm={confirmZasilkovnaChoice}
+        />
+      )}
       <h2>
         {
           t('deliveryMethods') // eslint-disable-line
@@ -56,16 +108,27 @@ const DeliveryMethods = () => {
       {!isEmpty(deliveryMethods) &&
         deliveryMethods.map((method: DeliveryMethodType) => {
           const allowedDelivery = getAllowedDelivery()
-          const disabled = !method.enabled
-            ? true
-            : allowedDelivery && !allowedDelivery.includes(method.delivery_id)
+          const disabled = false //!method.enabled
+          //? true
+          //: allowedDelivery && !allowedDelivery.includes(method.delivery_id)
           return (
             <div key={method.delivery_id}>
               <label
                 htmlFor={`delivery_${method.delivery_id}`}
                 className={`inputCont ${disabled ? 'inputCont--disabled' : ''}`}
               >
-                {method.name} <b>{formatPriceOutput(method.price)}</b> 
+                {method.name} {/* zasilkovna */}
+                {method.delivery_id == deliveryMethod && deliverySpecification && (
+                  <span
+                    onClick={() => setZasilkovnaVisible(true)}
+                    className="pickupPlace--change"
+                    title="změnit pobočku zásilkovny"
+                  >
+                    {deliverySpecification.label}
+                  </span>
+                )}
+                {/* -end zasilkovna- */}
+                <b> {formatPriceOutput(method.price)}</b>
                 {/* (id:{method.delivery_id}) */}
                 <input
                   type="radio"

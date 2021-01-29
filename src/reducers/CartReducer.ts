@@ -15,6 +15,7 @@ import {
   addOnlineItem,
   clearAllData,
   clearCartData,
+  zasilkovnaSearch,
 } from '../api'
 import {
   CartType,
@@ -41,6 +42,8 @@ setGlobal({ isSubmittingOrder: false })
 setGlobal({ onlyOnlineItems: false })
 setGlobal({ testVar: {} })
 setGlobal({ submittedOrderData: {} })
+setGlobal({ searchZasilkovnaRes: [] })
+setGlobal({ selectedZasilkovnaPlace: undefined })
 
 addReducer('getCart', async (global, dispatch) => {
   setGlobal({ cartItemsCall: ApiCallStatus.Pending })
@@ -89,10 +92,25 @@ addReducer('getDeliveryAndPay', async (global, dispatch) => {
   console.error('invalid incoming data format at getDeliveryAndPay')
   return {}
 })
-addReducer('changeDeliveryMethod', async (global, dispatch, delivery_id) => {
-  setGlobal({ selectedDelivery: delivery_id })
-  let response = await changeDeliveryMethod(delivery_id)
-  return parseIncomingCart(response.data)
+addReducer(
+  'changeDeliveryMethod',
+  async (global, dispatch, delivery_id, spec_data) => {
+    setGlobal({ selectedDelivery: delivery_id })
+    let response = await changeDeliveryMethod(delivery_id, spec_data)
+    return parseIncomingCart(response.data)
+  }
+)
+addReducer('searchZasilkovnaPlace', async (global, dispatch, search) => {
+  let response = await zasilkovnaSearch(search)
+  if (typeof response.data === 'object') {
+    return { searchZasilkovnaRes: response.data }
+  }
+  return { searchZasilkovnaRes: [] }
+})
+addReducer('setZasilkovnaPlace', async (global, dispatch, place, callback) => {
+  //await setZasilkovnaPlace(delivery_id)
+  callback()
+  return { selectedZasilkovnaPlace: place }
 })
 addReducer('changePaymentMethod', async (global, dispatch, payment_id) => {
   setGlobal({ selectedPayment: payment_id })
@@ -109,6 +127,7 @@ addReducer('fetchOrderInfo', async global => {
     orderInfo: data,
     selectedDelivery: data.deliveryMethod,
     regUser: data.regUser,
+    selectedZasilkovnaPlace: data.deliverySpecificationData || {},
     //selectedPayment: data.paymentMethod, //somehow works commented as well
   }
 })
@@ -120,7 +139,7 @@ addReducer('submitOrder', async (global, dispatch, forms_data) => {
   setGlobal({ isSubmittingOrder: true })
   let response = await submitOrder(forms_data)
   setGlobal({ isSubmittingOrder: false })
-  console.log('response.data', typeof response.data, response.data, response)
+  //console.log('response.data', typeof response.data, response.data, response)
 
   if (typeof response.data === 'object') {
     setGlobal({ submittedOrderData: response.data?.res })
@@ -132,13 +151,12 @@ addReducer('submitOrder', async (global, dispatch, forms_data) => {
   //return { fail: true, res: response }
 })
 addReducer('orderProcessedScreen', async (global, dispatch, submitOrderRes) => {
-  console.log('orderProcessedScreen', submitOrderRes?.res?.status)
   if (submitOrderRes?.res?.status === 'orderCreated') {
     const payment = global.paymentMethods.filter(
       f => f.payment_id === global.selectedPayment
     )[0]
     if (payment.online_pay && global.orderInfo.onlinePayURL) {
-      console.log('jdu to redirectnout', global.orderInfo.onlinePayURL)
+      console.log('jdu to redirectnout, jeste neni kam', global.orderInfo.onlinePayURL)
       window.location.href = global.orderInfo.onlinePayURL
     } else if (submitOrderRes?.res?.postOrderInstructions) {
       dispatch.showCompletedScreen(OrderCompletedScreen.SuccessScreen)
@@ -234,7 +252,7 @@ const dataFromHtmlOrApi = async (
   let data
   if ((window as any)['APP_DATA'] && (window as any)['APP_DATA'][domVar]) {
     data = JSON.parse((window as any)['APP_DATA'][domVar])
-    console.log('data z html', domVar, data)
+    //console.log('data z html', domVar, data)
   }
   if (domVar === 'cartItems' && data?.cart) {
     if (data.cart.length === 0 && localSimpleCopy) {
@@ -252,7 +270,7 @@ const dataFromHtmlOrApi = async (
   if (!data) {
     let response = await apiCall()
     data = response.data
-    console.log('data z API', domVar, domVar.length, data)
+    //console.log('data z API', domVar, domVar.length, data)
   }
   return data
 }
@@ -266,17 +284,17 @@ const dataFromHtmlOrApi_firstTimeOnly = async (
   let data: any
   // Nemám nic v reduxu
   if (isEmpty(globVar)) {
-    console.log('first time', domVar)
+    //console.log('first time', domVar)
     // on first app init try to reach in html server rendered cartItems Data
     data = await dataFromHtmlOrApi(domVar, apiCall, localSimpleCopy)
   } else {
     // REDUX mám, chci nová data
     // on every other time, ask ONLY to server to actual data
-    console.log('any other time DIRECT API', domVar)
+    //console.log('any other time DIRECT API', domVar)
     const response = await apiCall()
     data = response.data
   }
-  console.log('gv', domVar, globVar, data)
+  //console.log('gv', domVar, globVar, data)
   return data
 }
 

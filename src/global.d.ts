@@ -9,7 +9,8 @@ import {
   RegUserType,
   OrderCompletedScreen,
   SubmittedOrderData,
-  ApiCallStatus
+  ApiCallStatus,
+  ZasilkovnaSearchRes,
 } from './utils/types'
 // NOTE: changes here needs SERVER RESTART to apply changes
 
@@ -44,8 +45,22 @@ declare module 'reactn/default' {
     changeDeliveryMethod: (
       global: State,
       dispatch: Dispatch,
-      delivery_id: number
+      delivery_id: number,
+      spec_data?: string
     ) => Pick<State>
+
+    searchZasilkovnaPlace: (
+      global: State,
+      dispatch: Dispatch,
+      search: string
+    ) => Pick<State, 'searchZasilkovnaRes'>
+
+    setZasilkovnaPlace: (
+      global: State,
+      dispatch: Dispatch,
+      place: ZasilkovnaSearchRes, //number
+      callback: () => void
+    ) => Pick<State, 'selectedZasilkovnaPlace'>
 
     changePaymentMethod: (
       global: State,
@@ -140,5 +155,7 @@ declare module 'reactn/default' {
     submittedOrderData: SubmittedOrderData
     cartItemsCall: ApiCallStatus
     testVar: {}
+    searchZasilkovnaRes: Array<ZasilkovnaSearchRes>
+    selectedZasilkovnaPlace: ZasilkovnaSearchRes
   }
 }
