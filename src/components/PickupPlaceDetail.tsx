@@ -8,7 +8,6 @@ type Props = {
 }
 const PickupPlaceDetail = ({ place, select }: Props) => {
   const opening = !isEmpty(place) && JSON.parse(place.opening) //compactShort, compactLong, tableLong, regular, exceptions
-  console.log('opening', opening)
   return (
     <>
       {isEmpty(place) ? (

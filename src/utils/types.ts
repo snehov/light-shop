@@ -28,7 +28,7 @@ export const DeliveryMethod = {
   description: 'a',
   is_online: true,
   enabled: true,
-  require_specification: true,
+  //require_specification: true,
   specification_type: 'a',
 }
 //export type DeliveryMethodTypeIncl = typeof DeliveryMethod

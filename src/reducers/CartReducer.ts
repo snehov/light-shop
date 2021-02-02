@@ -123,11 +123,12 @@ addReducer('fetchOrderInfo', async global => {
     'orderInfo',
     () => fetchOrderInfo()
   )
+  console.log("fetchOrderInfo", Boolean(data.deliverySpecificationData), data.deliverySpecificationData, data.deliverySpecificationData || {})
   return {
     orderInfo: data,
     selectedDelivery: data.deliveryMethod,
     regUser: data.regUser,
-    selectedZasilkovnaPlace: data.deliverySpecificationData || {},
+    selectedZasilkovnaPlace: data.deliverySpecificationData || undefined,
     //selectedPayment: data.paymentMethod, //somehow works commented as well
   }
 })
@@ -156,7 +157,7 @@ addReducer('orderProcessedScreen', async (global, dispatch, submitOrderRes) => {
       f => f.payment_id === global.selectedPayment
     )[0]
     if (payment.online_pay && global.orderInfo.onlinePayURL) {
-      console.log('jdu to redirectnout, jeste neni kam', global.orderInfo.onlinePayURL)
+      //console.log('jdu to redirectnout, jeste neni kam', global.orderInfo.onlinePayURL)
       window.location.href = global.orderInfo.onlinePayURL
     } else if (submitOrderRes?.res?.postOrderInstructions) {
       dispatch.showCompletedScreen(OrderCompletedScreen.SuccessScreen)

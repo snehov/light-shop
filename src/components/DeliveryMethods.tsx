@@ -54,7 +54,7 @@ const DeliveryMethods = () => {
     const methodDetail = deliveryMethods.filter(
       m => m.delivery_id === selectedValue
     )[0]
-    if (methodDetail.require_specification) {
+    if (methodDetail.specification_type) {
       if (methodDetail.specification_type === 'zasilkovna') {
         setZasilkovnaVisible(true)
       }

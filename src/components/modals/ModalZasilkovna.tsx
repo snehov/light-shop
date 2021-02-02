@@ -51,6 +51,7 @@ const ModalZasilkovna = ({ close, confirm, selected }: Props) => {
   }
   const selectPlace = () => {
     if (selectedPlaceDetail) {
+      console.log("dispatch setZasilkovnaPlace", selectedPlaceDetail)
       setZasilkovnaPlace(selectedPlaceDetail, () => confirmModal())
     }
   }
