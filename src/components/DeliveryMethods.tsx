@@ -108,9 +108,9 @@ const DeliveryMethods = () => {
       {!isEmpty(deliveryMethods) &&
         deliveryMethods.map((method: DeliveryMethodType) => {
           const allowedDelivery = getAllowedDelivery()
-          const disabled = false //!method.enabled
-          //? true
-          //: allowedDelivery && !allowedDelivery.includes(method.delivery_id)
+          const disabled = !method.enabled
+            ? true
+            : allowedDelivery && !allowedDelivery.includes(method.delivery_id)
           return (
             <div key={method.delivery_id}>
               <label
