@@ -469,8 +469,6 @@ fieldset {
     top: 0;
     width: 100%; /* Full width */
     height: 100%; /* Full height */
-    max-height: 90vh;
-    overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0, 0, 0); /* Fallback color */
     background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
   }
@@ -480,6 +478,8 @@ fieldset {
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
+    max-height: 90vh;
+    overflow-y: scroll;
   }
   &--close {
     color: #aaaaaa;
@@ -496,12 +496,14 @@ fieldset {
   }
 }
 .pickupPlace {
+  
   &--header {
     border-bottom: 1px solid $borderColor;
     padding-bottom: 15px;
   }
   &--name {
     margin: 0px;
+    font-size:20px;
   }
   &--search {
     width: 300px;
@@ -531,6 +533,9 @@ fieldset {
       display: flex;
       flex-wrap: wrap;
       justify-content: normal;
+      div, span, p, a{
+        /* font-size: 14px; */
+      }
     }
   }
   &--leftHalf {
