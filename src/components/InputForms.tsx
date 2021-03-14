@@ -151,7 +151,7 @@ const InputForms = ({ disabled }: { disabled?: boolean }) => {
     !isEmpty(formParts) &&
       debounceFnc(() => {
         const dataSend = fromFullFormatToSimple(formParts)
-        console.log('debounced API call to save data', dataSend)
+        //console.log('debounced API call to save data', dataSend)
         saveAddressInfo(dataSend)
       })
   }

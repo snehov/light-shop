@@ -26,14 +26,9 @@ const PaymentMethods = () => {
     //# when delivery methods loaded
     if (paymentMethod !== 0 && deliveryMethods !== []) {
       const allowedPayments = getAllowedPayments()
-      console.log('paymentMethod', paymentMethod)
+      //console.log('paymentMethod', paymentMethod)
       //# if delivery changes and current payment is not supported by that delivery, change to fist in list of suppored
-      console.log(
-        'allowedPayments',
-        allowedPayments,
-        'deliveryMethods',
-        deliveryMethods
-      )
+      //console.log('allowedPayments',allowedPayments,'deliveryMethods',deliveryMethods)
       if (!allowedPayments.includes(paymentMethod.toString())) {
         allowedPayments.length > 0
           ? setPaymentMethod(Number(allowedPayments[0]))

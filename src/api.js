@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { getEnv } from 'utils/functions'
 
-export const baseURL= 'https://pohadkovarezervace.cz/shop/cart_api/'
+export const baseURL = 'https://pohadkovarezervace.cz/shop/cart_api/'
 const api = axios.create({
   baseURL: baseURL,
   //trailingSlash: true,
@@ -29,8 +29,11 @@ export const addItem = () =>
 
 export const fetchDeliveryPayMethods = () => api.get('getDeliveryAndPay')
 
-export const changeDeliveryMethod = delivery_id =>
-  api.patch('changeDeliveryMethod', { delivery_id })
+export const changeDeliveryMethod = (delivery_id, spec_data) =>
+  api.patch('changeDeliveryMethod', { delivery_id, spec_data })
+
+export const zasilkovnaSearch = search =>
+  api.post('zasilkovnaSearch', { s: search })
 
 export const changePaymentMethod = payment_id =>
   api.patch('changePaymentMethod', { payment_id })
