@@ -40,6 +40,9 @@ export const changePaymentMethod = payment_id =>
 
 export const fetchOrderInfo = () => api.get('getOrderInfo')
 
+export const fetchPaymentResult = order_id =>
+  api.post('getPaymentResult', { order_id })
+
 export const saveAddressInfo = forms_data =>
   api.post('saveAddressInfo', forms_data)
 

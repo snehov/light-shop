@@ -1,4 +1,4 @@
-export const parseSimpleCartList = (cartItems) => {
+export const parseSimpleCartList = cartItems => {
   return cartItems.reduce(
     (acc, cur) => [
       ...acc,
@@ -9,7 +9,7 @@ export const parseSimpleCartList = (cartItems) => {
         v2: cur.variant_attr2,
       },
     ],
-    [],
+    []
   )
 }
 
@@ -24,7 +24,7 @@ export const getEnv = () => {
   return env
 }
 
-export const saveLangPrefLocal = (lang) => {
+export const saveLangPrefLocal = lang => {
   window.localStorage.setItem('lang', lang)
 }
 
@@ -32,6 +32,24 @@ export const getLangPrefLocal = () => {
   return window.setAppLng || window.localStorage.getItem('lang')
 }
 
-export const hasOnlyOnlineItems = (cart) => {
-  return cart.every(i=>i.is_online)
+export const hasOnlyOnlineItems = cart => {
+  return cart.every(i => i.is_online)
+}
+
+export const parseUrlQuery = (queryStringInput = '') => {
+  let queryString = queryStringInput
+  if (typeof window !== 'undefined' && queryStringInput === '') {
+    queryString = window.location.search
+  }
+
+  var query = {}
+  var pairs = (queryString[0] === '?'
+    ? queryString.substr(1)
+    : queryString
+  ).split('&')
+  for (var i = 0; i < pairs.length; i++) {
+    var pair = pairs[i].split('=')
+    query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '')
+  }
+  return query
 }

@@ -16,6 +16,7 @@ import {
   clearAllData,
   clearCartData,
   zasilkovnaSearch,
+  fetchPaymentResult,
 } from '../api'
 import {
   CartType,
@@ -44,6 +45,8 @@ setGlobal({ testVar: {} })
 setGlobal({ submittedOrderData: {} })
 setGlobal({ searchZasilkovnaRes: [] })
 setGlobal({ selectedZasilkovnaPlace: undefined })
+setGlobal({ paymentResult: undefined })
+setGlobal({ submittedOrderId: undefined })
 
 addReducer('getCart', async (global, dispatch) => {
   setGlobal({ cartItemsCall: ApiCallStatus.Pending })
@@ -123,7 +126,12 @@ addReducer('fetchOrderInfo', async global => {
     'orderInfo',
     () => fetchOrderInfo()
   )
-  console.log("fetchOrderInfo", Boolean(data.deliverySpecificationData), data.deliverySpecificationData, data.deliverySpecificationData || {})
+  console.log(
+    'fetchOrderInfo',
+    Boolean(data.deliverySpecificationData),
+    data.deliverySpecificationData,
+    data.deliverySpecificationData || {}
+  )
   return {
     orderInfo: data,
     selectedDelivery: data.deliveryMethod,
@@ -189,6 +197,25 @@ addReducer('changeLang', async (global, dispatch, lang, i18n) => {
     }
   }
   return {}
+})
+
+addReducer('getPaymentResult', async (global, dispatch, order_id) => {
+  try {
+    let response = await fetchPaymentResult(order_id)
+    dispatch.showCompletedScreen(OrderCompletedScreen.PaymentResult)
+    if (response.data.status === 'PENDING') {
+      setTimeout(() => dispatch.getPaymentResult(order_id), 5000)
+    }
+    return { paymentResult: response.data }
+  } catch (err) {
+    //if (err.response.status === 404) {
+    return {
+      paymentResult: {
+        error: err.response.data?.status || 'order_not_found',
+      },
+    }
+    //}
+  }
 })
 
 addReducer('addRandomItem', async () => {

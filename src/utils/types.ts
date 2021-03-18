@@ -109,6 +109,7 @@ export enum OrderCompletedScreen {
   SuccessScreen,
   OnlinePaySucces,
   OnlinePayFail,
+  PaymentResult,
 }
 export type SubmittedOrderData = {
   status: string
@@ -147,4 +148,12 @@ export type PickupPlaceDetailType = ZasilkovnaSearchRes
 export type DeliverySpecs = {
   label: string
   data: string
+}
+export type PaymentResultType = {
+  test: boolean
+  price: string
+  curr: string
+  status: string
+  fee: string
+  error?: {}
 }

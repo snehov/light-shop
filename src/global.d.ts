@@ -11,6 +11,7 @@ import {
   SubmittedOrderData,
   ApiCallStatus,
   ZasilkovnaSearchRes,
+  PaymentResultType,
 } from './utils/types'
 // NOTE: changes here needs SERVER RESTART to apply changes
 
@@ -92,6 +93,12 @@ declare module 'reactn/default' {
       i18n: i18n
     ) => null
 
+    getPaymentResult: (
+      global: State,
+      dispatch: Dispatch,
+      order_id: string
+    ) => Pick<State>
+
     clearCartData: (global: State, dispatch: Dispatch) => null
     clearAllData: (global: State, dispatch: Dispatch) => null
 
@@ -157,5 +164,7 @@ declare module 'reactn/default' {
     testVar: {}
     searchZasilkovnaRes: Array<ZasilkovnaSearchRes>
     selectedZasilkovnaPlace: ZasilkovnaSearchRes
+    paymentResult: PaymentResultType
+    submittedOrderId: string | undefined
   }
 }

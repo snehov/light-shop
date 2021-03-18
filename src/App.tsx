@@ -1,4 +1,4 @@
-import React, { useDispatch, useGlobal, useEffect } from 'reactn'
+import React, { useDispatch, useGlobal, useEffect, useState } from 'reactn'
 import { useTranslation } from 'react-i18next'
 import './i18n'
 import './App.scss'
@@ -8,8 +8,13 @@ import DeliveryAndPay from './components/DeliveryAndPay'
 import InputForms from './components/InputForms'
 import UserLogin from './components/UserLogin'
 import OrderCompletedScreen from './components/OrderCompletedScreen'
-import { getEnv } from 'utils/functions'
+import { getEnv, parseUrlQuery } from 'utils/functions'
+import { OrderCompletedScreen as TypeScreenName } from 'utils/types'
+
 const App = () => {
+  const getPaymentResult = useDispatch('getPaymentResult')
+  const [, setSubmittedOrderId] = useGlobal('submittedOrderId')
+  const showCompletedScreen = useDispatch('showCompletedScreen')
   const fetchCart = useDispatch('getCart')
   const fetchOrderInfo = useDispatch('fetchOrderInfo')
   const [cartItems] = useGlobal('cartItems')
@@ -30,7 +35,15 @@ const App = () => {
     fetchOrderInfo()
     //console.log('process.env.NODE_ENV', process.env)
   }, [fetchCart, fetchOrderInfo])
-
+  useEffect(() => {
+    const queryObj = parseUrlQuery()
+    const payRes = (queryObj as any).payRes
+    if (payRes) {
+      getPaymentResult(payRes)
+      setSubmittedOrderId(payRes)
+      showCompletedScreen(TypeScreenName.PaymentResult)
+    }
+  }, []) // eslint-disable-line
   const dapAllowed = cartItems.length > 0
   const addressAllowed = dapAllowed && selectedDelivery && selectedPayment
 
