@@ -37,7 +37,7 @@ const PaymentMethods = () => {
       if (!allowedPayments.includes(paymentMethod.toString())) {
         allowedPayments.length > 0
           ? setPaymentMethod(Number(allowedPayments[0]))
-          : setPaymentMethod(0)
+          : setPaymentMethod(allowedPayments[0])
       }
     }
   }, [selectedDelivery]) // eslint-disable-line
@@ -80,7 +80,7 @@ const PaymentMethods = () => {
                 htmlFor={`payment_${method.payment_id}`}
                 className={`inputCont ${disabled ? 'inputCont--disabled' : ''}`}
               >
-                {method.name} <b>{formatPriceOutput(method.price)}</b> 
+                {method.name} <b>{formatPriceOutput(method.price)}</b>
                 {/* (id:{method.payment_id}) */}
                 <input
                   type="radio"

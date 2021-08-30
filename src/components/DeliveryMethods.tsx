@@ -24,7 +24,7 @@ const DeliveryMethods = () => {
     const allowedDelivery = getAllowedDelivery()
     if (allowedDelivery) {
       if (!allowedDelivery.includes(deliveryMethod)) {
-        setDeliveryMethod(0)
+        setDeliveryMethod(allowedDelivery[0])
       }
     }
   }, [deliveryMethod, deliveryMethods, onlyOnlineItems]) // eslint-disable-line
