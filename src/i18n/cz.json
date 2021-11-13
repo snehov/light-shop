@@ -17,23 +17,23 @@
     "personal": {
       "personalInfo": "Základní údaje",
       "nameSurname": "Jméno a příjmení",
-      "nameSurname_ph": "např.: Rostislav Kozela",
+      "nameSurname_ph": "např.: Franta Novák",
       "tel": "Telefon",
-      "tel_ph": "např.: +420 606 572 439",
+      "tel_ph": "např.: +420 602 572 000",
       "email": "E-mail",
-      "email_ph": "např.: vexlák@seznam.cz"
+      "email_ph": "např.: franta@example.cz"
     },
     "address": {
       "addresDelivery": "Adresa doručení",
       "addressPickup": "Adresa vyzvednutí",
       "place": "Popis místa",
-      "place_ph": "např.: karavan před stadionem",
+      "place_ph": "např.: firma/vchod/recepce/patro",
       "street": "Ulice a č.p.",
-      "street_ph": "např.: Na Stínadlech 2796",
+      "street_ph": "např.: Stoupající 983/25",
       "city": "Město",
-      "city_ph": "např.: Teplice",
+      "city_ph": "např.: Praha",
       "zip": "PSČ",
-      "zip_ph": "např.: 41501"
+      "zip_ph": "např.: 14900"
     },
     "company": {
       "addressInvoice": "Fakturační adresa",
@@ -52,7 +52,7 @@
       "choseDaP": "Dokončete výběr dopravy a platby",
       "missingFields": "Ještě není vše vyplněno",
       "justAgreeLeft": "Už zbývá jen souhlasit s podmínkama",
-      "agreeMarketing": "Zašlete mi občas žhavý drb z Pohádkové rezervace",
+      "agreeMarketing": "Souhlasím se zasíláním newsletteru",
       "sendWithSum": "Odeslat objednávku v hodnotě ",
       "comment": "Komentář k objednávce"
     },

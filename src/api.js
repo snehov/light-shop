@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { getEnv } from 'utils/functions'
 
-export const baseURL = 'https://pohadkovarezervace.cz/shop/cart_api/'
+export const baseURL = 'https://www.rudylinka.com/shop/cart_api/'
 const api = axios.create({
   baseURL: baseURL,
   //trailingSlash: true,
