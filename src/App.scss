@@ -1,6 +1,6 @@
 $backgroundColor: #f8f8f9;
 $borderColor: #e6e6e6;
-$baseItemHeight: 33px;
+$baseItemHeight: 60px;
 
 $disabledColor: #f3f3f3;
 $normalColor: #ccc;
@@ -52,10 +52,12 @@ $selectedColor: #2196f3;
       min-width: 100px;
       width: 15%;
       &__input {
-        font-size: 17px;
-        /* height: 28px; */
+        height: 42px !important;
+        margin-top: 5px;
+        margin-right: 4px;
+        font-size: 20px !important;
         width: 53px;
-        padding: 5px;
+        padding: 5px !important;
         text-align: center;
       }
       &__button {
@@ -133,6 +135,9 @@ $selectedColor: #2196f3;
       font-weight: bold;
     }
   }
+}
+#comment_agree {
+  height: 60px;
 }
 .deliveryAndPay {
   display: flex;
@@ -496,14 +501,13 @@ fieldset {
   }
 }
 .pickupPlace {
-  
   &--header {
     border-bottom: 1px solid $borderColor;
     padding-bottom: 15px;
   }
   &--name {
     margin: 0px;
-    font-size:20px;
+    font-size: 20px;
   }
   &--search {
     width: 300px;
@@ -533,7 +537,10 @@ fieldset {
       display: flex;
       flex-wrap: wrap;
       justify-content: normal;
-      div, span, p, a{
+      div,
+      span,
+      p,
+      a {
         /* font-size: 14px; */
       }
     }
