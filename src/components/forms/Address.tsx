@@ -34,7 +34,13 @@ const inputsConf = {
     required: true,
     placeholder: 'address.zip_ph',
   },
+  country: {
+    label: 'address.country',
+    placeholder: 'address.country_ph',
+    required: true,
+  },
 }
+
 const Address = forwardRef(
   (
     {
@@ -100,6 +106,7 @@ const Address = forwardRef(
     const street = useField('street', form)
     const city = useField('city', form)
     const zip = useField('zip', form)
+    const country = useField('country', form)
 
     return (
       <div className={`formBlock ${hidden ? 'hidden' : ''}`}>
@@ -108,6 +115,7 @@ const Address = forwardRef(
         <InputFF field={street} config={inputsConfig} g={dataName} />
         <InputFF field={city} config={inputsConfig} g={dataName} />
         <InputFF field={zip} config={inputsConfig} g={dataName} />
+        <InputFF field={country} config={inputsConfig} g={dataName} />
       </div>
     )
   }

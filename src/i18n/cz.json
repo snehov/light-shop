@@ -33,7 +33,9 @@
       "city": "Město",
       "city_ph": "např.: Praha",
       "zip": "PSČ",
-      "zip_ph": "např.: 14900"
+      "zip_ph": "např.: 14900",
+      "country": "Země",
+      "country_ph": "Česka republika"
     },
     "company": {
       "addressInvoice": "Fakturační adresa",

@@ -29,7 +29,9 @@
       "street": "Street",
       "city": "City",
       "zip": "ZIP",
-      "zip_ph": "eg.: 14900"
+      "zip_ph": "eg.: 14900",
+      "country": "Country",
+      "country_ph": "Czech republic"
     },
     "company": {
       "addressInvoice": "Invoice address",
