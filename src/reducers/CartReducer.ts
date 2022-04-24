@@ -11,10 +11,13 @@ import {
   submitOrder,
   changeLang,
   addRandomItem,
+  addItem,
   addPhysicalItem,
   addOnlineItem,
   clearAllData,
   clearCartData,
+  fetchProducts,
+  fetchProduct,
 } from '../api'
 import { CartType, CartItemType, OrderCompletedScreen } from 'utils/types'
 import {
@@ -35,10 +38,8 @@ setGlobal({ isSubmittingOrder: false })
 setGlobal({ onlyOnlineItems: false })
 setGlobal({ testVar: {} })
 setGlobal({ submittedOrderData: {} })
+setGlobal({ products: [] })
 
-/* addReducer('isSubmitting', () => {
-  return { isSubmitting: true }
-}) */
 addReducer('getCart', async (global, dispatch) => {
   const cartSimple =
     JSON.stringify(window.localStorage.getItem('cartSimple')) || ''
@@ -50,6 +51,22 @@ addReducer('getCart', async (global, dispatch) => {
   )
   return parseIncomingCart(data)
 })
+addReducer('fetchProducts', async (global, dispatch) => {
+  let response = await fetchProducts()
+  return { products: response.data }
+})
+addReducer('addProductsToStore', (global, dispatch, products) => {
+  const newPdctsState = [...global.products, ...products]
+  return { products: newPdctsState }
+})
+addReducer('fetchProduct', async (global, dispatch, product_id) => {
+  const foundLocally = global.products.find(f => f.product_id === product_id)
+  if (!foundLocally) {
+    let response = await fetchProduct({ product_id })
+    dispatch.addProductsToStore(response.data)
+  }
+})
+
 addReducer(
   'changeCartItemAmount',
   async (global, dispatch, index, newAmount) => {
@@ -158,6 +175,16 @@ addReducer('addRandomItem', async () => {
   window.location.reload()
   return {}
 })
+addReducer('addItem', async (global, dispatch, product_id) => {
+  const response = await addItem(product_id)
+  if (typeof response.data === 'object') {
+    return {
+      cartItems: response.data.cart,
+      cartInfo: response.data.sum,
+    }
+  }
+  return {}
+})
 addReducer('addPhysicalItem', async () => {
   await addPhysicalItem()
   window.location.reload()
@@ -206,12 +233,12 @@ const dataFromHtmlOrApi = async (domVar: string, apiCall: any) => {
   let data
   if ((window as any)['APP_DATA'] && (window as any)['APP_DATA'][domVar]) {
     data = JSON.parse((window as any)['APP_DATA'][domVar])
-    console.log('data z html', domVar, data)
+    // console.log('data z html', domVar, data)
   }
   if (!data) {
     let response = await apiCall()
     data = response.data
-    console.log('data z API', domVar, data)
+    //console.log('data z API', domVar, data)
   }
   return data
 }
@@ -223,16 +250,16 @@ const dataFromHtmlOrApi_firstTimeOnly = async (
 ) => {
   let data: any
   if (isEmpty(globVar)) {
-    console.log('first time', domVar)
+    //console.log('first time', domVar)
     // on first app init try to reach in html server rendered cartItems Data
     data = await dataFromHtmlOrApi(domVar, apiCall)
   } else {
     // on every other time, ask ONLY to server to actual data
-    console.log('any other time DIRECT API', domVar)
+    //console.log('any other time DIRECT API', domVar)
     const response = await apiCall()
     data = response.data
   }
-  console.log('gv', domVar, globVar, data)
+  //console.log('gv', domVar, globVar, data)
   return data
 }
 

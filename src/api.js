@@ -18,14 +18,16 @@ export const fetchCart = (cartSimple = '') => {
     ? api.get('getCart')
     : api.post('getCart', cartSimple)
 }
+export const fetchProducts = () => api.get('getProducts')
+export const fetchProduct = product_id => api.post('getProducts', product_id)
 
 export const changeCartItemAmount = (index, amount) =>
   api.post('changeCartItemAmount', { index, amount })
 
 export const removeFromCart = index => api.post('removeFromCart', { index })
 
-export const addItem = () =>
-  api.post('addToCart', { product_id: 7, variant: '' })
+export const addItem = product_id =>
+  api.post('addToCart', { product_id, variant: '' })
 
 export const fetchDeliveryPayMethods = () => api.get('getDeliveryAndPay')
 

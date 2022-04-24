@@ -2,6 +2,7 @@ import React, { useDispatch, useState, useEffect } from 'reactn'
 import { ft } from '../utils/forceTypes'
 import { CartItemType, CartItemTypeObj } from '../utils/types'
 import { formatPriceOutput } from '../utils/priceOperations'
+import { CartItemAdditionalService } from './CartItemAdditionalService'
 const Big = require('big-js')
 
 const CartItem = (params: CartItemComponentType) => {
@@ -29,11 +30,19 @@ const CartItem = (params: CartItemComponentType) => {
   }
 
   const sum = item.price ? Number(new Big(item.price).times(item.amount)) : 0
+  const hasAdditionalServices = item.additional_services?.length ?? false
 
   return (
-    <div className="cart-item">
-      <div className="cart-item--name">
-        {item.name}
+    <div
+      className={`cart-item ${
+        hasAdditionalServices ? 'cart-item--noHeight' : ''
+      }`}
+    >
+      <div className="cart-item--nameArea">
+        <span className="cart-item--name">{item.name}</span>
+        {hasAdditionalServices && (
+          <CartItemAdditionalService services={item.additional_services} />
+        )}
         {/* (id:{item.product_id}) */}
       </div>
       <div className="cart-item--amount">

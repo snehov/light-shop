@@ -49,7 +49,6 @@ const setFormParts = (
   noInputs?: boolean
 ) => {
   formParts = newVersion
-  console.log('newVersion', newVersion)
   if (updateValidStatus) {
     updateValidStatus(checkAllFormsValid(noDeliveryAddress, [], noInputs))
     setAllValidButAgree(

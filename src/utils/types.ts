@@ -7,6 +7,7 @@ export const CartItemTypeObj = {
   price: 1,
   is_online: true,
   is_one_piece: true,
+  additional_services: [],
 }
 export type CartItemType = typeof CartItemTypeObj
 
@@ -113,7 +114,7 @@ export type SubmittedOrderData = {
   postOrderInstructions: any
   orderData: {
     cena_objednavky: number
-    doruc_adr_json: { street: string; city: string; zip: string },
+    doruc_adr_json: { street: string; city: string; zip: string }
   }
 }
 export enum ApiCallStatus {

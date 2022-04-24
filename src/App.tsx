@@ -11,6 +11,7 @@ import OrderCompletedScreen from './components/OrderCompletedScreen'
 import { getEnv } from 'utils/functions'
 const App = () => {
   const fetchCart = useDispatch('getCart')
+  const fetchProducts = useDispatch('fetchProducts')
   const fetchOrderInfo = useDispatch('fetchOrderInfo')
   const [cartItems] = useGlobal('cartItems')
   const [selectedDelivery] = useGlobal('selectedDelivery')
@@ -28,9 +29,9 @@ const App = () => {
   useEffect(() => {
     fetchCart()
     fetchOrderInfo()
+    fetchProducts()
     //console.log('process.env.NODE_ENV', process.env)
-  }, [fetchCart, fetchOrderInfo])
-
+  }, [fetchCart, fetchOrderInfo, fetchProducts])
   const dapAllowed = cartItems.length > 0
   const addressAllowed = dapAllowed && selectedDelivery && selectedPayment
 
@@ -53,7 +54,7 @@ const App = () => {
           <button onClick={() => clearAllData()}>Reset All</button>
         </fieldset>
       )}
-       {showOrderCompletedScreen ? (
+      {showOrderCompletedScreen ? (
         <OrderCompletedScreen />
       ) : (
         <>
