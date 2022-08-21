@@ -18,8 +18,15 @@ import {
   clearCartData,
   fetchProducts,
   fetchProduct,
+  submitVoucherCode,
+  removeSaleItem,
 } from '../api'
-import { CartType, CartItemType, OrderCompletedScreen } from 'utils/types'
+import {
+  CartType,
+  CartItemType,
+  OrderCompletedScreen,
+  SalesType,
+} from 'utils/types'
 import {
   parseSimpleCartList,
   saveLangPrefLocal,
@@ -28,6 +35,7 @@ import {
 const isEmpty = require('ramda').isEmpty
 
 setGlobal({ cartItems: [] })
+setGlobal({ sales: [] })
 setGlobal({ cartInfo: {} })
 setGlobal({ orderInfo: {} })
 setGlobal({ deliveryMethods: {} })
@@ -39,6 +47,7 @@ setGlobal({ onlyOnlineItems: false })
 setGlobal({ testVar: {} })
 setGlobal({ submittedOrderData: {} })
 setGlobal({ products: [] })
+setGlobal({ voucherSubmit: { pending: false, response: undefined } })
 
 addReducer('getCart', async (global, dispatch) => {
   const cartSimple =
@@ -115,10 +124,12 @@ addReducer('fetchOrderInfo', async global => {
     //selectedPayment: data.paymentMethod, //somehow works commented as well
   }
 })
+
 addReducer('saveAddressInfo', async (global, dispatch, forms_data) => {
   let response = await saveAddressInfo(forms_data)
   return response.data
 })
+
 addReducer('submitOrder', async (global, dispatch, forms_data) => {
   setGlobal({ isSubmittingOrder: true })
   let response = await submitOrder(forms_data)
@@ -132,6 +143,37 @@ addReducer('submitOrder', async (global, dispatch, forms_data) => {
   dispatch.orderProcessedScreen(response.data)
   return {}
 })
+
+addReducer('submitVoucherCode', async (global, dispatch, code) => {
+  setGlobal({ voucherSubmit: { pending: true, response: undefined } })
+  try {
+    const response = await submitVoucherCode(code)
+    if (typeof response.data === 'object') {
+      setGlobal({
+        voucherSubmit: {
+          pending: false,
+          response: response.data.voucherAddStatus,
+        },
+      })
+      return parseIncomingCart(response.data.newCart)
+    }
+  } catch (error) {
+    setGlobal({ voucherSubmit: { pending: false, response: 4 } })
+    return {}
+  }
+})
+
+addReducer('removeSaleItem', async (global, dispatch, index) => {
+  try {
+    const response = await removeSaleItem(index)
+    if (typeof response.data === 'object') {
+      return parseIncomingCart(response.data)
+    }
+  } catch (error) {
+    return {}
+  }
+})
+
 addReducer('orderProcessedScreen', async (global, dispatch, submitOrderRes) => {
   console.log('orderProcessedScreen', submitOrderRes?.res?.status)
   if (submitOrderRes?.res?.status === 'orderCreated') {
@@ -222,6 +264,7 @@ const parseIncomingCart = (data: CartData) => {
     cartItems: data.cart,
     cartInfo: data.sum,
     onlyOnlineItems,
+    sales: data.sales,
   }
 }
 
@@ -266,7 +309,9 @@ const dataFromHtmlOrApi_firstTimeOnly = async (
 type CartData = {
   cart: CartItemType
   sum: CartType
+  sales: Array<SalesType>
 }
+
 type DeliveryAndPaymentsType = {
   delivery: object
   payments: object

@@ -13,6 +13,8 @@ const api = axios.create({
   },
 })
 
+//api.get('getSession')
+
 export const fetchCart = (cartSimple = '') => {
   return cartSimple === ''
     ? api.get('getCart')
@@ -45,6 +47,9 @@ export const saveAddressInfo = forms_data =>
 export const changeLang = lang => api.post('changeLang', lang)
 
 export const submitOrder = forms_data => api.post('submitOrder', forms_data)
+
+export const submitVoucherCode = code => api.post('addVoucher', { code })
+export const removeSaleItem = index => api.post('removeSaleItem', { index })
 
 export const addRandomItem = () => api.get('addRandomItem')
 export const addPhysicalItem = () => api.get('addPhysicalItem')

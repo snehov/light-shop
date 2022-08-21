@@ -123,3 +123,11 @@ export enum ApiCallStatus {
   Fetched,
   Error,
 }
+export type SalesType = {
+  descr: string
+  name: string
+  prize: number
+  percent: number
+  type: string
+  sumable: boolean
+}

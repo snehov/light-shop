@@ -7,6 +7,7 @@ import {
   LoginType,
   CreateLogin,
   RegUserType,
+  SalesType,
 } from './utils/types'
 // NOTE: changes here needs SERVER RESTART to apply changes
 
@@ -63,6 +64,9 @@ declare module 'reactn/default' {
 
     submitOrder: (global: State, dispatch: Dispatch, forms_data: object) => null
 
+    submitVoucherCode: (global: State, dispatch: Dispatch, code: string) => null
+    removeSaleItem: (global: State, dispatch: Dispatch, index: number) => null
+
     changeLang: (
       global: State,
       dispatch: Dispatch,
@@ -113,6 +117,7 @@ declare module 'reactn/default' {
 
   export interface State {
     cartItems: Array<CartItemType>
+    sales: Array<SalesType>
     cartInfo: {
       noVat: SumLine
       vatIncl: SumLine
@@ -139,5 +144,6 @@ declare module 'reactn/default' {
     cartItemsCall: ApiCallStatus
     testVar: {}
     products: Array<CartItemType>
+    voucherSubmit: { pending: boolean; response: number }
   }
 }

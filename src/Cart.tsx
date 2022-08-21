@@ -3,10 +3,13 @@ import { useTranslation } from 'react-i18next'
 import CartItem from './components/CartItem'
 import { CartItemType } from './utils/types'
 import { formatPriceOutput } from 'utils/priceOperations'
+import { Voucher } from './components/Voucher'
+import { SalesItem } from 'components/SalesItem'
 
 const Cart = () => {
   const [cartItems] = useGlobal('cartItems') // needs to define at global.d.ts
   const [cartInfo] = useGlobal('cartInfo')
+  const [sales] = useGlobal('sales')
   const { t } = useTranslation()
 
   return cartItems.length === 0 ? (
@@ -49,6 +52,10 @@ const Cart = () => {
           {formatPriceOutput(cartInfo.vatIncl.paymentFee)}
         </div>
       </div>
+      {sales.map((sale, index) => (
+        <SalesItem index={index} {...sale} />
+      ))}
+      <Voucher />
       {/* cartInfo.vatIncl && (
         <div className="cart-item cart-extraItem">
           <div className="cart-extraItem--name">

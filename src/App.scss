@@ -101,6 +101,14 @@ $selectedColor: #2196f3;
       }
     }
 
+    &-sale {
+      justify-content: space-between;
+
+      &--name {
+        flex-grow: 2;
+      }
+    }
+
     .recomendAdd {
       color: $selectedColor;
       padding-left: 15px;
@@ -173,6 +181,40 @@ $selectedColor: #2196f3;
     &--sumWord {
       width: 40%;
       font-weight: bold;
+    }
+  }
+
+  &-voucher {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    padding: 10px 15px;
+    align-items: center;
+
+    &-label {
+      margin-right: 15px;
+    }
+
+    &-input-wrap {
+      flex-grow: 2;
+    }
+
+    &-input {
+      margin-right: 15px;
+      font-size: 16px;
+      text-transform: uppercase;
+      padding: 5px 10px;
+      width: 11em;
+    }
+
+    &-response {
+      padding: 15px;
+    }
+
+    &-submit {
+      font-size: 17px;
+      padding: 5px 15px;
+      cursor: pointer;
     }
   }
 }
