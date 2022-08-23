@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { PaymentMethodType } from 'utils/types'
 import { formatPriceOutput } from '../utils/priceOperations'
 const isEmpty = require('ramda').isEmpty
+const isNil = require('ramda').isNil
 const intersection = require('ramda').intersection
 
 const PaymentMethods = () => {
@@ -24,16 +25,21 @@ const PaymentMethods = () => {
 
   useEffect(() => {
     //# when delivery methods loaded
-    if (paymentMethod !== 0 && deliveryMethods !== []) {
+    if (
+      paymentMethod !== 0 &&
+      !isNil(paymentMethod) &&
+      deliveryMethods !== []
+    ) {
       const allowedPayments = getAllowedPayments()
       console.log('paymentMethod', paymentMethod)
       //# if delivery changes and current payment is not supported by that delivery, change to fist in list of suppored
       console.log(
         'allowedPayments',
-        allowedPayments,
+        allowedPayments, // [] when error
         'deliveryMethods',
         deliveryMethods
       )
+      //TODO: check for errors after one order done, new order start
       if (!allowedPayments.includes(paymentMethod.toString())) {
         allowedPayments.length > 0
           ? setPaymentMethod(Number(allowedPayments[0]))
