@@ -14,6 +14,7 @@
     "send": "Send",
     "isSending": "Sending",
     "cartNeedItems": "Shopping cart needs to contain any item",
+    "maxExceeded": "You already have maximum available items",
     "personal": {
       "personalInfo": "Personal info",
       "nameSurname": "Name and surname",
@@ -67,6 +68,10 @@
       "loggedAsUser": "Logged as user",
       "logout": "Logout",
       "err_username_exists": "This email is somebody using for login, chose another one"
+    },
+    "apiErrorCodes": {
+      "removedTicketsDueToNotEnoughCapacity": "Počet zbývajících míst se změnil, byl změněn počet vstupenek",
+      "reducedAmountDueToNotEnoughCapacity": "Počet zbývajících míst se změnil, byl změněn počet vstupenek"
     }
   }
 }

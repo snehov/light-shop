@@ -7,6 +7,9 @@ export const CartItemTypeObj = {
   price: 1,
   is_online: true,
   is_one_piece: true,
+  warning: 'a',
+  exceededCapacity: true,
+  measure: 'a',
 }
 export type CartItemType = typeof CartItemTypeObj
 

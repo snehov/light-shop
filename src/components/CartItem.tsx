@@ -2,9 +2,11 @@ import React, { useDispatch, useState, useEffect } from 'reactn'
 import { ft } from '../utils/forceTypes'
 import { CartItemType, CartItemTypeObj } from '../utils/types'
 import { formatPriceOutput } from '../utils/priceOperations'
+import { useTranslation } from 'react-i18next'
 const Big = require('big-js')
 
 const CartItem = (params: CartItemComponentType) => {
+  const { t } = useTranslation()
   const item = ft(params.item, CartItemTypeObj),
     index = ft(params.index, 1)
 
@@ -34,7 +36,11 @@ const CartItem = (params: CartItemComponentType) => {
     <div className="cart-item">
       <div className="cart-item--name">
         {item.link ? <a href={item.link}>{item.name}</a> : item.name}
-        {/* (id:{item.product_id}) */}
+        {item.warning && (
+          <div className="cart-item--warning">
+            {t(`apiErrorCodes.${item.warning}`)}
+          </div>
+        )}
       </div>
       <div className="cart-item--amount">
         {!item.is_one_piece && (
@@ -51,6 +57,8 @@ const CartItem = (params: CartItemComponentType) => {
               <button
                 className="cart-item--amount__plus cart-item--amount__button"
                 onClick={() => changeAmountSafe(index, Number(item.amount) + 1)}
+                disabled={item.exceededCapacity}
+                title={item.exceededCapacity ? t('maxExceeded') : ''}
               >
                 +
               </button>
@@ -67,7 +75,7 @@ const CartItem = (params: CartItemComponentType) => {
       <div className="cart-item--price"></div>
       <div className="cart-item--price__piece">
         {formatPriceOutput(item.price)}
-        {!item.is_one_piece && '/ks'}
+        {!item.is_one_piece && ` / ${item.measure}`}
       </div>
       <div className="cart-item--price__sum"> {formatPriceOutput(sum)}</div>
       <div className="cart-item--del">

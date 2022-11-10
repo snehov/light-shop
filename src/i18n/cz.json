@@ -14,6 +14,7 @@
     "send": "Odeslat",
     "isSending": "Odesílá se",
     "cartNeedItems": "Košík musí obsahovat zboží",
+    "maxExceeded": "Více položek tohoto produktu nelze přidat",
     "personal": {
       "personalInfo": "Základní údaje",
       "nameSurname": "Jméno a příjmení",
@@ -71,6 +72,10 @@
       "loggedAsUser": "Přihlášen jako uživatel",
       "logout": "Odhlásit",
       "err_username_exists": "Tento přihlašovací email již existuje, vyberte jiný"
+    },
+    "apiErrorCodes": {
+      "removedTicketsDueToNotEnoughCapacity": "Počet zbývajících míst se změnil, byl změněn počet vstupenek",
+      "reducedAmountDueToNotEnoughCapacity": "Dosáhli jste maximální počet dostupních vstupů"
     }
   }
 }
