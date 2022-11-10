@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { getEnv } from 'utils/functions'
 
+//axios.get('https://inwash.cz/shop/info.php')
 const api = axios.create({
   baseURL: 'https://inwash.cz/shop/cart_api/',
   //baseURL: 'https://snowcorp.cz/ls/cart_api/',

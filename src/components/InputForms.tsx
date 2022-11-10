@@ -314,6 +314,25 @@ const InputForms = ({ disabled }: { disabled?: boolean }) => {
               ref={validatePersonal}
             />
           </div>
+          <div className="stdPadding">
+            <label className="inputCont cy-fillCompany">
+              {t('company.companyOrder')}
+              <input
+                type="checkbox"
+                checked={Boolean(companyVisible)}
+                onChange={e => setCompanyVisible(e.target.checked)}
+              />
+              <span className="checkmark"></span>
+            </label>
+            {companyVisible && (
+              <CompanyBaseInfo
+                dataName="company"
+                returnValues={setValues}
+                prefillData={addressName}
+                ref={validateCompany}
+              />
+            )}
+          </div>
         </div>
       )}
 
