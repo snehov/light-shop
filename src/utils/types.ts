@@ -10,6 +10,8 @@ export const CartItemTypeObj = {
   warning: 'a',
   exceededCapacity: true,
   measure: 'a',
+  product_type: 'a',
+  online_pay_from: 1,
 }
 export type CartItemType = typeof CartItemTypeObj
 
@@ -33,6 +35,7 @@ export const DeliveryMethod = {
   enabled: true,
   //require_specification: true,
   specification_type: 'a',
+  product_type: 'a',
 }
 //export type DeliveryMethodTypeIncl = typeof DeliveryMethod
 //type EE = { payments: Array<number> }
@@ -48,6 +51,11 @@ export const PaymentMethod = {
   bank_transfer: true,
   account: 1,
   pay_at_takeover: true,
+  only_free_of_charge: true,
+  product_type: 'a',
+  pay_individual: true,
+  money_transfer: true,
+  online: true,
   //description
   //pay_before
 }

@@ -69,6 +69,14 @@
       "logout": "Logout",
       "err_username_exists": "This email is somebody using for login, chose another one"
     },
+    "orderComplete": {
+      "loadingPaymentData": "Loading payment data",
+      "orderNotFound": "Order not found",
+      "orderPayment": "Order payment",
+      "paymentPending": "Order is waiting for payment",
+      "paymentPaid": "Order were successfully paid",
+      "paymentCanceled": "Order payment was canceled from user side"
+    },
     "apiErrorCodes": {
       "removedTicketsDueToNotEnoughCapacity": "Počet zbývajících míst se změnil, byl změněn počet vstupenek",
       "reducedAmountDueToNotEnoughCapacity": "Počet zbývajících míst se změnil, byl změněn počet vstupenek"

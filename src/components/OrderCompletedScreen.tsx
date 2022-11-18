@@ -21,22 +21,24 @@ const OrderCompletedScreen = () => {
   }
   const ShowPaymentResult = () => {
     return !paymentResult ? (
-      <div>Stahuji data o platbě</div>
+      <div>{t('orderComplete.loadingPaymentData')}</div>
     ) : (
       <>
         {paymentResult.error ? (
-          <div>Objednávka nebyla nalezena</div>
+          <div>{t('orderComplete.orderNotFound')}</div>
         ) : (
           <div>
-            <h3>Platba objednávky: {submittedOrderId}</h3>
+            <h3>
+              {t('orderComplete.orderPayment')}: {submittedOrderId}
+            </h3>
             {paymentResult.status === 'PENDING' && (
-              <div>Platba je ve stavu: čeká na zaplacení</div>
+              <div>{t('orderComplete.paymentPending')}</div>
             )}
             {paymentResult.status === 'PAID' && (
-              <div>Objednávka byla úspěšně zaplacena</div>
+              <div>{t('orderComplete.paymentPaid')}</div>
             )}
             {paymentResult.status === 'CANCELLED' && (
-              <div>Platba byla zrušena ze strany uživatele</div>
+              <div>{t('orderComplete.paymentCanceled')}</div>
             )}
           </div>
         )}

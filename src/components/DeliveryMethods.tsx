@@ -3,11 +3,14 @@ import { useTranslation } from 'react-i18next'
 import { DeliveryMethodType, DeliverySpecs } from 'utils/types'
 import { formatPriceOutput } from '../utils/priceOperations'
 import ModalZasilkovna from './modals/ModalZasilkovna'
+import { filterDeliveryMethods } from './deliveryMethodsConditions'
 const isEmpty = require('ramda').isEmpty
 const isNil = require('ramda').isNil
 
 const DeliveryMethods = () => {
   const [deliveryMethods] = useGlobal('deliveryMethods')
+  const [deliveryFiltered, setDeliveryFiltered] = useState(deliveryMethods)
+  const [cartItems] = useGlobal('cartItems')
   const [orderInfo] = useGlobal('orderInfo')
   const [onlyOnlineItems] = useGlobal('onlyOnlineItems')
   const [deliveryMethod, setDeliveryMethod] = useState(0)
@@ -18,6 +21,9 @@ const DeliveryMethods = () => {
   >()
   const [selectedZasilkovnaPlace] = useGlobal('selectedZasilkovnaPlace')
 
+  useEffect(() => {
+    setDeliveryFiltered(filterDeliveryMethods(cartItems, deliveryMethods))
+  }, [cartItems, deliveryMethods])
   //# used generally for initial render (prefilled value from server), then for every change as well
   useEffect(() => {
     if (!isNil(selectedZasilkovnaPlace)) {
@@ -44,14 +50,18 @@ const DeliveryMethods = () => {
     const allowedDelivery = getAllowedDelivery()
     if (allowedDelivery) {
       if (!allowedDelivery.includes(deliveryMethod)) {
-        setDeliveryMethod(0)
+        if (deliveryFiltered.length === 1 && deliveryMethod == 0) {
+          setDeliveryMethod(deliveryFiltered[0].delivery_id)
+        } else {
+          setDeliveryMethod(0)
+        }
       }
     }
-  }, [deliveryMethod, deliveryMethods, onlyOnlineItems]) // eslint-disable-line
+  }, [deliveryMethod, deliveryFiltered, onlyOnlineItems]) // eslint-disable-line
 
   const changeMethod = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedValue = Number(e.target.value)
-    const methodDetail = deliveryMethods.filter(
+    const methodDetail = deliveryFiltered.filter(
       m => m.delivery_id === selectedValue
     )[0]
     if (methodDetail.specification_type) {
@@ -70,8 +80,8 @@ const DeliveryMethods = () => {
   }
 
   const confirmZasilkovnaChoice = (specs: DeliverySpecs) => {
-    const zasilkovnaDeliveryId = !isEmpty(deliveryMethods)
-      ? deliveryMethods.filter(d => d.specification_type === 'zasilkovna')[0]
+    const zasilkovnaDeliveryId = !isEmpty(deliveryFiltered)
+      ? deliveryFiltered.filter(d => d.specification_type === 'zasilkovna')[0]
           .delivery_id
       : 0
 
@@ -80,12 +90,12 @@ const DeliveryMethods = () => {
   }
 
   const getAllowedDelivery = () => {
-    if (isEmpty(deliveryMethods)) {
+    if (isEmpty(deliveryFiltered)) {
       return false
     }
     const allowedDeliveries = onlyOnlineItems
-      ? deliveryMethods.filter(d => d.is_online)
-      : deliveryMethods.filter(d => !d.is_online)
+      ? deliveryFiltered.filter(d => d.is_online)
+      : deliveryFiltered.filter(d => !d.is_online)
     return allowedDeliveries.reduce((acc: Array<number>, cur) => {
       return [...acc, cur.delivery_id]
     }, [])
@@ -105,8 +115,8 @@ const DeliveryMethods = () => {
           t('deliveryMethods') // eslint-disable-line
         }
       </h2>
-      {!isEmpty(deliveryMethods) &&
-        deliveryMethods.map((method: DeliveryMethodType) => {
+      {!isEmpty(deliveryFiltered) &&
+        deliveryFiltered.map((method: DeliveryMethodType) => {
           const allowedDelivery = getAllowedDelivery()
           const disabled = !method.enabled
             ? true

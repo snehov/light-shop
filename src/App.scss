@@ -3,10 +3,13 @@ $borderColor: #e6e6e6;
 $baseItemHeight: 33px;
 
 $disabledColor: #f3f3f3;
+$disabledDarkColor: #939393;
 $normalColor: #ccc;
 $hoverColor: #999;
 $selectedColor: #2196f3;
 $errorColor: #a80d0d;
+
+
 
 .cart {
   display: flex;
@@ -40,6 +43,14 @@ $errorColor: #a80d0d;
 
     background-color: $backgroundColor;
     transition: all 0.4s ease-out;
+
+    &--disabled {
+      background-color: $disabledDarkColor;
+
+      &:hover {
+        filter: none;
+      }
+    }
 
     &--name {
       min-width: 250px;

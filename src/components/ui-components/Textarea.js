@@ -1,5 +1,4 @@
 import React from 'react'
-import Input from './Inputjs.js'
 
 const Textarea = ({ name, groupName = '', label, width, rows, ...props }) => {
   const id = groupName ? `${groupName}_${name}` : name

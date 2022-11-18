@@ -2,18 +2,26 @@ import React, { useDispatch, useState, useGlobal, useEffect } from 'reactn'
 import { useTranslation } from 'react-i18next'
 import { PaymentMethodType } from 'utils/types'
 import { formatPriceOutput } from '../utils/priceOperations'
+import { filterPayMethods } from './payMethodsConditions'
 const isEmpty = require('ramda').isEmpty
 const intersection = require('ramda').intersection
 
 const PaymentMethods = () => {
   const [paymentsMethods] = useGlobal('paymentMethods')
+  const [paymentsFiltered, setPaymentsFiltered] = useState(paymentsMethods)
+  const [cartItems] = useGlobal('cartItems')
+  const [cartInfo] = useGlobal('cartInfo')
   const [deliveryMethods] = useGlobal('deliveryMethods')
   const [orderInfo] = useGlobal('orderInfo')
   const [paymentMethod, setPaymentMethod] = useState(0)
   const [selectedDelivery] = useGlobal('selectedDelivery')
   const changePaymentMethod = useDispatch('changePaymentMethod')
   const { t } = useTranslation()
-
+  useEffect(() => {
+    setPaymentsFiltered(
+      filterPayMethods(cartItems, paymentsMethods, selectedDelivery)
+    )
+  }, [cartInfo, cartItems, paymentsMethods, selectedDelivery])
   useEffect(() => {
     orderInfo?.paymentMethod && setPaymentMethod(orderInfo.paymentMethod) //# preselect historicaly chosen option (used with page refresh)
   }, [orderInfo])
@@ -23,13 +31,20 @@ const PaymentMethods = () => {
   }, [paymentMethod]) // eslint-disable-line
 
   useEffect(() => {
+    if (paymentsFiltered.length === 1 && paymentMethod == 0) {
+      setPaymentMethod(paymentsFiltered[0].payment_id)
+    }
+  }, [paymentsFiltered, paymentMethod])
+
+  useEffect(() => {
     //# when delivery methods loaded
-    if (paymentMethod !== 0 && deliveryMethods !== []) {
+    if (paymentMethod !== 0 && deliveryMethods.length > 0) {
       const allowedPayments = getAllowedPayments()
       //console.log('paymentMethod', paymentMethod)
       //# if delivery changes and current payment is not supported by that delivery, change to fist in list of suppored
       //console.log('allowedPayments',allowedPayments,'deliveryMethods',deliveryMethods)
       if (!allowedPayments.includes(paymentMethod.toString())) {
+        console.log('setuju platbu>>>>')
         allowedPayments.length > 0
           ? setPaymentMethod(Number(allowedPayments[0]))
           : setPaymentMethod(0)
@@ -51,19 +66,17 @@ const PaymentMethods = () => {
           .filter(d => d.delivery_id == selectedDelivery)[0] //eslint-disable-line eqeqeq
           .payments.split(',')
 
-    const currentPayments = paymentsMethods.reduce((acc: any, cur) => {
+    const currentPayments = paymentsFiltered.reduce((acc: any, cur) => {
       return [...acc, cur.payment_id.toString()] // TODO: I dont like this "toSting()", make allowedPayements result as integers
     }, [])
-
     const allowedPresent = intersection(allowedPayements, currentPayments)
     return allowedPresent
   }
-
   return (
     <div className="paymentChoice">
       <h2>{t('paymentMethods')}</h2>
-      {!isEmpty(paymentsMethods) &&
-        paymentsMethods.map((method: PaymentMethodType) => {
+      {!isEmpty(paymentsFiltered) &&
+        paymentsFiltered.map((method: PaymentMethodType) => {
           const disabled = isEmpty(getAllowedPayments())
             ? false
             : !method.enabled
@@ -75,7 +88,7 @@ const PaymentMethods = () => {
                 htmlFor={`payment_${method.payment_id}`}
                 className={`inputCont ${disabled ? 'inputCont--disabled' : ''}`}
               >
-                {method.name} <b>{formatPriceOutput(method.price)}</b> 
+                {method.name} <b>{formatPriceOutput(method.price)}</b>
                 {/* (id:{method.payment_id}) */}
                 <input
                   type="radio"

@@ -2,7 +2,7 @@ import React, { MouseEvent } from 'react'
 
 type Props = {
   children?: JSX.Element
-  close: () => void
+  close: (event: MouseEvent<HTMLElement>) => void
 }
 const Modal = ({ children, close }: Props) => {
   return (

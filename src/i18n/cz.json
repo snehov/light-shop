@@ -73,9 +73,17 @@
       "logout": "Odhlásit",
       "err_username_exists": "Tento přihlašovací email již existuje, vyberte jiný"
     },
+    "orderComplete": {
+      "loadingPaymentData": "Stahuji data o platbě",
+      "orderNotFound": "Objednávka nebyla nalezena",
+      "orderPayment": "Platba objednávky",
+      "paymentPending": "Platba je ve stavu: čeká na zaplacení",
+      "paymentPaid": "Objednávka byla úspěšně zaplacena",
+      "paymentCanceled": "Platba byla zrušena ze strany uživatele"
+    },
     "apiErrorCodes": {
-      "removedTicketsDueToNotEnoughCapacity": "Počet zbývajících míst se změnil, byl změněn počet vstupenek",
-      "reducedAmountDueToNotEnoughCapacity": "Dosáhli jste maximální počet dostupních vstupů"
+      "removedTicketsDueToNotEnoughCapacity": "Není dostatek lístků, snížili jsme váš počet",
+      "reducedAmountDueToNotEnoughCapacity": "Dosáhli jste maximální počet lístků"
     }
   }
 }

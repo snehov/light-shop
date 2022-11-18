@@ -33,7 +33,9 @@ const CartItem = (params: CartItemComponentType) => {
   const sum = item.price ? Number(new Big(item.price).times(item.amount)) : 0
 
   return (
-    <div className="cart-item">
+    <div
+      className={`cart-item ${item.amount === 0 ? 'cart-item--disabled' : ''}`}
+    >
       <div className="cart-item--name">
         {item.link ? <a href={item.link}>{item.name}</a> : item.name}
         {item.warning && (

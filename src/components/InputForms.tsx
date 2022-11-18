@@ -6,7 +6,7 @@ import React, {
   useGlobal,
 } from 'reactn'
 import { useTranslation } from 'react-i18next'
-import { Address, PersonalInfo, CompanyBaseInfo } from './forms'
+import { Address, PersonalInfo } from './forms'
 import {
   areObjectsEqual,
   fromApiAddrToAppAddrForm,
@@ -32,7 +32,7 @@ const checkAllFormsValid = (
 ) => {
   let requiredParts = ['agree']
   if (!noInputs) {
-    requiredParts = ['personal']//, 'invoice'
+    requiredParts = ['personal'] //, 'invoice'
     !noDeliveryAddress && requiredParts.push('delivery')
   }
   return skipParts
@@ -62,11 +62,11 @@ const setFormParts = (
 // # uncomment const validateInvoice = useRef() at approx. 203
 // # uncomment component dataName="invoice"
 
-// to allow comany info 
+// to allow comany info
 // # uncomment const validateCompany = useRef()
 // # uncomment component  dataName="company"
 const InputForms = ({ disabled }: { disabled?: boolean }) => {
-  const [copyInvoiceAddr, setCopyInvoiceAddr] = useState(false)//true
+  const [copyInvoiceAddr, setCopyInvoiceAddr] = useState(false) //true
   const [noDeliveryAddress, setNoDeliveryAddress] = useState(false)
   const [companyVisible, setCompanyVisible] = useState<boolean | undefined>(
     undefined

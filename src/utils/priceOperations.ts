@@ -1,7 +1,7 @@
 export const formatPriceOutput = (
   price: number,
   currencyPrefix = '',
-  currencyPostfix = ' Kč',
+  currencyPostfix = ' Kč'
 ) => {
   let output = currencyPrefix
   if (price) {
