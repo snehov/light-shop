@@ -20,7 +20,7 @@
     "react-dom": "^16.13.1",
     "react-final-form-hooks": "^2.0.2",
     "react-i18next": "^11.3.4",
-    "react-scripts": "3.4.0",
+    "react-scripts": "5.0.1",
     "reactn": "^2.2.6",
     "sha1": "^1.1.1",
     "typescript": "^3.8.3"
