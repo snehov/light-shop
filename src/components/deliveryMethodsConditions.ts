@@ -11,7 +11,7 @@ export const filterDeliveryMethods = (
   if (!Array.isArray(deliveryMethods)) {
     return deliveryMethods
   }
-  console.log('cartItems', cartItems)
+
   let filteredDeliveryMethods: Array<DeliveryMethodType> = []
   deliveryMethods.forEach(delivery => {
     if (

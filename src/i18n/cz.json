@@ -15,6 +15,7 @@
     "isSending": "Odesílá se",
     "cartNeedItems": "Košík musí obsahovat zboží",
     "maxExceeded": "Více položek tohoto produktu nelze přidat",
+    "removeFromCartQ": "Chceš z košíku tohle vyhodit?",
     "personal": {
       "personalInfo": "Základní údaje",
       "nameSurname": "Jméno a příjmení",

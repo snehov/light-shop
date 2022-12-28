@@ -8,7 +8,6 @@ export const filterPayMethods = (
   if (!Array.isArray(paymentsMethods)) {
     return paymentsMethods
   }
-  console.log('cartItems', cartItems)
   let filteredPayMethods: Array<PaymentMethodType> = []
   paymentsMethods.forEach(pay => {
     if (pay.only_free_of_charge) {

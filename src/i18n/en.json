@@ -15,6 +15,7 @@
     "isSending": "Sending",
     "cartNeedItems": "Shopping cart needs to contain any item",
     "maxExceeded": "You already have maximum available items",
+    "removeFromCartQ": "Remove it from the shopping cart?",
     "personal": {
       "personalInfo": "Personal info",
       "nameSurname": "Name and surname",

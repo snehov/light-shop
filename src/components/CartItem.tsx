@@ -20,6 +20,10 @@ const CartItem = (params: CartItemComponentType) => {
   const changeAmountSafe = (index: number, newAmount: number) => {
     if (newAmount > 0) {
       changeAmount(index, newAmount)
+    } else {
+      if (window.confirm(t('removeFromCartQ'))) {
+        removeFromCart(index)
+      }
     }
   }
 
