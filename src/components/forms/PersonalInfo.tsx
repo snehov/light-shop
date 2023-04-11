@@ -14,8 +14,14 @@ const inputsConf = {
   name: {
     required: true,
     minLength: 2,
-    label: 'personal.nameSurname',
-    placeholder: 'personal.nameSurname_ph',
+    label: 'personal.name',
+    placeholder: 'personal.name_ph',
+  },
+  surname: {
+    required: true,
+    minLength: 2,
+    label: 'personal.surname',
+    placeholder: 'personal.surname_ph',
   },
   tel: {
     required: true,
@@ -77,6 +83,7 @@ const PersonalInfo = forwardRef(
     }, [formValid, values]) // eslint-disable-line
 
     const name = useField('name', form)
+    const surname = useField('surname', form)
     const tel = useField('tel', form)
     const email = useField('email', form)
 
@@ -84,6 +91,7 @@ const PersonalInfo = forwardRef(
       <div className="formBlock">
         <h3>{t('personal.personalInfo')}</h3>
         <InputFF field={name} config={inputsConfig} g={dataName} />
+        <InputFF field={surname} config={inputsConfig} g={dataName} />
         <InputFF field={tel} config={inputsConfig} g={dataName} />
         <InputFF field={email} config={inputsConfig} g={dataName} />
       </div>

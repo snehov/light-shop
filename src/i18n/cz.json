@@ -18,8 +18,10 @@
     "removeFromCartQ": "Chceš z košíku tohle vyhodit?",
     "personal": {
       "personalInfo": "Základní údaje",
-      "nameSurname": "Jméno a příjmení",
-      "nameSurname_ph": "např.: Rostislav Kozela",
+      "name": "Jméno",
+      "name_ph": "např.: Rostislav",
+      "surname": "Příjmení",
+      "surname_ph": "např.: Kozela",
       "tel": "Telefon",
       "tel_ph": "např.: +420 606 572 439",
       "email": "E-mail",

@@ -4269,9 +4269,10 @@ fill-range@^7.0.1:
   dependencies:
     to-regex-range "^5.0.1"
 
-final-form@^4.20.1:
-  version "4.20.1"
-  resolved "https://registry.yarnpkg.com/final-form/-/final-form-4.20.1.tgz#525a7f7f27f55c28d8994b157b24d6104fc560e9"
+final-form@^4.20.9:
+  version "4.20.9"
+  resolved "https://registry.yarnpkg.com/final-form/-/final-form-4.20.9.tgz#647b459f8c504d77ec8f6e280015ab172982af2f"
+  integrity sha512-shA1X/7v8RmukWMNRHx0l7+Bm41hOivY78IvOiBrPVHjyWFIyqqIEMCz7yTVRc9Ea+EU4WkZ5r4MH6whSo5taw==
   dependencies:
     "@babel/runtime" "^7.10.0"
 
