@@ -21,6 +21,7 @@ const inputsConf = {
     required: true,
     type: 'tel',
     placeholder: '+420',
+    minLength: 9,
     default: '+420 ',
     label: 'personal.tel',
   },
