@@ -20,7 +20,7 @@ export const Voucher = () => {
       <span className="cart-voucher-label">Mám slevový kód:</span>
       <span className="cart-voucher-input-wrap">
         <CodeInput
-          maxLength={10}
+          maxLength={20}
           submit={handleSubmit}
           isProcessing={pending}
         />
