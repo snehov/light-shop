@@ -88,7 +88,10 @@ const PaymentMethods = () => {
                 htmlFor={`payment_${method.payment_id}`}
                 className={`inputCont ${disabled ? 'inputCont--disabled' : ''}`}
               >
-                {method.name} <b>{formatPriceOutput(method.price)}</b>
+                {method.name}
+                {method.price > 0 ? (
+                  <b> {formatPriceOutput(method.price)}</b>
+                ) : null}
                 {/* (id:{method.payment_id}) */}
                 <input
                   type="radio"

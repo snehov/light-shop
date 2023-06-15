@@ -128,17 +128,20 @@ const DeliveryMethods = () => {
                 className={`inputCont ${disabled ? 'inputCont--disabled' : ''}`}
               >
                 {method.name} {/* zasilkovna */}
-                {method.delivery_id == deliveryMethod && deliverySpecification && (
-                  <span
-                    onClick={() => setZasilkovnaVisible(true)}
-                    className="pickupPlace--change"
-                    title="změnit pobočku zásilkovny"
-                  >
-                    {deliverySpecification.label}
-                  </span>
-                )}
+                {method.delivery_id == deliveryMethod &&
+                  deliverySpecification && (
+                    <span
+                      onClick={() => setZasilkovnaVisible(true)}
+                      className="pickupPlace--change"
+                      title="změnit pobočku zásilkovny"
+                    >
+                      {deliverySpecification.label}
+                    </span>
+                  )}
                 {/* -end zasilkovna- */}
-                <b> {formatPriceOutput(method.price)}</b>
+                {method.price > 0 ? (
+                  <b> {formatPriceOutput(method.price)}</b>
+                ) : null}
                 {/* (id:{method.delivery_id}) */}
                 <input
                   type="radio"
