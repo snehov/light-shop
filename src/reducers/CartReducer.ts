@@ -11,10 +11,22 @@ import {
   submitOrder,
   changeLang,
   addRandomItem,
+  addItem,
+  addPhysicalItem,
+  addOnlineItem,
   clearAllData,
   clearCartData,
+  fetchProducts,
+  fetchProduct,
+  submitVoucherCode,
+  removeSaleItem,
 } from '../api'
-import { CartType, CartItemType } from 'utils/types'
+import {
+  CartType,
+  CartItemType,
+  OrderCompletedScreen,
+  SalesType,
+} from 'utils/types'
 import {
   parseSimpleCartList,
   saveLangPrefLocal,
@@ -23,6 +35,7 @@ import {
 const isEmpty = require('ramda').isEmpty
 
 setGlobal({ cartItems: [] })
+setGlobal({ sales: [] })
 setGlobal({ cartInfo: {} })
 setGlobal({ orderInfo: {} })
 setGlobal({ deliveryMethods: {} })
@@ -32,10 +45,10 @@ setGlobal({ selectedPayment: 0 })
 setGlobal({ isSubmittingOrder: false })
 setGlobal({ onlyOnlineItems: false })
 setGlobal({ testVar: {} })
+setGlobal({ submittedOrderData: {} })
+setGlobal({ products: [] })
+setGlobal({ voucherSubmit: { pending: false, response: undefined } })
 
-/* addReducer('isSubmitting', () => {
-  return { isSubmitting: true }
-}) */
 addReducer('getCart', async (global, dispatch) => {
   const cartSimple =
     JSON.stringify(window.localStorage.getItem('cartSimple')) || ''
@@ -43,16 +56,32 @@ addReducer('getCart', async (global, dispatch) => {
   const data: any = await dataFromHtmlOrApi_firstTimeOnly(
     global.cartItems,
     'cartItems',
-    () => fetchCart(cartSimple),
+    () => fetchCart(cartSimple)
   )
   return parseIncomingCart(data)
 })
+addReducer('fetchProducts', async (global, dispatch) => {
+  let response = await fetchProducts()
+  return { products: response.data }
+})
+addReducer('addProductsToStore', (global, dispatch, products) => {
+  const newPdctsState = [...global.products, ...products]
+  return { products: newPdctsState }
+})
+addReducer('fetchProduct', async (global, dispatch, product_id) => {
+  const foundLocally = global.products.find(f => f.product_id === product_id)
+  if (!foundLocally) {
+    let response = await fetchProduct({ product_id })
+    dispatch.addProductsToStore(response.data)
+  }
+})
+
 addReducer(
   'changeCartItemAmount',
   async (global, dispatch, index, newAmount) => {
     let response = await changeCartItemAmount(index, newAmount)
     return parseIncomingCart(response.data)
-  },
+  }
 )
 addReducer('removeFromCart', async (global, dispatch, index) => {
   let response = await removeFromCart(index)
@@ -61,7 +90,7 @@ addReducer('removeFromCart', async (global, dispatch, index) => {
 addReducer('getDeliveryAndPay', async (global, dispatch) => {
   const data: DeliveryAndPaymentsType = await dataFromHtmlOrApi(
     'delivPayOpts',
-    () => fetchDeliveryPayMethods(),
+    () => fetchDeliveryPayMethods()
   )
   if (typeof data === 'object') {
     return {
@@ -82,11 +111,11 @@ addReducer('changePaymentMethod', async (global, dispatch, payment_id) => {
   let response = await changePaymentMethod(payment_id)
   return parseIncomingCart(response.data)
 })
-addReducer('fetchOrderInfo', async (global) => {
+addReducer('fetchOrderInfo', async global => {
   const data: any = await dataFromHtmlOrApi_firstTimeOnly(
     global.orderInfo,
     'orderInfo',
-    () => fetchOrderInfo(),
+    () => fetchOrderInfo()
   )
   return {
     orderInfo: data,
@@ -95,21 +124,79 @@ addReducer('fetchOrderInfo', async (global) => {
     //selectedPayment: data.paymentMethod, //somehow works commented as well
   }
 })
+
 addReducer('saveAddressInfo', async (global, dispatch, forms_data) => {
   let response = await saveAddressInfo(forms_data)
   return response.data
 })
+
 addReducer('submitOrder', async (global, dispatch, forms_data) => {
   setGlobal({ isSubmittingOrder: true })
   let response = await submitOrder(forms_data)
   setGlobal({ isSubmittingOrder: false })
-  alert('A tady bude pokračování na stránku oznamující úspěch')
   console.log('response.data', typeof response.data, response.data, response)
+
   if (typeof response.data === 'object') {
-    return response.data // TODO: maybe also validate returned structure // TODO: use this IF at all API calls
+    setGlobal({ submittedOrderData: response.data?.res })
+    //return response.data // TODO: maybe also validate returned structure // TODO: use this IF at all API calls
   }
+  dispatch.orderProcessedScreen(response.data)
   return {}
 })
+
+addReducer('submitVoucherCode', async (global, dispatch, code) => {
+  setGlobal({ voucherSubmit: { pending: true, response: undefined } })
+  try {
+    const response = await submitVoucherCode(code)
+    if (typeof response.data === 'object') {
+      setGlobal({
+        voucherSubmit: {
+          pending: false,
+          response: response.data.voucherAddStatus,
+        },
+      })
+      return parseIncomingCart(response.data.newCart)
+    }
+  } catch (error) {
+    setGlobal({ voucherSubmit: { pending: false, response: 4 } })
+    return {}
+  }
+})
+
+addReducer('removeSaleItem', async (global, dispatch, index) => {
+  try {
+    const response = await removeSaleItem(index)
+    if (typeof response.data === 'object') {
+      return parseIncomingCart(response.data)
+    }
+  } catch (error) {
+    return {}
+  }
+})
+
+addReducer('orderProcessedScreen', async (global, dispatch, submitOrderRes) => {
+  console.log('orderProcessedScreen', submitOrderRes?.res?.status)
+  if (submitOrderRes?.res?.status === 'orderCreated') {
+    const payment = global.paymentMethods.filter(
+      f => f.payment_id === global.selectedPayment
+    )[0]
+    if (payment.online_pay && global.orderInfo.onlinePayURL) {
+      console.log('jdu to redirectnout', global.orderInfo.onlinePayURL)
+      window.location.href = global.orderInfo.onlinePayURL
+    } else if (submitOrderRes?.res?.postOrderInstructions) {
+      dispatch.showCompletedScreen(OrderCompletedScreen.SuccessScreen)
+    } else {
+      alert(
+        'Objednávka se nezdařila, zkuste to znovu nebo  nás kontatujte prosím'
+      )
+    }
+  } else {
+    alert(
+      'Objednávka se nezdařila, zkuste to znovu nebo  nás kontatujte prosím'
+    )
+  }
+})
+
 addReducer('changeLang', async (global, dispatch, lang, i18n) => {
   i18n.changeLanguage(lang)
   saveLangPrefLocal(lang)
@@ -124,8 +211,29 @@ addReducer('changeLang', async (global, dispatch, lang, i18n) => {
   }
   return {}
 })
+
 addReducer('addRandomItem', async () => {
   await addRandomItem()
+  window.location.reload()
+  return {}
+})
+addReducer('addItem', async (global, dispatch, product_id) => {
+  const response = await addItem(product_id)
+  if (typeof response.data === 'object') {
+    return {
+      cartItems: response.data.cart,
+      cartInfo: response.data.sum,
+    }
+  }
+  return {}
+})
+addReducer('addPhysicalItem', async () => {
+  await addPhysicalItem()
+  window.location.reload()
+  return {}
+})
+addReducer('addOnlineItem', async () => {
+  await addOnlineItem()
   window.location.reload()
   return {}
 })
@@ -145,7 +253,7 @@ addReducer('clearAllData', async () => {
 const parseIncomingCart = (data: CartData) => {
   window.localStorage.setItem(
     'cartSimple',
-    JSON.stringify(parseSimpleCartList(data.cart)),
+    JSON.stringify(parseSimpleCartList(data.cart))
   )
   // TODO: check incoming data format!!!
 
@@ -156,6 +264,7 @@ const parseIncomingCart = (data: CartData) => {
     cartItems: data.cart,
     cartInfo: data.sum,
     onlyOnlineItems,
+    sales: data.sales,
   }
 }
 
@@ -167,12 +276,12 @@ const dataFromHtmlOrApi = async (domVar: string, apiCall: any) => {
   let data
   if ((window as any)['APP_DATA'] && (window as any)['APP_DATA'][domVar]) {
     data = JSON.parse((window as any)['APP_DATA'][domVar])
-    console.log('data z html', domVar, data)
+    // console.log('data z html', domVar, data)
   }
   if (!data) {
     let response = await apiCall()
     data = response.data
-    console.log('data z API', domVar, data)
+    //console.log('data z API', domVar, data)
   }
   return data
 }
@@ -180,27 +289,29 @@ const dataFromHtmlOrApi = async (domVar: string, apiCall: any) => {
 const dataFromHtmlOrApi_firstTimeOnly = async (
   globVar: any,
   domVar: string,
-  apiCall: any,
+  apiCall: any
 ) => {
   let data: any
   if (isEmpty(globVar)) {
-    console.log('first time', domVar)
+    //console.log('first time', domVar)
     // on first app init try to reach in html server rendered cartItems Data
     data = await dataFromHtmlOrApi(domVar, apiCall)
   } else {
     // on every other time, ask ONLY to server to actual data
-    console.log('any other time DIRECT API', domVar)
+    //console.log('any other time DIRECT API', domVar)
     const response = await apiCall()
     data = response.data
   }
-  console.log('gv', domVar, globVar, data)
+  //console.log('gv', domVar, globVar, data)
   return data
 }
 
 type CartData = {
   cart: CartItemType
   sum: CartType
+  sales: Array<SalesType>
 }
+
 type DeliveryAndPaymentsType = {
   delivery: object
   payments: object

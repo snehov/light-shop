@@ -7,6 +7,7 @@ import {
   LoginType,
   CreateLogin,
   RegUserType,
+  SalesType,
 } from './utils/types'
 // NOTE: changes here needs SERVER RESTART to apply changes
 
@@ -23,68 +24,84 @@ declare module 'reactn/default' {
       global: State,
       dispatch: Dispatch,
       index: number,
-      newAmount: number,
+      newAmount: number
     ) => Pick<State>
 
     removeFromCart: (
       global: State,
       dispatch: Dispatch,
-      index: number,
+      index: number
     ) => Pick<State> //, 'cartInfo'
 
     getCart: (global: State, dispatch: Dispatch) => Pick<State> // 'cartItems'
     getDeliveryAndPay: (
       global: State,
-      dispatch: Dispatch,
+      dispatch: Dispatch
     ) => Pick<State, 'deliveryMethods', 'paymentMethods'>
 
     changeDeliveryMethod: (
       global: State,
       dispatch: Dispatch,
-      delivery_id: number,
+      delivery_id: number
     ) => Pick<State>
 
     changePaymentMethod: (
       global: State,
       dispatch: Dispatch,
-      payment_id: number,
+      payment_id: number
     ) => Pick<State>
 
     fetchOrderInfo: (
       global: State,
-      dispatch: Dispatch,
+      dispatch: Dispatch
     ) => Pick<State, 'deliveryMethod', 'paymentMethod', 'addressName'> //previously just 'orderInfo'>
 
     saveAddressInfo: (
       global: State,
       dispatch: Dispatch,
-      forms_data: object,
+      forms_data: object
     ) => null
 
     submitOrder: (global: State, dispatch: Dispatch, forms_data: object) => null
+
+    submitVoucherCode: (global: State, dispatch: Dispatch, code: string) => null
+    removeSaleItem: (global: State, dispatch: Dispatch, index: number) => null
 
     changeLang: (
       global: State,
       dispatch: Dispatch,
       lang: string,
-      i18n: i18n,
+      i18n: i18n
     ) => null
 
     clearCartData: (global: State, dispatch: Dispatch) => null
     clearAllData: (global: State, dispatch: Dispatch) => null
 
     addRandomItem: (global: State, dispatch: Dispatch) => null
+    addItem: (
+      global: State,
+      dispatch: Dispatch,
+      product_id: number
+    ) => Pick<State> // 'cartItems'
+    fetchProducts: (global: State, dispatch: Dispatch) => Pick<State> // 'products'
+    fetchProduct: (
+      global: State,
+      dispatch: Dispatch,
+      product_id: number
+    ) => null
+    addOnlineItem: (global: State, dispatch: Dispatch) => null
+    addPhysicalItem: (global: State, dispatch: Dispatch) => null
 
     createLogin: (
       global: State,
       dispatch: Dispatch,
-      loginInfo: CreateLogin,
+      loginInfo: CreateLogin
     ) => null
 
     login: (
       global: State,
       dispatch: Dispatch,
-      loginInfo: LoginType,
+      loginInfo: LoginType
     ) => Pick<State, 'orderInfo', 'regUser', 'isLoggingIn'>
     logout: (global: State, dispatch: Dispatch) => null
   }
@@ -100,6 +117,7 @@ declare module 'reactn/default' {
 
   export interface State {
     cartItems: Array<CartItemType>
+    sales: Array<SalesType>
     cartInfo: {
       noVat: SumLine
       vatIncl: SumLine
@@ -120,6 +138,12 @@ declare module 'reactn/default' {
     isLoggingIn: boolean
     regUser: RegUserType
     onlyOnlineItems: boolean
-    testVar:{}
+    showOrderCompletedScreen: boolean
+    orderCompletedScreenType: OrderCompletedScreen
+    submittedOrderData: SubmittedOrderData
+    cartItemsCall: ApiCallStatus
+    testVar: {}
+    products: Array<CartItemType>
+    voucherSubmit: { pending: boolean; response: number }
   }
 }

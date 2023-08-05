@@ -21,10 +21,12 @@ const inputsConf = {
     required: true,
     type: 'tel',
     placeholder: '+420',
+    minLength: 9,
     default: '+420 ',
     label: 'personal.tel',
   },
   email: {
+    required: true,
     type: 'email',
     label: 'personal.email',
     placeholder: 'personal.email_ph',

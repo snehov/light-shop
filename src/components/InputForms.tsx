@@ -28,7 +28,7 @@ const debounceFnc = debounce((launchDebounced: any) => {
 const checkAllFormsValid = (
   noDeliveryAddress: boolean,
   skipParts?: Array<string>,
-  noInputs?: boolean,
+  noInputs?: boolean
 ) => {
   let requiredParts = ['agree']
   if (!noInputs) {
@@ -46,14 +46,13 @@ const setFormParts = (
   updateValidStatus: any,
   setAllValidButAgree: any,
   noDeliveryAddress: boolean,
-  noInputs?: boolean,
+  noInputs?: boolean
 ) => {
   formParts = newVersion
-  console.log('newVersion', newVersion)
   if (updateValidStatus) {
     updateValidStatus(checkAllFormsValid(noDeliveryAddress, [], noInputs))
     setAllValidButAgree(
-      checkAllFormsValid(noDeliveryAddress, ['agree'], noInputs),
+      checkAllFormsValid(noDeliveryAddress, ['agree'], noInputs)
     )
   }
 }
@@ -62,7 +61,7 @@ const InputForms = ({ disabled }: { disabled?: boolean }) => {
   const [copyInvoiceAddr, setCopyInvoiceAddr] = useState(true)
   const [noDeliveryAddress, setNoDeliveryAddress] = useState(false)
   const [companyVisible, setCompanyVisible] = useState<boolean | undefined>(
-    undefined,
+    undefined
   )
   //const [formParts, setFormParts] = useState({}) // unreliable as state, moved to variable
   const [allFormsAreValid, setAllFormsAreValid] = useState(false)
@@ -94,7 +93,7 @@ const InputForms = ({ disabled }: { disabled?: boolean }) => {
           setAllFormsAreValid,
           setAllValidButAgree,
           noDeliveryAddress,
-          onlyOnlineItems,
+          onlyOnlineItems
         )
       }
     }
@@ -103,7 +102,7 @@ const InputForms = ({ disabled }: { disabled?: boolean }) => {
   useEffect(() => {
     if (!isEmpty(deliveryMethods)) {
       const methodInfo = deliveryMethods.filter(
-        (m) => m.delivery_id == selectedDelivery, // eslint-disable-line
+        m => m.delivery_id == selectedDelivery // eslint-disable-line
       )[0]
       if (methodInfo?.personal_pickup) {
         setCopyInvoiceAddr(false)
@@ -113,7 +112,7 @@ const InputForms = ({ disabled }: { disabled?: boolean }) => {
           setAllFormsAreValid,
           setAllValidButAgree,
           true,
-          onlyOnlineItems,
+          onlyOnlineItems
         )
       } else {
         setNoDeliveryAddress(false)
@@ -122,20 +121,20 @@ const InputForms = ({ disabled }: { disabled?: boolean }) => {
           setAllFormsAreValid,
           setAllValidButAgree,
           false,
-          onlyOnlineItems,
+          onlyOnlineItems
         )
       }
     }
   }, [selectedDelivery, deliveryMethods]) // eslint-disable-line
   useEffect(() => {
     if (onlyOnlineItems) {
-      //console.log("formparts", formParts,{ agree: formParts?.agree })
+      //console.log('formparts', formParts, { agree: formParts?.agree })
       setFormParts(
-        { agree: formParts?.agree },
+        { agree: formParts?.agree, personal: formParts?.personal },
         setAllFormsAreValid,
         setAllValidButAgree,
         true,
-        onlyOnlineItems,
+        onlyOnlineItems
       )
     }
   }, [onlyOnlineItems]) // eslint-disable-line
@@ -162,7 +161,7 @@ const InputForms = ({ disabled }: { disabled?: boolean }) => {
           setAllFormsAreValid,
           setAllValidButAgree,
           noDeliveryAddress,
-          onlyOnlineItems,
+          onlyOnlineItems
         )
         saveDataToServer()
       }
@@ -182,7 +181,7 @@ const InputForms = ({ disabled }: { disabled?: boolean }) => {
       saveData,
       setAllFormsAreValid,
       setAllValidButAgree,
-      noDeliveryAddress,
+      noDeliveryAddress
     )
     if (sendToServer) {
       saveDataToServer()
@@ -211,11 +210,12 @@ const InputForms = ({ disabled }: { disabled?: boolean }) => {
       }
     }
     ;(validateAgrees as any).current.runValidation()
+    ;(validatePersonal as any).current.runValidation()
   }
   const dm = isEmpty(deliveryMethods)
     ? []
     : deliveryMethods.filter(
-        (m) => m.delivery_id == selectedDelivery, // eslint-disable-line
+        m => m.delivery_id == selectedDelivery // eslint-disable-line
       )
   const pickupLine = dm.length === 0 ? 'defaultni adresa...' : dm[0].description // eslint-disable-line
 
@@ -231,7 +231,7 @@ const InputForms = ({ disabled }: { disabled?: boolean }) => {
         </div>
       )}
 
-      {!onlyOnlineItems && (
+      {!onlyOnlineItems ? (
         <div className="elemsToRow">
           <div className="stdPadding">
             <PersonalInfo
@@ -264,7 +264,7 @@ const InputForms = ({ disabled }: { disabled?: boolean }) => {
                 <input
                   type="checkbox"
                   checked={copyInvoiceAddr}
-                  onChange={(e) => setCopyInvoiceAddr(e.target.checked)}
+                  onChange={e => setCopyInvoiceAddr(e.target.checked)}
                 />
                 <span className="checkmark"></span>
               </label>
@@ -289,7 +289,38 @@ const InputForms = ({ disabled }: { disabled?: boolean }) => {
               <input
                 type="checkbox"
                 checked={Boolean(companyVisible)}
-                onChange={(e) => setCompanyVisible(e.target.checked)}
+                onChange={e => setCompanyVisible(e.target.checked)}
+              />
+              <span className="checkmark"></span>
+            </label>
+            {companyVisible && (
+              <CompanyBaseInfo
+                dataName="company"
+                returnValues={setValues}
+                prefillData={addressName}
+                ref={validateCompany}
+              />
+            )}
+          </div>
+        </div>
+      ) : (
+        // online products only
+        <div className="elemsToRow">
+          <div className="stdPadding">
+            <PersonalInfo
+              dataName="personal"
+              returnValues={setValues}
+              prefillData={addressName}
+              ref={validatePersonal}
+            />
+          </div>
+          <div className="stdPadding">
+            <label className="inputCont cy-fillCompany">
+              {t('company.companyOrder')}
+              <input
+                type="checkbox"
+                checked={Boolean(companyVisible)}
+                onChange={e => setCompanyVisible(e.target.checked)}
               />
               <span className="checkmark"></span>
             </label>
@@ -321,17 +352,17 @@ const InputForms = ({ disabled }: { disabled?: boolean }) => {
           onScreenValidation={onScreenValidation}
         />
       </div>
-      <br />
+      {/*<br />
       <br />
       <b style={{ color: 'red' }}>...</b>
       <br />
-      <cite>
+       <cite>
         Next steps:
         <br />
         1) <s>submit endpoint</s>, validate FE data and process order, on FE
         redirect to succes screen
         <br />
-      </cite>
+      </cite> */}
       <br />
     </div>
   )

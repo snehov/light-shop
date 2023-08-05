@@ -18,7 +18,7 @@ if (SLOW_DOWN_TESTING) {
   for (const command of ['click', 'get']) {
     Cypress.Commands.overwrite(command, (originalFn, ...args) => {
       const origVal = originalFn(...args)
-      return new Promise((resolve) => {
+      return new Promise(resolve => {
         setTimeout(() => {
           resolve(origVal)
         }, COMMAND_DELAY)
@@ -51,9 +51,8 @@ Cypress.Commands.add('visitRoot', () => {
   cy.visit(rootUrl)
 })
 Cypress.Commands.add('request_addOnlineItem', () => {
-  cy.request(URL_addOnlineItem).then(() => {
-    cy.reload()
-  })
+  cy.request(URL_addOnlineItem)
+  cy.reload()
 })
 Cypress.Commands.add('request_clearCart', () => {
   cy.request(URL_clearCart)

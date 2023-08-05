@@ -1,9 +1,4 @@
-import React, {
-  useDispatch,
-  useState,
-  useEffect,
-  useGlobal,
-} from 'reactn'
+import React, { useDispatch, useState, useEffect, useGlobal } from 'reactn'
 import { useTranslation } from 'react-i18next'
 import { DeliveryMethodType } from 'utils/types'
 import { formatPriceOutput } from '../utils/priceOperations'
@@ -29,7 +24,7 @@ const DeliveryMethods = () => {
     const allowedDelivery = getAllowedDelivery()
     if (allowedDelivery) {
       if (!allowedDelivery.includes(deliveryMethod)) {
-        setDeliveryMethod(0)
+        setDeliveryMethod(allowedDelivery[0])
       }
     }
   }, [deliveryMethod, deliveryMethods, onlyOnlineItems]) // eslint-disable-line
@@ -44,8 +39,8 @@ const DeliveryMethods = () => {
       return false
     }
     const allowedDeliveries = onlyOnlineItems
-      ? deliveryMethods.filter((d) => d.is_online)
-      : deliveryMethods.filter((d) => !d.is_online)
+      ? deliveryMethods.filter(d => d.is_online)
+      : deliveryMethods.filter(d => !d.is_online)
     return allowedDeliveries.reduce((acc: Array<number>, cur) => {
       return [...acc, cur.delivery_id]
     }, [])
@@ -61,16 +56,17 @@ const DeliveryMethods = () => {
       {!isEmpty(deliveryMethods) &&
         deliveryMethods.map((method: DeliveryMethodType) => {
           const allowedDelivery = getAllowedDelivery()
-          const disabled =
-            allowedDelivery && !allowedDelivery.includes(method.delivery_id)
+          const disabled = !method.enabled
+            ? true
+            : allowedDelivery && !allowedDelivery.includes(method.delivery_id)
           return (
             <div key={method.delivery_id}>
               <label
                 htmlFor={`delivery_${method.delivery_id}`}
                 className={`inputCont ${disabled ? 'inputCont--disabled' : ''}`}
               >
-                {method.name} <b>{formatPriceOutput(method.price)}</b> (id:
-                {method.delivery_id})
+                {method.name} <b>{formatPriceOutput(method.price)}</b> 
+                {/* (id:{method.delivery_id}) */}
                 <input
                   type="radio"
                   name="delivery"

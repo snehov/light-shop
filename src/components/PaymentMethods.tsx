@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { PaymentMethodType } from 'utils/types'
 import { formatPriceOutput } from '../utils/priceOperations'
 const isEmpty = require('ramda').isEmpty
+const isNil = require('ramda').isNil
+const intersection = require('ramda').intersection
 
 const PaymentMethods = () => {
   const [paymentsMethods] = useGlobal('paymentMethods')
@@ -23,14 +25,25 @@ const PaymentMethods = () => {
 
   useEffect(() => {
     //# when delivery methods loaded
-    if (paymentMethod !== 0 && deliveryMethods !== []) {
+    if (
+      paymentMethod !== 0 &&
+      !isNil(paymentMethod) &&
+      deliveryMethods !== []
+    ) {
       const allowedPayments = getAllowedPayments()
       console.log('paymentMethod', paymentMethod)
       //# if delivery changes and current payment is not supported by that delivery, change to fist in list of suppored
+      console.log(
+        'allowedPayments',
+        allowedPayments, // [] when error
+        'deliveryMethods',
+        deliveryMethods
+      )
+      //TODO: check for errors after one order done, new order start
       if (!allowedPayments.includes(paymentMethod.toString())) {
         allowedPayments.length > 0
           ? setPaymentMethod(Number(allowedPayments[0]))
-          : setPaymentMethod(0)
+          : setPaymentMethod(allowedPayments[0])
       }
     }
   }, [selectedDelivery]) // eslint-disable-line
@@ -46,9 +59,15 @@ const PaymentMethods = () => {
     const allowedPayements = !selectedDelivery
       ? ''
       : deliveryMethods
-          .filter((d) => d.delivery_id == selectedDelivery)[0] //eslint-disable-line eqeqeq
+          .filter(d => d.delivery_id == selectedDelivery)[0] //eslint-disable-line eqeqeq
           .payments.split(',')
-    return allowedPayements
+
+    const currentPayments = paymentsMethods.reduce((acc: any, cur) => {
+      return [...acc, cur.payment_id.toString()] // TODO: I dont like this "toSting()", make allowedPayements result as integers
+    }, [])
+
+    const allowedPresent = intersection(allowedPayements, currentPayments)
+    return allowedPresent
   }
 
   return (
@@ -58,6 +77,8 @@ const PaymentMethods = () => {
         paymentsMethods.map((method: PaymentMethodType) => {
           const disabled = isEmpty(getAllowedPayments())
             ? false
+            : !method.enabled
+            ? true
             : !getAllowedPayments().includes(method.payment_id.toString())
           return (
             <div key={method.payment_id}>
@@ -65,8 +86,8 @@ const PaymentMethods = () => {
                 htmlFor={`payment_${method.payment_id}`}
                 className={`inputCont ${disabled ? 'inputCont--disabled' : ''}`}
               >
-                {method.name} <b>{formatPriceOutput(method.price)}</b> (id:
-                {method.payment_id})
+                {method.name} <b>{formatPriceOutput(method.price)}</b>
+                {/* (id:{method.payment_id}) */}
                 <input
                   type="radio"
                   name="payment"

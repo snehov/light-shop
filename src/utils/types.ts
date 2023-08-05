@@ -7,6 +7,7 @@ export const CartItemTypeObj = {
   price: 1,
   is_online: true,
   is_one_piece: true,
+  additional_services: [],
 }
 export type CartItemType = typeof CartItemTypeObj
 
@@ -27,6 +28,7 @@ export const DeliveryMethod = {
   personal_pickup: 'a',
   description: 'a',
   is_online: true,
+  enabled: true,
 }
 //export type DeliveryMethodTypeIncl = typeof DeliveryMethod
 //type EE = { payments: Array<number> }
@@ -37,6 +39,8 @@ export const PaymentMethod = {
   payment_id: 1,
   name: 'a',
   price: 1,
+  online_pay: true,
+  enabled: true,
   //description
   //bank_transfer
   //pay_before
@@ -77,6 +81,7 @@ export type OrderInfoType = {
   deliveryMethod: number
   addressName: DeliveryInfoType
   terms: termsConditions
+  onlinePayURL: string
 }
 
 export type LoginType = {
@@ -94,4 +99,35 @@ export type RegUserType = {
   name: string
   res?: string
   err_code?: string
+}
+export enum OrderCompletedScreen {
+  //BankTransfer,
+  //PersonalPay,
+  SuccessScreen,
+  OnlinePaySucces,
+  OnlinePayFail,
+}
+export type SubmittedOrderData = {
+  status: string
+  newOrderId: number
+  newOrderNumber: string
+  postOrderInstructions: any
+  orderData: {
+    cena_objednavky: number
+    doruc_adr_json: { street: string; city: string; zip: string }
+  }
+}
+export enum ApiCallStatus {
+  Nothing,
+  Pending,
+  Fetched,
+  Error,
+}
+export type SalesType = {
+  descr: string
+  name: string
+  prize: number
+  percent: number
+  type: string
+  sumable: boolean
 }
